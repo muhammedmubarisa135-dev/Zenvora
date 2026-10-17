@@ -1,0 +1,1345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Admin Portal | Volcano Martial Arts Academy</title>
+    
+    <!-- STRICT SECURITY HEADERS & BOT BLOCKING -->
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+    <meta name="googlebot" content="noindex, nofollow">
+    <meta name="referrer" content="no-referrer">
+    <link rel="icon" type="image/png" href="../favicon.png">
+
+    <!-- Google Fonts: Kanit & Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Supabase CDN & RBAC Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../supabase-client.js"></script>
+
+    <!-- Tailwind CSS (Local with CDN Fallback) -->
+    <script src="../tailwind.js"></script>
+    <script>
+        if (typeof tailwind === 'undefined') {
+            document.write('<script src="https://cdn.tailwindcss.com"><\/script>');
+        }
+    </script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: {
+                            950: '#07090e',
+                            900: '#0b111e',
+                            800: '#131c2e',
+                            700: '#1b273e',
+                            600: '#253552'
+                        },
+                        flame: {
+                            DEFAULT: '#ff5e00',
+                            glow: '#ff2a00',
+                            light: '#ff8800'
+                        },
+                        gold: {
+                            DEFAULT: '#ffbe0b',
+                            light: '#ffd154'
+                        }
+                    },
+                    fontFamily: {
+                        kanit: ['Kanit', 'sans-serif'],
+                        poppins: ['Poppins', 'sans-serif']
+                    }
+                }
+            }
+        };
+    </script>
+
+    <style>
+        .hidden { display: none !important; }
+        html { scroll-behavior: smooth; }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0b111e; }
+        ::-webkit-scrollbar-thumb { background: #253552; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #ff5e00; }
+
+        body {
+            background-color: #0b111e;
+            background-image: 
+                radial-gradient(at 10% 20%, rgba(255, 94, 0, 0.08) 0px, transparent 50%),
+                radial-gradient(at 90% 80%, rgba(255, 190, 11, 0.05) 0px, transparent 50%);
+            color: #f0f4f8;
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        .glass-panel {
+            background: rgba(19, 28, 46, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .glass-header {
+            background: rgba(11, 17, 30, 0.95);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .gradient-text-orange {
+            background: linear-gradient(135deg, #ff5e00 0%, #ffbe0b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Printable Receipt Styles */
+        @media print {
+            body * { visibility: hidden !important; }
+            #printableAdminReceipt, #printableAdminReceipt * { visibility: visible !important; }
+            #printableAdminReceipt {
+                position: absolute !important;
+                left: 0 !important;
+                top: 0 !important;
+                width: 100% !important;
+                background: #ffffff !important;
+                color: #000000 !important;
+                padding: 24px !important;
+                border: 2px solid #000000 !important;
+            }
+            #printableAdminReceipt .no-print { display: none !important; }
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <!-- Toast Notification Container -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+        <div class="glass-panel border-l-4 border-flame px-5 py-4 rounded-xl shadow-2xl flex items-center gap-3">
+            <i id="toastIcon" class="fa-solid fa-circle-check text-flame text-xl"></i>
+            <span id="toastMsg" class="text-sm font-medium text-white">Security notification</span>
+        </div>
+    </div>
+
+    <!-- Student Modal (Add/Edit) -->
+    <div id="studentModal" style="display: none;" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="glass-panel border-flame/40 rounded-2xl max-w-md w-full p-6 relative animate-in fade-in zoom-in duration-200">
+            <button onclick="closeStudentModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white transition">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <h3 id="modalHeaderTitle" class="font-kanit text-2xl font-bold gradient-text-orange mb-6 flex items-center gap-2">
+                <i class="fa-solid fa-user-plus text-flame"></i> Add Student Record
+            </h3>
+            
+            <form id="studentForm" onsubmit="handleSaveStudent(event)" class="space-y-4">
+                <input type="hidden" id="studentDbId">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Roll Number / Student ID</label>
+                    <input type="text" id="studentRoll" required placeholder="e.g. VOL-107" class="w-full bg-navy-900 border border-navy-600 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-flame transition">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Student Full Name</label>
+                    <input type="text" id="studentName" required placeholder="e.g. Muhammed Mubashir" class="w-full bg-navy-900 border border-navy-600 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-flame transition">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Batch</label>
+                        <select id="studentBatch" class="w-full bg-navy-900 border border-navy-600 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-flame transition">
+                            <option value="Evening Karate">Evening Karate</option>
+                            <option value="Morning Kickboxing">Morning Kickboxing</option>
+                            <option value="Weekend Special">Weekend Special</option>
+                            <option value="Kids Beginner">Kids Beginner</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Belt Rank</label>
+                        <select id="studentBelt" class="w-full bg-navy-900 border border-navy-600 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-flame transition">
+                            <option value="White Belt">White Belt</option>
+                            <option value="Yellow Belt">Yellow Belt</option>
+                            <option value="Orange Belt">Orange Belt</option>
+                            <option value="Green Belt">Green Belt</option>
+                            <option value="Blue Belt">Blue Belt</option>
+                            <option value="Purple Belt">Purple Belt</option>
+                            <option value="Brown Belt">Brown Belt</option>
+                            <option value="Black Belt">Black Belt</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Monthly Fee Status</label>
+                    <select id="studentFeeStatus" class="w-full bg-navy-900 border border-navy-600 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-flame transition">
+                        <option value="Pending">Pending (Fee Due)</option>
+                        <option value="Paid">Paid (Up to Date)</option>
+                    </select>
+                </div>
+                <div class="flex gap-3 pt-4">
+                    <button type="submit" class="flex-1 bg-gradient-to-r from-flame to-flame-light hover:from-flame-light hover:to-flame text-white font-bold py-2.5 rounded-xl transition text-sm flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-floppy-disk"></i> Save Record
+                    </button>
+                    <button type="button" onclick="closeStudentModal()" class="flex-1 bg-navy-700 hover:bg-navy-600 text-gray-300 font-medium py-2.5 rounded-xl transition text-sm">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Photo Modal (Admin Portal) -->
+    <div id="adminAddPhotoModal" style="display: none;" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
+        <div class="glass-panel border-flame/40 rounded-3xl max-w-md w-full p-6 sm:p-7 text-left shadow-2xl my-8 relative animate-in fade-in zoom-in duration-200">
+            <button onclick="closeAdminAddPhotoModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white transition" title="Close">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <div class="flex items-center gap-3 pb-4 border-b border-navy-700 mb-5">
+                <div class="w-10 h-10 rounded-xl bg-flame/20 text-flame flex items-center justify-center text-lg border border-flame/30">
+                    <i class="fa-solid fa-camera"></i>
+                </div>
+                <div>
+                    <h3 class="font-kanit text-lg font-bold text-white">Add Photo to Gallery</h3>
+                    <p class="text-[11px] text-gray-400">Publish photo directly to public academy gallery</p>
+                </div>
+            </div>
+
+            <form onsubmit="handleAdminSavePhoto(event)" class="space-y-4">
+                <!-- Tab Switcher: Upload File vs Image URL -->
+                <div class="flex gap-2 p-1 bg-navy-900 rounded-xl border border-navy-700 text-xs font-semibold">
+                    <button type="button" id="adminPhotoTabUploadBtn" onclick="switchAdminPhotoUploadTab('upload')" class="flex-1 py-2 rounded-lg bg-flame text-white transition">
+                        <i class="fa-solid fa-upload mr-1"></i> Upload Image
+                    </button>
+                    <button type="button" id="adminPhotoTabUrlBtn" onclick="switchAdminPhotoUploadTab('url')" class="flex-1 py-2 rounded-lg text-gray-300 hover:text-white transition">
+                        <i class="fa-solid fa-link mr-1"></i> Image URL
+                    </button>
+                </div>
+
+                <!-- Option A: File Upload -->
+                <div id="adminPhotoUploadSection" class="space-y-2">
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-gray-300">Choose Image File</label>
+                    <div class="border-2 border-dashed border-navy-600 hover:border-flame rounded-2xl p-4 text-center cursor-pointer transition bg-navy-900/50" onclick="document.getElementById('adminPhotoFileInput').click()">
+                        <i class="fa-solid fa-cloud-arrow-up text-3xl text-flame mb-2 block"></i>
+                        <span class="text-xs text-gray-300 block font-medium">Click to select photo from device</span>
+                        <span class="text-[11px] text-gray-500 block mt-0.5">JPG, PNG, WEBP supported (Auto-compressed)</span>
+                        <input type="file" id="adminPhotoFileInput" accept="image/*" onchange="handleAdminPhotoFileSelected(event)" class="hidden">
+                    </div>
+                </div>
+
+                <!-- Option B: Direct URL -->
+                <div id="adminPhotoUrlSection" style="display: none;" class="space-y-2">
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-gray-300">Image Web Link (URL)</label>
+                    <input type="url" id="adminPhotoUrlInput" placeholder="https://images.unsplash.com/... or https://..." oninput="handleAdminPhotoUrlInput(event)" class="w-full bg-navy-900 border border-navy-600 rounded-xl px-4 py-2.5 text-white text-xs focus:outline-none focus:border-flame transition">
+                </div>
+
+                <!-- Caption / Title -->
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-1.5">Photo Caption / Event Title</label>
+                    <input type="text" id="adminPhotoCaptionInput" required placeholder="e.g. State Championship Celebration 2026" oninput="updateAdminPhotoPreviewCaption(this.value)" class="w-full bg-navy-900 border border-navy-600 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-flame transition">
+                </div>
+
+                <!-- Live Preview -->
+                <div id="adminPhotoPreviewContainer" style="display: none;" class="space-y-1.5">
+                    <span class="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Preview:</span>
+                    <div class="w-full h-44 rounded-xl overflow-hidden border border-flame/50 relative bg-navy-900">
+                        <img id="adminPhotoPreviewImg" src="" alt="Preview" class="w-full h-full object-cover">
+                        <span id="adminPhotoPreviewCaption" class="absolute bottom-2 left-2 right-2 bg-black/75 backdrop-blur-sm text-white text-xs px-2.5 py-1 rounded-lg truncate"></span>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex gap-3 pt-2">
+                    <button type="submit" id="adminSavePhotoSubmitBtn" class="flex-1 bg-gradient-to-r from-flame to-flame-light hover:from-flame-light hover:to-flame text-white font-bold py-3 rounded-xl transition text-sm shadow-lg shadow-flame/30 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-plus"></i> Add to Gallery
+                    </button>
+                    <button type="button" onclick="closeAdminAddPhotoModal()" class="px-5 py-3 bg-navy-700 hover:bg-navy-600 text-gray-300 text-sm font-medium rounded-xl transition">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Lightbox Modal -->
+    <div id="adminLightboxModal" style="display: none;" class="fixed inset-0 bg-black/95 backdrop-blur-md z-50 flex items-center justify-center p-4 sm:p-6" onclick="closeAdminLightbox()">
+        <div class="relative max-w-4xl w-full max-h-[90vh] flex flex-col items-center justify-center" onclick="event.stopPropagation()">
+            <button type="button" onclick="closeAdminLightbox()" class="absolute -top-12 right-0 sm:-right-4 text-white hover:text-flame transition text-2xl sm:text-3xl p-2 bg-navy-800/90 hover:bg-navy-700 rounded-full w-10 h-10 flex items-center justify-center cursor-pointer shadow-lg border border-navy-600" aria-label="Close">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <img id="adminLightboxImg" src="" alt="Full View" class="max-h-[75vh] w-auto max-w-full object-contain rounded-2xl border-2 border-flame/40 shadow-2xl bg-navy-950">
+            <div class="mt-3 text-center px-4">
+                <p id="adminLightboxCaption" class="text-white font-kanit text-base sm:text-lg font-semibold tracking-wide"></p>
+                <span class="text-xs text-gray-400">Volcano Martial Arts Academy</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Printable Receipt Container -->
+    <div id="printableAdminReceipt" class="hidden">
+        <div style="border-bottom: 2px solid #000; padding-bottom: 15px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h1 style="font-size: 22px; font-weight: 800; text-transform: uppercase; margin: 0;">Volcano Karate &amp; Kick Boxing Academy</h1>
+                <p style="font-size: 11px; margin: 4px 0 0 0; color: #444;">Official Dan-Ranked Training Center • Affiliated Martial Arts Registry</p>
+            </div>
+            <div style="text-align: right;">
+                <span style="font-size: 13px; font-weight: bold; border: 1px solid #000; padding: 4px 10px; display: inline-block;">FEE PAYMENT RECEIPT</span>
+                <p style="font-size: 10px; margin: 4px 0 0 0;" id="printReceiptDate">Date: --/--/----</p>
+            </div>
+        </div>
+        <div style="margin-bottom: 20px;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
+                <tr>
+                    <td style="padding: 6px 0; font-weight: bold; width: 140px;">Student ID:</td>
+                    <td style="padding: 6px 0;" id="printReceiptRoll">---</td>
+                    <td style="padding: 6px 0; font-weight: bold; width: 140px;">Batch / Discipline:</td>
+                    <td style="padding: 6px 0;" id="printReceiptBatch">---</td>
+                </tr>
+                <tr>
+                    <td style="padding: 6px 0; font-weight: bold;">Student Name:</td>
+                    <td style="padding: 6px 0; font-size: 14px; font-weight: bold;" id="printReceiptName">---</td>
+                    <td style="padding: 6px 0; font-weight: bold;">Current Rank:</td>
+                    <td style="padding: 6px 0;" id="printReceiptBelt">---</td>
+                </tr>
+            </table>
+        </div>
+        <div style="border: 1px solid #000; padding: 12px; margin-bottom: 20px;">
+            <div style="display: flex; justify-content: space-between; font-weight: bold; border-bottom: 1px solid #ccc; padding-bottom: 6px; font-size: 12px;">
+                <span>DESCRIPTION</span>
+                <span>STATUS / AMOUNT</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 8px 0; font-size: 13px;">
+                <span>Monthly Academy Training &amp; Dojo Access Fee</span>
+                <span style="font-weight: bold; color: green;" id="printReceiptStatus">PAID IN FULL</span>
+            </div>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 30px; font-size: 11px;">
+            <div>
+                <p style="margin: 0; color: #555;">Thank you for training with Volcano Academy.</p>
+                <p style="margin: 2px 0 0 0; color: #555;">Discipline • Honor • Strength • Self-Defense</p>
+            </div>
+            <div style="text-align: center; width: 180px;">
+                <div style="border-bottom: 1px solid #000; height: 35px; margin-bottom: 5px;"></div>
+                <span style="font-weight: bold; font-size: 11px;">Authorized Academy Seal</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECURE ADMIN HEADER -->
+    <header class="glass-header fixed top-0 left-0 right-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                
+                <!-- Logo & Brand -->
+                <div class="flex items-center gap-3">
+                    <div class="w-11 h-11 rounded-xl bg-flame flex items-center justify-center text-white shadow-lg shadow-flame/30">
+                        <i class="fa-solid fa-shield-halved text-xl"></i>
+                    </div>
+                    <div>
+                        <span class="font-kanit font-black text-xl text-white block leading-none tracking-wider">VOLCANO <span class="text-flame">PORTAL</span></span>
+                        <span class="text-[10px] text-gray-400 uppercase tracking-widest font-semibold flex items-center gap-1.5 mt-0.5">
+                            <span class="w-2 h-2 rounded-full bg-emerald-400"></span> Restricted RBAC Terminal
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Right Security Tag -->
+                <div class="flex items-center gap-4">
+                    <span class="text-xs text-gray-400 font-mono hidden sm:inline-flex items-center gap-1.5 bg-navy-900/80 px-3 py-1.5 rounded-lg border border-navy-700">
+                        <i class="fa-solid fa-lock text-emerald-400"></i> Strict RBAC Mode
+                    </span>
+                    <a href="../index.html" class="px-3.5 py-1.5 rounded-lg text-xs font-medium text-gray-300 hover:text-white bg-navy-800 hover:bg-navy-700 border border-navy-700 transition">
+                        Exit to Home
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN SECURE ADMIN CONTENT -->
+    <main class="pt-28 pb-20 flex-grow">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- 1. AUTHENTICATION & LOGIN GATE (Locked View) -->
+            <div id="adminLockView" class="max-w-md mx-auto glass-panel p-8 sm:p-10 rounded-3xl border border-flame/40 text-center shadow-2xl animate-in fade-in duration-300 mt-8">
+                <div class="w-16 h-16 rounded-2xl bg-flame/20 border border-flame/40 flex items-center justify-center text-flame text-2xl mx-auto mb-4 shadow-lg shadow-flame/20">
+                    <i class="fa-solid fa-user-shield"></i>
+                </div>
+                
+                <h2 class="font-kanit text-2xl font-bold text-white mb-2">Restricted Admin Authentication</h2>
+                <p class="text-gray-300 text-xs leading-relaxed mb-6">
+                    Enter authorized administrator credentials. This terminal is protected by strict Role-Based Access Control (RBAC).
+                </p>
+
+                <!-- Rate Limit Lockout Alert -->
+                <div id="lockoutAlert" class="hidden p-3 mb-4 rounded-xl bg-red-900/30 border border-red-500/50 text-red-300 text-xs font-semibold">
+                    <i class="fa-solid fa-triangle-exclamation"></i> Too many failed attempts. Terminal locked for security.
+                </div>
+
+                <form onsubmit="handleSecureLogin(event)" autocomplete="off" class="space-y-4">
+                    <div class="text-left">
+                        <label class="block text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1">Admin Email or Master ID</label>
+                        <div class="relative">
+                            <i class="fa-solid fa-user absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                            <input type="text" id="adminUser" required placeholder="admin@volcanoacademy.com" class="w-full bg-navy-900 border border-navy-600 rounded-xl pl-11 pr-4 py-3 text-white text-sm focus:outline-none focus:border-flame transition">
+                        </div>
+                    </div>
+
+                    <div class="text-left">
+                        <label class="block text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1">Security Key / Passcode</label>
+                        <div class="relative">
+                            <i class="fa-solid fa-key absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                            <input type="password" id="adminPasscode" required autocomplete="new-password" placeholder="Enter admin passcode..." class="w-full bg-navy-900 border border-navy-600 rounded-xl pl-11 pr-11 py-3 text-white font-mono text-sm focus:outline-none focus:border-flame transition">
+                            <button type="button" onclick="togglePasscodeVisibility('adminPasscode', this)" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition p-1" title="Show/Hide">
+                                <i class="fa-solid fa-eye text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="loginBtn" class="w-full bg-gradient-to-r from-flame to-flame-light hover:from-flame-light hover:to-flame text-white font-bold py-3.5 rounded-xl shadow-lg shadow-flame/25 transition transform hover:-translate-y-0.5 flex items-center justify-center gap-2 text-sm cursor-pointer mt-2">
+                        <i class="fa-solid fa-lock-open text-gold"></i> Authenticate Session
+                    </button>
+                </form>
+
+                <div class="mt-6 pt-4 border-t border-navy-700/60 flex items-center justify-between text-[11px] text-gray-400">
+                    <span class="text-emerald-400 flex items-center gap-1.5"><i class="fa-solid fa-shield-halved"></i> 256-Bit Encrypted</span>
+                    <span id="loginAttemptsNotice" class="text-gray-500">5 Attempts Remaining</span>
+                </div>
+            </div>
+
+            <!-- 2. UNLOCKED DASHBOARD (Rendered ONLY after RBAC verification) -->
+            <div id="adminUnlockedPortal" style="display: none;" class="space-y-8 animate-in fade-in duration-300">
+                
+                <!-- Admin Control Navigation Bar -->
+                <div class="glass-panel p-4 rounded-2xl border border-navy-600 flex flex-col md:flex-row items-center justify-between gap-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center text-base">
+                            <i class="fa-solid fa-shield-cat"></i>
+                        </div>
+                        <div>
+                            <span class="font-kanit font-bold text-white text-base block leading-tight flex items-center gap-2">
+                                <span id="activeAdminDisplay">Master Administrator</span>
+                                <span class="px-2 py-0.5 text-[10px] rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 uppercase font-bold">Admin Role</span>
+                            </span>
+                            <span id="sessionExpiryNotice" class="text-[11px] text-gray-400 flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Active Session • Auto-lock on idle
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Navigation Tabs -->
+                    <div class="flex items-center gap-2 bg-navy-900/90 p-1.5 rounded-xl border border-navy-700 overflow-x-auto max-w-full">
+                        <button onclick="switchTab('students')" id="tabBtnStudents" class="px-4 py-2 rounded-lg text-xs font-semibold bg-flame text-white transition flex items-center gap-2 cursor-pointer whitespace-nowrap shadow-md shadow-flame/30">
+                            <i class="fa-solid fa-users"></i> Students &amp; Fees
+                        </button>
+                        <button onclick="switchTab('admissions')" id="tabBtnAdmissions" class="px-4 py-2 rounded-lg text-xs font-semibold text-gray-300 hover:text-white transition flex items-center gap-2 cursor-pointer whitespace-nowrap">
+                            <i class="fa-solid fa-file-invoice"></i> Admissions 
+                            <span id="admissionsBadge" class="bg-navy-800 text-gold text-[10px] px-1.5 py-0.5 rounded-full font-bold">0</span>
+                        </button>
+                        <button onclick="switchTab('instructors')" id="tabBtnInstructors" class="px-4 py-2 rounded-lg text-xs font-semibold text-gray-300 hover:text-white transition flex items-center gap-2 cursor-pointer whitespace-nowrap">
+                            <i class="fa-solid fa-user-ninja"></i> Instructors
+                        </button>
+                        <button onclick="switchTab('gallery')" id="tabBtnGallery" class="px-4 py-2 rounded-lg text-xs font-semibold text-gray-300 hover:text-white transition flex items-center gap-2 cursor-pointer whitespace-nowrap">
+                            <i class="fa-solid fa-camera"></i> Gallery
+                            <span id="galleryCountBadge" class="bg-navy-800 text-gold text-[10px] px-1.5 py-0.5 rounded-full font-bold">0</span>
+                        </button>
+                    </div>
+
+                    <!-- Logout / Lock Terminal -->
+                    <button onclick="handleLogout()" class="px-4 py-2 bg-navy-700 hover:bg-red-900/40 hover:text-red-300 text-gray-300 text-xs font-semibold rounded-xl border border-navy-600 transition flex items-center gap-2 cursor-pointer">
+                        <i class="fa-solid fa-power-off text-flame"></i> Lock Terminal
+                    </button>
+                </div>
+
+                <!-- TAB 1: STUDENTS & FEE TRACKER -->
+                <div id="tabContentStudents" class="space-y-6">
+                    
+                    <!-- Stats Analytics Cards -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                        <div class="glass-panel p-5 rounded-2xl border border-navy-600 flex items-center justify-between">
+                            <div>
+                                <span class="text-xs text-gray-400 uppercase tracking-wider block font-medium">Total Registered</span>
+                                <span id="statTotalStudents" class="font-kanit text-3xl font-extrabold text-white">0</span>
+                            </div>
+                            <div class="w-12 h-12 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center text-xl">
+                                <i class="fa-solid fa-users"></i>
+                            </div>
+                        </div>
+                        <div class="glass-panel p-5 rounded-2xl border border-navy-600 flex items-center justify-between">
+                            <div>
+                                <span class="text-xs text-emerald-400 uppercase tracking-wider block font-medium">Fees Paid</span>
+                                <span id="statPaidCount" class="font-kanit text-3xl font-extrabold text-emerald-400">0</span>
+                            </div>
+                            <div class="w-12 h-12 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xl">
+                                <i class="fa-solid fa-circle-check"></i>
+                            </div>
+                        </div>
+                        <div class="glass-panel p-5 rounded-2xl border border-navy-600 flex items-center justify-between">
+                            <div>
+                                <span class="text-xs text-rose-400 uppercase tracking-wider block font-medium">Fees Pending</span>
+                                <span id="statPendingCount" class="font-kanit text-3xl font-extrabold text-rose-400">0</span>
+                            </div>
+                            <div class="w-12 h-12 rounded-xl bg-rose-500/20 text-rose-400 flex items-center justify-center text-xl">
+                                <i class="fa-solid fa-clock"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Search & Action Toolbar -->
+                    <div class="glass-panel p-4 rounded-2xl border border-navy-600 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div class="flex flex-wrap items-center gap-3 w-full sm:w-auto">
+                            <div class="relative flex-1 sm:flex-initial">
+                                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+                                <input type="text" id="searchInput" oninput="filterStudents()" placeholder="Search name or ID..." class="w-full sm:w-64 bg-navy-900 border border-navy-600 rounded-xl pl-9 pr-4 py-2 text-white text-xs focus:outline-none focus:border-flame transition">
+                            </div>
+                            <select id="beltFilter" onchange="filterStudents()" class="bg-navy-900 border border-navy-600 rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-flame transition">
+                                <option value="">All Belts</option>
+                                <option value="White Belt">White Belt</option>
+                                <option value="Yellow Belt">Yellow Belt</option>
+                                <option value="Orange Belt">Orange Belt</option>
+                                <option value="Green Belt">Green Belt</option>
+                                <option value="Blue Belt">Blue Belt</option>
+                                <option value="Purple Belt">Purple Belt</option>
+                                <option value="Brown Belt">Brown Belt</option>
+                                <option value="Black Belt">Black Belt</option>
+                            </select>
+                            <select id="feeFilter" onchange="filterStudents()" class="bg-navy-900 border border-navy-600 rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-flame transition">
+                                <option value="">All Fee Status</option>
+                                <option value="Paid">Paid</option>
+                                <option value="Pending">Pending</option>
+                            </select>
+                        </div>
+                        <button onclick="openStudentModal()" class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-gradient-to-r from-flame to-flame-light hover:from-flame-light hover:to-flame text-white font-bold text-xs shadow-lg shadow-flame/30 transition flex items-center justify-center gap-2 cursor-pointer">
+                            <i class="fa-solid fa-user-plus"></i> Add New Student
+                        </button>
+                    </div>
+
+                    <!-- Students Table -->
+                    <div class="glass-panel rounded-2xl border border-navy-600 overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse text-xs">
+                                <thead>
+                                    <tr class="bg-navy-900/90 border-b border-navy-700 text-gray-400 font-semibold uppercase tracking-wider">
+                                        <th class="p-4">Student ID</th>
+                                        <th class="p-4">Full Name</th>
+                                        <th class="p-4">Batch</th>
+                                        <th class="p-4">Belt Rank</th>
+                                        <th class="p-4">Fee Status</th>
+                                        <th class="p-4 text-center">Receipt</th>
+                                        <th class="p-4 text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="studentTableBody" class="divide-y divide-navy-700/60 text-gray-200">
+                                    <!-- Dynamic rows -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- TAB 2: ADMISSION INQUIRIES LEADS -->
+                <div id="tabContentAdmissions" style="display: none;" class="space-y-6">
+                    <div class="glass-panel p-6 rounded-2xl border border-navy-600">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <h3 class="font-kanit text-xl font-bold text-white">Prospective Student Admissions</h3>
+                                <p class="text-xs text-gray-400">Leads generated via the public admission form.</p>
+                            </div>
+                            <button onclick="loadAdmissions()" class="px-3 py-1.5 rounded-lg bg-navy-800 hover:bg-navy-700 text-xs text-gray-300 transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-arrows-rotate text-flame"></i> Refresh
+                            </button>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse text-xs">
+                                <thead>
+                                    <tr class="bg-navy-900/90 border-b border-navy-700 text-gray-400 font-semibold uppercase tracking-wider">
+                                        <th class="p-4">Date</th>
+                                        <th class="p-4">Student Name</th>
+                                        <th class="p-4">Phone / WhatsApp</th>
+                                        <th class="p-4">Discipline</th>
+                                        <th class="p-4">Batch</th>
+                                        <th class="p-4">Message</th>
+                                        <th class="p-4 text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admissionsTableBody" class="divide-y divide-navy-700/60 text-gray-200">
+                                    <!-- Dynamic admission leads -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 3: INSTRUCTORS ROSTER -->
+                <div id="tabContentInstructors" style="display: none;" class="space-y-6">
+                    <div class="glass-panel p-6 rounded-2xl border border-navy-600">
+                        <h3 class="font-kanit text-xl font-bold text-white mb-2">Academy Dan-Ranked Instructors</h3>
+                        <p class="text-xs text-gray-400 mb-6">Certified martial arts masters leading training batches.</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="instructorsGrid">
+                            <!-- Dynamic instructors cards -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 4: GALLERY MANAGEMENT -->
+                <div id="tabContentGallery" style="display: none;" class="space-y-6">
+                    <!-- Gallery Header Card & Stats -->
+                    <div class="glass-panel p-6 rounded-2xl border border-navy-600">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                            <div>
+                                <h3 class="font-kanit text-2xl font-bold text-white flex items-center gap-2">
+                                    <i class="fa-solid fa-images text-flame"></i> Academy Photo Gallery
+                                </h3>
+                                <p class="text-xs text-gray-300 mt-1">Manage public website moments, upload high-energy dojo photos, and update gallery showcases.</p>
+                            </div>
+                            <button onclick="openAdminAddPhotoModal()" style="background: linear-gradient(135deg, #ff5e00, #ff8800); color: #fff; border: none; padding: 10px 22px; border-radius: 14px; font-weight: 700; font-size: 14px; cursor: pointer; display: inline-flex; align-items: center; gap: 9px; box-shadow: 0 4px 18px rgba(255,94,0,0.4); transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'" class="shadow-lg shadow-flame/30">
+                                <i class="fa-solid fa-camera"></i> + Add Photo
+                            </button>
+                        </div>
+
+                        <!-- Gallery Stat Counters -->
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6 pt-6 border-t border-navy-700/60">
+                            <div class="bg-navy-900/60 p-3.5 rounded-xl border border-navy-700">
+                                <span class="text-[11px] text-gray-400 uppercase tracking-wider block font-medium">Total Gallery Items</span>
+                                <span id="statGalleryTotal" class="font-kanit text-2xl font-bold text-white">0</span>
+                            </div>
+                            <div class="bg-navy-900/60 p-3.5 rounded-xl border border-navy-700">
+                                <span class="text-[11px] text-flame uppercase tracking-wider block font-medium">Custom Uploads</span>
+                                <span id="statGalleryCustom" class="font-kanit text-2xl font-bold text-flame">0</span>
+                            </div>
+                            <div class="bg-navy-900/60 p-3.5 rounded-xl border border-navy-700">
+                                <span class="text-[11px] text-gray-400 uppercase tracking-wider block font-medium">Default Highlights</span>
+                                <span id="statGalleryDefault" class="font-kanit text-2xl font-bold text-gray-300">4</span>
+                            </div>
+                            <div class="bg-navy-900/60 p-3.5 rounded-xl border border-navy-700 flex flex-col justify-between">
+                                <span class="text-[11px] text-emerald-400 uppercase tracking-wider block font-medium">Public Status</span>
+                                <span class="text-xs text-emerald-400 font-semibold flex items-center gap-1.5 mt-1">
+                                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Live on Website
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Gallery Photos Grid -->
+                    <div class="glass-panel p-6 rounded-2xl border border-navy-600">
+                        <div class="flex items-center justify-between mb-5">
+                            <h4 class="font-kanit font-bold text-white text-lg flex items-center gap-2">
+                                <i class="fa-solid fa-grip text-flame"></i> Current Gallery Showcase
+                            </h4>
+                            <span class="text-xs text-gray-400">Photos will automatically loop on the home page carousel</span>
+                        </div>
+
+                        <div id="adminGalleryGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+                            <!-- Populated dynamically by renderAdminGallery() -->
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+    <!-- JavaScript Application Logic with Strict RBAC -->
+    <script>
+        let studentsList = [];
+        let admissionsList = [];
+        let idleTimer = null;
+
+        // Reset inactivity timer on user interactions
+        ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'].forEach(evt => {
+            window.addEventListener(evt, resetIdleTimer, { passive: true });
+        });
+
+        function resetIdleTimer() {
+            if (getActiveAdminSession()) {
+                clearTimeout(idleTimer);
+                idleTimer = setTimeout(() => {
+                    handleLogout("Session locked due to 30 minutes of inactivity.");
+                }, 30 * 60 * 1000);
+            }
+        }
+
+        // Initialize portal on page load
+        window.addEventListener('DOMContentLoaded', async () => {
+            if (typeof initSupabase === 'function') initSupabase();
+            checkAuthorizationGate();
+        });
+
+        function checkAuthorizationGate() {
+            const session = getActiveAdminSession();
+            const lockView = document.getElementById('adminLockView');
+            const portalView = document.getElementById('adminUnlockedPortal');
+
+            if (session && session.role === 'admin') {
+                if (lockView) lockView.style.display = 'none';
+                if (portalView) portalView.style.display = 'block';
+                document.getElementById('activeAdminDisplay').innerText = session.email || 'Master Administrator';
+                loadDashboardData();
+                resetIdleTimer();
+            } else {
+                if (lockView) lockView.style.display = 'block';
+                if (portalView) portalView.style.display = 'none';
+                studentsList = [];
+                admissionsList = [];
+            }
+        }
+
+        // Authentication Handler with Brute-Force Rate Limiting
+        async function handleSecureLogin(e) {
+            e.preventDefault();
+            const user = document.getElementById('adminUser').value;
+            const pass = document.getElementById('adminPasscode').value;
+            const btn = document.getElementById('loginBtn');
+            const lockoutAlert = document.getElementById('lockoutAlert');
+
+            // Check brute-force lockout
+            const attemptsRaw = localStorage.getItem('volcano_auth_attempts');
+            let attempts = attemptsRaw ? JSON.parse(attemptsRaw) : { count: 0, lockUntil: 0 };
+            const now = Date.now();
+
+            if (attempts.lockUntil > now) {
+                const remainingMin = Math.ceil((attempts.lockUntil - now) / 60000);
+                lockoutAlert.classList.remove('hidden');
+                lockoutAlert.innerText = `Too many failed attempts. Locked for ${remainingMin} more minutes.`;
+                return;
+            }
+
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Authenticating...`;
+            btn.disabled = true;
+
+            const res = await authenticateAdmin(user, pass);
+
+            btn.disabled = false;
+            btn.innerHTML = `<i class="fa-solid fa-lock-open text-gold"></i> Authenticate Session`;
+
+            if (res.success) {
+                localStorage.removeItem('volcano_auth_attempts');
+                lockoutAlert.classList.add('hidden');
+                document.getElementById('adminPasscode').value = '';
+                showToast("Admin session authenticated. Welcome Master.", "success");
+                checkAuthorizationGate();
+            } else {
+                attempts.count = (attempts.count || 0) + 1;
+                if (attempts.count >= 5) {
+                    attempts.lockUntil = Date.now() + (15 * 60 * 1000); // 15 mins lock
+                    lockoutAlert.classList.remove('hidden');
+                    lockoutAlert.innerText = "Too many failed attempts. Terminal locked for 15 minutes.";
+                } else {
+                    document.getElementById('loginAttemptsNotice').innerText = `${5 - attempts.count} Attempts Remaining`;
+                    showToast(res.error || "Access Denied: Invalid credentials", "warning");
+                }
+                localStorage.setItem('volcano_auth_attempts', JSON.stringify(attempts));
+            }
+        }
+
+        async function handleLogout(msg = "Admin terminal locked.") {
+            await terminateAdminSession();
+            checkAuthorizationGate();
+            showToast(msg, "info");
+        }
+
+        // Load protected dashboard data
+        async function loadDashboardData() {
+            try {
+                // Guarded by RBAC in supabase-client.js
+                const cloudStudents = await getStudentRecords();
+                if (cloudStudents) {
+                    studentsList = cloudStudents;
+                } else {
+                    studentsList = JSON.parse(localStorage.getItem('volcano_students_2026') || '[]');
+                }
+                renderStudents();
+                loadAdmissions();
+                renderInstructors();
+                renderAdminGallery();
+            } catch (err) {
+                console.error("RBAC Data Load Error:", err);
+                if (err.status === 403) {
+                    handleLogout("403 Forbidden: Session expired or invalid role.");
+                }
+            }
+        }
+
+        function renderStudents(filtered = null) {
+            const data = filtered || studentsList;
+            const tbody = document.getElementById('studentTableBody');
+            tbody.innerHTML = '';
+
+            const paidCount = studentsList.filter(s => s.status === 'Paid').length;
+            const pendingCount = studentsList.length - paidCount;
+
+            document.getElementById('statTotalStudents').innerText = studentsList.length;
+            document.getElementById('statPaidCount').innerText = paidCount;
+            document.getElementById('statPendingCount').innerText = pendingCount;
+
+            if (data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-gray-500">No student records found.</td></tr>`;
+                return;
+            }
+
+            data.forEach(s => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-navy-800/40 transition";
+                const isPaid = s.status === 'Paid';
+                const statusBadge = isPaid
+                    ? `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Paid</span>`
+                    : `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-rose-500/20 text-rose-400 border border-rose-500/30">Pending</span>`;
+
+                tr.innerHTML = `
+                    <td class="p-4 font-mono font-bold text-gray-300">${escapeHtml(s.id)}</td>
+                    <td class="p-4 font-semibold text-white">${escapeHtml(s.name)}</td>
+                    <td class="p-4 text-gray-300">${escapeHtml(s.batch)}</td>
+                    <td class="p-4 font-medium text-gold">${escapeHtml(s.belt)}</td>
+                    <td class="p-4">${statusBadge}</td>
+                    <td class="p-4 text-center">
+                        <button onclick="printReceipt('${escapeHtml(s.id)}')" class="p-1.5 rounded-lg bg-navy-800 hover:bg-navy-700 text-gray-300 hover:text-white transition" title="Print Fee Receipt">
+                            <i class="fa-solid fa-print"></i>
+                        </button>
+                    </td>
+                    <td class="p-4 text-right space-x-2">
+                        <button onclick="toggleFeeStatus('${escapeHtml(s.id)}')" class="px-2 py-1 rounded-lg bg-navy-800 hover:bg-navy-700 text-[11px] text-gray-300 transition" title="Toggle Fee">
+                            <i class="fa-solid fa-repeat text-flame"></i>
+                        </button>
+                        <button onclick="openEditStudent('${escapeHtml(s.id)}')" class="px-2 py-1 rounded-lg bg-navy-800 hover:bg-navy-700 text-[11px] text-gray-300 transition" title="Edit">
+                            <i class="fa-solid fa-pen-to-square text-sky-400"></i>
+                        </button>
+                        <button onclick="handleDeleteStudent('${escapeHtml(s.id)}')" class="px-2 py-1 rounded-lg bg-navy-800 hover:bg-rose-900/40 text-[11px] text-rose-400 transition" title="Delete">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function filterStudents() {
+            const query = document.getElementById('searchInput').value.toLowerCase().trim();
+            const belt = document.getElementById('beltFilter').value;
+            const fee = document.getElementById('feeFilter').value;
+
+            const res = studentsList.filter(s => {
+                const matchQ = !query || s.name.toLowerCase().includes(query) || s.id.toLowerCase().includes(query);
+                const matchBelt = !belt || s.belt === belt;
+                const matchFee = !fee || s.status === fee;
+                return matchQ && matchBelt && matchFee;
+            });
+            renderStudents(res);
+        }
+
+        async function toggleFeeStatus(id) {
+            const s = studentsList.find(x => x.id === id);
+            if (!s) return;
+            s.status = s.status === 'Paid' ? 'Pending' : 'Paid';
+            try {
+                await saveStudentRecord(s, true);
+                saveLocalStudents();
+                renderStudents();
+                showToast(`Status updated to ${s.status}`, "success");
+            } catch (err) {
+                showToast("Unauthorized: Admin privilege required", "warning");
+            }
+        }
+
+        async function handleDeleteStudent(id) {
+            const s = studentsList.find(x => x.id === id);
+            if (!s || !confirm(`Delete student record for ${s.name}?`)) return;
+            try {
+                await deleteStudentRecord(s);
+                studentsList = studentsList.filter(x => x.id !== id);
+                saveLocalStudents();
+                renderStudents();
+                showToast("Student record deleted", "info");
+            } catch (err) {
+                showToast("Unauthorized: Admin privilege required", "warning");
+            }
+        }
+
+        function openStudentModal() {
+            document.getElementById('modalHeaderTitle').innerHTML = `<i class="fa-solid fa-user-plus text-flame"></i> Add Student Record`;
+            document.getElementById('studentDbId').value = '';
+            document.getElementById('studentRoll').value = 'VOL-' + (Math.floor(100 + Math.random() * 900));
+            document.getElementById('studentName').value = '';
+            document.getElementById('studentBatch').value = 'Evening Karate';
+            document.getElementById('studentBelt').value = 'White Belt';
+            document.getElementById('studentFeeStatus').value = 'Pending';
+            document.getElementById('studentModal').style.display = 'flex';
+        }
+
+        function openEditStudent(id) {
+            const s = studentsList.find(x => x.id === id);
+            if (!s) return;
+            document.getElementById('modalHeaderTitle').innerHTML = `<i class="fa-solid fa-pen-to-square text-flame"></i> Edit Student Record`;
+            document.getElementById('studentDbId').value = s.db_id || '';
+            document.getElementById('studentRoll').value = s.id;
+            document.getElementById('studentName').value = s.name;
+            document.getElementById('studentBatch').value = s.batch;
+            document.getElementById('studentBelt').value = s.belt;
+            document.getElementById('studentFeeStatus').value = s.status;
+            document.getElementById('studentModal').style.display = 'flex';
+        }
+
+        function closeStudentModal() {
+            document.getElementById('studentModal').style.display = 'none';
+        }
+
+        async function handleSaveStudent(e) {
+            e.preventDefault();
+            const db_id = document.getElementById('studentDbId').value;
+            const roll = document.getElementById('studentRoll').value.trim();
+            const name = document.getElementById('studentName').value.trim();
+            const batch = document.getElementById('studentBatch').value;
+            const belt = document.getElementById('studentBelt').value;
+            const status = document.getElementById('studentFeeStatus').value;
+
+            const isEdit = Boolean(db_id) || studentsList.some(s => s.id === roll);
+            const studentObj = { id: roll, db_id: db_id ? Number(db_id) : undefined, name, batch, belt, status };
+
+            try {
+                await saveStudentRecord(studentObj, isEdit);
+                if (isEdit) {
+                    const idx = studentsList.findIndex(s => s.id === roll || (db_id && s.db_id == db_id));
+                    if (idx !== -1) studentsList[idx] = { ...studentsList[idx], ...studentObj };
+                } else {
+                    studentsList.unshift(studentObj);
+                }
+                saveLocalStudents();
+                renderStudents();
+                closeStudentModal();
+                showToast("Student record saved successfully!", "success");
+            } catch (err) {
+                showToast("Unauthorized: Admin privilege required", "warning");
+            }
+        }
+
+        function saveLocalStudents() {
+            localStorage.setItem('volcano_students_2026', JSON.stringify(studentsList));
+        }
+
+        async function loadAdmissions() {
+            try {
+                admissionsList = await getAdmissionInquiries();
+                document.getElementById('admissionsBadge').innerText = admissionsList.length;
+                const tbody = document.getElementById('admissionsTableBody');
+                tbody.innerHTML = '';
+
+                if (admissionsList.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-gray-500">No admission inquiries received yet.</td></tr>`;
+                    return;
+                }
+
+                admissionsList.forEach(item => {
+                    const tr = document.createElement('tr');
+                    tr.className = "hover:bg-navy-800/40 transition";
+                    const cleanPhone = (item.phone || '').replace(/\D/g, '');
+                    const waLink = cleanPhone ? `https://wa.me/${cleanPhone}` : '#';
+                    const dateStr = item.created_at ? new Date(item.created_at).toLocaleDateString() : 'Recent';
+
+                    tr.innerHTML = `
+                        <td class="p-4 text-gray-400 font-mono">${dateStr}</td>
+                        <td class="p-4 font-bold text-white">${escapeHtml(item.student_name || item.name || 'Anonymous')}</td>
+                        <td class="p-4">
+                            <a href="${waLink}" target="_blank" class="text-emerald-400 hover:text-emerald-300 font-semibold flex items-center gap-1">
+                                <i class="fa-brands fa-whatsapp"></i> ${escapeHtml(item.phone || 'N/A')}
+                            </a>
+                        </td>
+                        <td class="p-4 text-flame font-medium">${escapeHtml(item.discipline || 'General')}</td>
+                        <td class="p-4 text-gray-300">${escapeHtml(item.preferred_batch || item.batch || 'Any')}</td>
+                        <td class="p-4 text-gray-400 max-w-xs truncate">${escapeHtml(item.message || '-')}</td>
+                        <td class="p-4 text-right space-x-2">
+                            <button onclick="convertLeadToStudent('${escapeHtml(item.student_name || item.name || '')}', '${escapeHtml(item.preferred_batch || '')}')" class="px-2.5 py-1 rounded-lg bg-flame hover:bg-flame-light text-white text-[11px] font-bold transition">
+                                + Register
+                            </button>
+                            <button onclick="handleDeleteAdmission('${item.id}')" class="px-2 py-1 rounded-lg bg-navy-800 hover:bg-rose-900/40 text-rose-400 text-[11px] transition">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (err) {
+                console.error("Admissions fetch error:", err);
+            }
+        }
+
+        async function handleDeleteAdmission(id) {
+            if (!confirm("Remove this admission inquiry lead?")) return;
+            try {
+                await deleteAdmissionInquiry(id);
+                admissionsList = admissionsList.filter(a => a.id != id);
+                loadAdmissions();
+                showToast("Inquiry lead removed.", "info");
+            } catch (e) {
+                showToast("Failed to delete lead", "warning");
+            }
+        }
+
+        function convertLeadToStudent(name, batch) {
+            openStudentModal();
+            document.getElementById('studentName').value = name;
+            if (batch) document.getElementById('studentBatch').value = batch;
+            switchTab('students');
+        }
+
+        function renderInstructors() {
+            const grid = document.getElementById('instructorsGrid');
+            const instructors = [
+                { name: "Amjad Moosa", rank: "7th Dan Black Belt", role: "Grand Master & Founder", img: "https://i.postimg.cc/2S5XvpP5/1000080369.jpg" },
+                { name: "Koya Mon", rank: "3rd Dan Black Belt", role: "Chief Instructor", img: "https://i.postimg.cc/RZBdrnSg/1000080346.jpg" },
+                { name: "Mufeed A", rank: "1st Dan Black Belt", role: "Karate Master", img: "https://i.postimg.cc/WpMKcwGD/1000080365.jpg" },
+                { name: "Shufaiq", rank: "1st Dan Black Belt", role: "Kickboxing Coach", img: "../shufaiq.jpg" }
+            ];
+
+            grid.innerHTML = instructors.map(inst => `
+                <div class="glass-panel p-5 rounded-2xl border border-navy-700 text-center">
+                    <img src="${inst.img}" alt="${inst.name}" class="w-20 h-20 rounded-full mx-auto object-cover border-2 border-flame/50 mb-3" onerror="this.src='../gallery-ring.jpg'">
+                    <h4 class="font-kanit font-bold text-white text-base">${inst.name}</h4>
+                    <span class="text-gold text-xs font-semibold block">${inst.rank}</span>
+                    <span class="text-gray-400 text-[11px] block mt-1">${inst.role}</span>
+                </div>
+            `).join('');
+        }
+
+        function printReceipt(id) {
+            const s = studentsList.find(x => x.id === id);
+            if (!s) return;
+            document.getElementById('printReceiptDate').innerText = 'Date: ' + new Date().toLocaleDateString();
+            document.getElementById('printReceiptRoll').innerText = s.id;
+            document.getElementById('printReceiptName').innerText = s.name;
+            document.getElementById('printReceiptBatch').innerText = s.batch;
+            document.getElementById('printReceiptBelt').innerText = s.belt;
+            document.getElementById('printReceiptStatus').innerText = s.status === 'Paid' ? 'PAID IN FULL' : 'FEE PAYMENT PENDING';
+            document.getElementById('printReceiptStatus').style.color = s.status === 'Paid' ? 'green' : 'red';
+            window.print();
+        }
+
+        function switchTab(tab) {
+            ['students', 'admissions', 'instructors', 'gallery'].forEach(t => {
+                const content = document.getElementById('tabContent' + t.charAt(0).toUpperCase() + t.slice(1));
+                const btn = document.getElementById('tabBtn' + t.charAt(0).toUpperCase() + t.slice(1));
+                if (content) content.style.display = (t === tab) ? 'block' : 'none';
+                if (btn) {
+                    btn.className = (t === tab)
+                        ? "px-4 py-2 rounded-lg text-xs font-semibold bg-flame text-white transition flex items-center gap-2 cursor-pointer whitespace-nowrap shadow-md shadow-flame/30"
+                        : "px-4 py-2 rounded-lg text-xs font-semibold text-gray-300 hover:text-white transition flex items-center gap-2 cursor-pointer whitespace-nowrap";
+                }
+            });
+            if (tab === 'admissions') loadAdmissions();
+            if (tab === 'gallery') renderAdminGallery();
+        }
+
+        // ==========================================
+        // ADMIN GALLERY MANAGEMENT LOGIC
+        // ==========================================
+        const defaultAdminGallery = [
+            { id: 'def-ring', url: '../gallery-ring.jpg', caption: 'Professional Ring Sparring & Kickboxing', isCustom: false },
+            { id: 'def-stunts', url: '../gallery-stunts.jpg', caption: 'Martial Arts Stunts & Gymnastic Pyramids', isCustom: false },
+            { id: 'def-team', url: '../gallery-team.jpg', caption: 'Volcano Academy Instructors & Fighters', isCustom: false },
+            { id: 'def-1', url: '../gallery-ring.jpg', caption: 'Academy Award & Certification Ceremony', isCustom: false }
+        ];
+
+        let adminActivePhotoUploadMode = 'upload';
+        let adminSelectedPhotoDataUrl = '';
+
+        function renderAdminGallery() {
+            let customPhotos = [];
+            try {
+                customPhotos = JSON.parse(localStorage.getItem('volcano_custom_gallery') || '[]');
+            } catch(e) { customPhotos = []; }
+
+            const total = customPhotos.length + defaultAdminGallery.length;
+            const badge = document.getElementById('galleryCountBadge');
+            if (badge) badge.innerText = total;
+
+            const statTotal = document.getElementById('statGalleryTotal');
+            const statCustom = document.getElementById('statGalleryCustom');
+            const statDefault = document.getElementById('statGalleryDefault');
+
+            if (statTotal) statTotal.innerText = total;
+            if (statCustom) statCustom.innerText = customPhotos.length;
+            if (statDefault) statDefault.innerText = defaultAdminGallery.length;
+
+            const grid = document.getElementById('adminGalleryGrid');
+            if (!grid) return;
+
+            const allPhotos = [
+                ...customPhotos.map(p => ({ ...p, isCustom: true })),
+                ...defaultAdminGallery
+            ];
+
+            if (allPhotos.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center py-12 text-gray-500">No photos in gallery yet. Click "+ Add Photo" to upload.</div>`;
+                return;
+            }
+
+            grid.innerHTML = allPhotos.map(photo => {
+                const isCustom = Boolean(photo.isCustom || (photo.id && String(photo.id).startsWith('custom-')));
+                const safeUrl = (photo.url || '../gallery-ring.jpg').replace(/'/g, "\\'");
+                const safeCaption = (photo.caption || 'Academy Moment').replace(/'/g, "\\'");
+                const tagBadge = isCustom
+                    ? `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-flame/20 text-flame border border-flame/40 flex items-center gap-1"><i class="fa-solid fa-cloud-arrow-up"></i> Custom Upload</span>`
+                    : `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-navy-700/80 text-gray-300 border border-navy-600 flex items-center gap-1"><i class="fa-solid fa-star text-gold"></i> Default Highlight</span>`;
+
+                const dateStr = photo.created_at ? new Date(photo.created_at).toLocaleDateString() : '';
+
+                const deleteBtn = isCustom
+                    ? `<button onclick="handleDeleteAdminPhoto('${photo.id}')" class="px-2.5 py-1.5 rounded-lg bg-navy-900/80 hover:bg-rose-900/50 text-rose-400 hover:text-rose-200 border border-navy-700 hover:border-rose-500/40 transition text-xs flex items-center gap-1.5" title="Delete Photo">
+                           <i class="fa-solid fa-trash"></i> Delete
+                       </button>`
+                    : `<span class="text-[11px] text-gray-500 italic">Protected</span>`;
+
+                return `
+                    <div class="glass-panel rounded-2xl border border-navy-700 overflow-hidden flex flex-col group hover:border-flame/60 transition duration-200">
+                        <div class="relative h-48 w-full overflow-hidden bg-navy-950 cursor-pointer" onclick="openAdminLightbox('${safeUrl}', '${safeCaption}')">
+                            <img src="${photo.url}" alt="${escapeHtml(photo.caption || '')}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.src='../gallery-ring.jpg'">
+                            <div class="absolute inset-0 bg-gradient-to-t from-navy-950 via-transparent to-transparent opacity-60"></div>
+                            <div class="absolute top-2.5 left-2.5">
+                                ${tagBadge}
+                            </div>
+                            <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition bg-black/50 backdrop-blur-[2px]">
+                                <span class="px-3 py-1.5 rounded-lg bg-flame text-white text-xs font-bold shadow-lg flex items-center gap-1.5">
+                                    <i class="fa-solid fa-expand"></i> View Full
+                                </span>
+                            </div>
+                        </div>
+                        <div class="p-4 flex-1 flex flex-col justify-between">
+                            <div>
+                                <h5 class="font-kanit font-bold text-white text-sm line-clamp-2">${escapeHtml(photo.caption || 'Academy Moment')}</h5>
+                                ${dateStr ? `<span class="text-[10px] text-gray-400 block mt-1"><i class="fa-regular fa-calendar"></i> Added: ${dateStr}</span>` : ''}
+                            </div>
+                            <div class="flex items-center justify-between pt-3 mt-3 border-t border-navy-800">
+                                <button onclick="openAdminLightbox('${safeUrl}', '${safeCaption}')" class="text-xs text-flame hover:underline font-semibold flex items-center gap-1 cursor-pointer">
+                                    <i class="fa-solid fa-eye"></i> Preview
+                                </button>
+                                ${deleteBtn}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function openAdminAddPhotoModal() {
+            adminSelectedPhotoDataUrl = '';
+            const modal = document.getElementById('adminAddPhotoModal');
+            const previewContainer = document.getElementById('adminPhotoPreviewContainer');
+            const captionInput = document.getElementById('adminPhotoCaptionInput');
+            const urlInput = document.getElementById('adminPhotoUrlInput');
+            const fileInput = document.getElementById('adminPhotoFileInput');
+
+            if (captionInput) captionInput.value = '';
+            if (urlInput) urlInput.value = '';
+            if (fileInput) fileInput.value = '';
+            if (previewContainer) previewContainer.style.display = 'none';
+
+            switchAdminPhotoUploadTab('upload');
+            if (modal) modal.style.display = 'flex';
+        }
+
+        function closeAdminAddPhotoModal() {
+            const modal = document.getElementById('adminAddPhotoModal');
+            if (modal) modal.style.display = 'none';
+            adminSelectedPhotoDataUrl = '';
+        }
+
+        function switchAdminPhotoUploadTab(mode) {
+            adminActivePhotoUploadMode = mode;
+            const uploadBtn = document.getElementById('adminPhotoTabUploadBtn');
+            const urlBtn = document.getElementById('adminPhotoTabUrlBtn');
+            const uploadSection = document.getElementById('adminPhotoUploadSection');
+            const urlSection = document.getElementById('adminPhotoUrlSection');
+
+            if (mode === 'upload') {
+                if (uploadBtn) uploadBtn.className = 'flex-1 py-2 rounded-lg bg-flame text-white transition';
+                if (urlBtn) urlBtn.className = 'flex-1 py-2 rounded-lg text-gray-300 hover:text-white transition';
+                if (uploadSection) uploadSection.style.display = 'block';
+                if (urlSection) urlSection.style.display = 'none';
+            } else {
+                if (urlBtn) urlBtn.className = 'flex-1 py-2 rounded-lg bg-flame text-white transition';
+                if (uploadBtn) uploadBtn.className = 'flex-1 py-2 rounded-lg text-gray-300 hover:text-white transition';
+                if (uploadSection) uploadSection.style.display = 'none';
+                if (urlSection) urlSection.style.display = 'block';
+            }
+        }
+
+        function handleAdminPhotoFileSelected(event) {
+            const file = event.target.files && event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const maxDimension = 1200;
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > height) {
+                        if (width > maxDimension) {
+                            height = Math.round((height * maxDimension) / width);
+                            width = maxDimension;
+                        }
+                    } else {
+                        if (height > maxDimension) {
+                            width = Math.round((width * maxDimension) / height);
+                            height = maxDimension;
+                        }
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    adminSelectedPhotoDataUrl = canvas.toDataURL('image/jpeg', 0.82);
+                    showAdminPhotoPreview(adminSelectedPhotoDataUrl);
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function handleAdminPhotoUrlInput(event) {
+            const url = event.target.value.trim();
+            if (url) {
+                adminSelectedPhotoDataUrl = url;
+                showAdminPhotoPreview(url);
+            }
+        }
+
+        function showAdminPhotoPreview(src) {
+            const previewContainer = document.getElementById('adminPhotoPreviewContainer');
+            const previewImg = document.getElementById('adminPhotoPreviewImg');
+            const captionInput = document.getElementById('adminPhotoCaptionInput');
+            const previewCaption = document.getElementById('adminPhotoPreviewCaption');
+
+            if (previewImg) previewImg.src = src;
+            if (previewCaption) previewCaption.innerText = (captionInput && captionInput.value.trim()) || 'Preview Photo';
+            if (previewContainer) previewContainer.style.display = 'block';
+        }
+
+        function updateAdminPhotoPreviewCaption(val) {
+            const previewCaption = document.getElementById('adminPhotoPreviewCaption');
+            if (previewCaption) previewCaption.innerText = val.trim() || 'Preview Photo';
+        }
+
+        function handleAdminSavePhoto(e) {
+            e.preventDefault();
+            const session = getActiveAdminSession();
+            if (!session || session.role !== 'admin') {
+                showToast("Access Denied: Admin privileges required", "warning");
+                return;
+            }
+
+            const captionInput = document.getElementById('adminPhotoCaptionInput');
+            const caption = captionInput ? captionInput.value.trim() : 'Academy Moment';
+
+            if (!adminSelectedPhotoDataUrl) {
+                showToast("Please choose an image file or enter an image link!", "warning");
+                return;
+            }
+
+            const newPhoto = {
+                id: 'custom-' + Date.now(),
+                url: adminSelectedPhotoDataUrl,
+                caption: caption,
+                isCustom: true,
+                created_at: new Date().toISOString()
+            };
+
+            let customPhotos = [];
+            try {
+                customPhotos = JSON.parse(localStorage.getItem('volcano_custom_gallery') || '[]');
+            } catch(err) { customPhotos = []; }
+
+            customPhotos.unshift(newPhoto);
+
+            try {
+                localStorage.setItem('volcano_custom_gallery', JSON.stringify(customPhotos));
+            } catch(storageErr) {
+                showToast("Storage full! Please use an Image URL instead of large upload.", "warning");
+                return;
+            }
+
+            renderAdminGallery();
+            closeAdminAddPhotoModal();
+            showToast("Photo added to academy gallery!", "success");
+        }
+
+        function handleDeleteAdminPhoto(photoId) {
+            const session = getActiveAdminSession();
+            if (!session || session.role !== 'admin') {
+                showToast("Access Denied: Admin privileges required", "warning");
+                return;
+            }
+
+            if (!confirm("Are you sure you want to remove this photo from the gallery?")) return;
+
+            let customPhotos = [];
+            try {
+                customPhotos = JSON.parse(localStorage.getItem('volcano_custom_gallery') || '[]');
+            } catch(err) { customPhotos = []; }
+
+            customPhotos = customPhotos.filter(p => p.id !== photoId);
+            localStorage.setItem('volcano_custom_gallery', JSON.stringify(customPhotos));
+            renderAdminGallery();
+            showToast("Photo removed from gallery.", "info");
+        }
+
+        function openAdminLightbox(url, caption) {
+            const modal = document.getElementById('adminLightboxModal');
+            const img = document.getElementById('adminLightboxImg');
+            const cap = document.getElementById('adminLightboxCaption');
+            if (img) img.src = url;
+            if (cap) cap.innerText = caption;
+            if (modal) modal.style.display = 'flex';
+        }
+
+        function closeAdminLightbox() {
+            const modal = document.getElementById('adminLightboxModal');
+            if (modal) modal.style.display = 'none';
+        }
+
+        function togglePasscodeVisibility(id, btn) {
+            const input = document.getElementById(id);
+            if (!input) return;
+            const isPass = input.type === 'password';
+            input.type = isPass ? 'text' : 'password';
+            btn.innerHTML = `<i class="fa-solid fa-${isPass ? 'eye-slash' : 'eye'} text-sm"></i>`;
+        }
+
+        function showToast(msg, type = "info") {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toastMsg');
+            const toastIcon = document.getElementById('toastIcon');
+            if (!toast || !toastMsg) return;
+
+            toastMsg.innerText = msg;
+            if (type === 'success') toastIcon.className = "fa-solid fa-circle-check text-emerald-400 text-xl";
+            else if (type === 'warning') toastIcon.className = "fa-solid fa-triangle-exclamation text-rose-400 text-xl";
+            else toastIcon.className = "fa-solid fa-circle-info text-flame text-xl";
+
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3500);
+        }
+
+        function escapeHtml(str) {
+            return String(str || '').replace(/[&<>"']/g, m => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
+            }[m]));
+        }
+    </script>
+</body>
+</html>

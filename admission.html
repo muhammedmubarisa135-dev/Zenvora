@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admission Procedure | Volcano Karate & Kick Boxing Academy</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+
+    <!-- Google Fonts: Kanit & Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-client.js"></script>
+
+    <!-- Tailwind CSS (Local with CDN Fallback) -->
+    <script src="tailwind.js"></script>
+    <script>
+        if (typeof tailwind === 'undefined') {
+            document.write('<script src="https://cdn.tailwindcss.com"><\/script>');
+        }
+    </script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: {
+                            900: '#0b111e',
+                            800: '#131c2e',
+                            700: '#1b273e',
+                            600: '#253552'
+                        },
+                        flame: {
+                            DEFAULT: '#ff5e00',
+                            glow: '#ff2a00',
+                            light: '#ff8800'
+                        },
+                        gold: {
+                            DEFAULT: '#ffbe0b',
+                            light: '#ffd154'
+                        }
+                    },
+                    fontFamily: {
+                        kanit: ['Kanit', 'sans-serif'],
+                        poppins: ['Poppins', 'sans-serif']
+                    }
+                }
+            }
+        };
+    </script>
+
+    <style>
+        .hidden { display: none !important; }
+
+        html { scroll-behavior: smooth; }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0b111e; }
+        ::-webkit-scrollbar-thumb { background: #253552; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #ff5e00; }
+
+        body {
+            background-color: #0b111e;
+            background-image: 
+                radial-gradient(at 10% 20%, rgba(255, 94, 0, 0.08) 0px, transparent 50%),
+                radial-gradient(at 90% 80%, rgba(255, 190, 11, 0.05) 0px, transparent 50%);
+            color: #f0f4f8;
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        .glass-panel {
+            background: rgba(19, 28, 46, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .glass-header {
+            background: rgba(11, 17, 30, 0.9);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .gradient-text-orange {
+            background: linear-gradient(135deg, #ff5e00 0%, #ffbe0b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .gradient-text-gold {
+            background: linear-gradient(135deg, #ffbe0b 0%, #ff8800 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <!-- Toast Notification Container -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+        <div class="glass-panel border-l-4 border-flame px-5 py-4 rounded-xl shadow-2xl flex items-center gap-3">
+            <i id="toastIcon" class="fa-solid fa-circle-check text-flame text-xl"></i>
+            <span id="toastMsg" class="text-sm font-medium text-white">Notification message</span>
+        </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- LOG IN OR SIGN UP MODAL (Matches Reference Design)       -->
+    <!-- ======================================================== -->
+    <div id="authModal" style="display: none;" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4" onclick="handleAuthModalBackdropClick(event)">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-7 sm:p-8 text-center shadow-2xl relative animate-in fade-in zoom-in duration-200 border border-gray-100" onclick="event.stopPropagation()">
+            <!-- Close Button (Top Left exactly like screenshot) -->
+            <button type="button" onclick="closeAuthModal()" class="absolute top-5 left-5 text-gray-400 hover:text-gray-700 transition p-1.5 rounded-full hover:bg-gray-100 cursor-pointer" aria-label="Close modal">
+                <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+
+            <!-- 1. Main View: Log in or sign up -->
+            <div id="authMainView">
+                <h3 class="font-kanit text-2xl sm:text-[26px] font-extrabold text-gray-900 tracking-tight mt-3 mb-1.5">Log in or sign up</h3>
+                <p class="text-gray-500 text-xs sm:text-[13px] leading-relaxed mb-6 px-1">
+                    Access student dashboard, track belt progress, and manage your account.
+                </p>
+
+                <!-- 3 Reference Pill Buttons -->
+                <div class="space-y-3">
+                    <!-- Continue with Google -->
+                    <button type="button" onclick="handleGoogleAuth()" class="w-full py-3.5 px-5 rounded-full border border-gray-300 hover:border-gray-400 hover:bg-gray-50/90 text-gray-800 font-semibold text-sm transition flex items-center shadow-sm cursor-pointer group">
+                        <svg class="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24">
+                            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                        </svg>
+                        <span class="flex-1 text-center font-medium text-gray-800 group-hover:text-black">Continue with Google</span>
+                    </button>
+
+                    <!-- Continue with Apple -->
+                    <button type="button" onclick="handleAppleAuth()" class="w-full py-3.5 px-5 rounded-full border border-gray-300 hover:border-gray-400 hover:bg-gray-50/90 text-gray-800 font-semibold text-sm transition flex items-center shadow-sm cursor-pointer group">
+                        <i class="fa-brands fa-apple text-xl text-black flex-shrink-0 w-5"></i>
+                        <span class="flex-1 text-center font-medium text-gray-800 group-hover:text-black">Continue with Apple</span>
+                    </button>
+
+                    <!-- Continue with phone -->
+                    <button type="button" onclick="showPhoneAuthView()" class="w-full py-3.5 px-5 rounded-full border border-gray-300 hover:border-gray-400 hover:bg-gray-50/90 text-gray-800 font-semibold text-sm transition flex items-center shadow-sm cursor-pointer group">
+                        <i class="fa-solid fa-phone text-gray-800 flex-shrink-0 w-5 text-sm"></i>
+                        <span class="flex-1 text-center font-medium text-gray-800 group-hover:text-black">Continue with phone</span>
+                    </button>
+                </div>
+
+                <!-- Divider -->
+                <div class="relative my-4">
+                    <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-gray-200"></div></div>
+                    <div class="relative flex justify-center text-[11px] uppercase tracking-wider"><span class="bg-white px-3 text-gray-400 font-medium">or student roll id</span></div>
+                </div>
+
+                <!-- Student Roll ID Direct Form -->
+                <form onsubmit="handleRollAuthSubmit(event)" class="space-y-2.5">
+                    <div class="relative">
+                        <input type="text" id="authRollInput" placeholder="Enter Roll ID (e.g. VOL-101)" required class="w-full bg-gray-50 border border-gray-200 rounded-full px-4 py-3 text-center text-gray-900 font-mono text-sm tracking-wider uppercase focus:outline-none focus:border-flame focus:bg-white transition">
+                    </div>
+                    <button type="submit" class="w-full py-3 rounded-full bg-gradient-to-r from-flame to-flame-light hover:brightness-105 text-white font-bold text-xs uppercase tracking-wider shadow-md shadow-flame/20 transition cursor-pointer">
+                        Sign In with Roll ID
+                    </button>
+                </form>
+
+                <p class="text-[11px] text-gray-400 mt-4">
+                    Already enrolled? Access your student identity and belt history anytime.
+                </p>
+            </div>
+
+            <!-- 2. Phone Input View -->
+            <div id="authPhoneView" style="display: none;" class="text-left">
+                <button type="button" onclick="showMainAuthView()" class="text-gray-500 hover:text-gray-800 text-xs font-semibold inline-flex items-center gap-1.5 mb-3 transition">
+                    <i class="fa-solid fa-arrow-left"></i> Back to options
+                </button>
+                <h3 class="font-kanit text-xl font-extrabold text-gray-900 tracking-tight mb-1">Continue with phone</h3>
+                <p class="text-gray-500 text-xs mb-4">Enter your registered mobile number to access your student profile.</p>
+
+                <form onsubmit="handlePhoneAuthSubmit(event)" class="space-y-3">
+                    <div class="flex gap-2">
+                        <span class="inline-flex items-center px-3.5 rounded-2xl border border-gray-200 bg-gray-50 text-gray-700 text-xs font-bold">+91</span>
+                        <input type="tel" id="authPhoneInput" required placeholder="81369 08602" maxlength="10" class="flex-1 bg-gray-50 border border-gray-200 rounded-2xl px-4 py-3 text-gray-900 text-sm focus:outline-none focus:border-flame focus:bg-white transition">
+                    </div>
+                    <button type="submit" class="w-full py-3.5 rounded-full bg-gradient-to-r from-flame to-flame-light hover:brightness-105 text-white font-bold text-xs uppercase tracking-wider shadow-md transition cursor-pointer">
+                        Verify &amp; Continue
+                    </button>
+                </form>
+                <p class="text-[11px] text-gray-400 text-center mt-3">WhatsApp help: <strong class="text-gray-600">+91 8136908602</strong></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <header class="glass-header fixed top-0 left-0 right-0 z-40">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20 gap-2 sm:gap-4">
+                <!-- 1. Logo -->
+                <a href="index.html" class="flex items-center gap-2 sm:gap-3 group flex-shrink-0">
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl overflow-hidden bg-navy-800 border-2 border-flame shadow-lg shadow-flame/30 group-hover:scale-105 transition duration-300 flex items-center justify-center p-0.5">
+                        <img src="logo.jpg" alt="Volcano Academy Logo" class="w-full h-full object-cover rounded-lg sm:rounded-xl">
+                    </div>
+                    <div>
+                        <span class="font-kanit font-extrabold text-base sm:text-xl tracking-wider text-white block leading-none">VOLCANO</span>
+                        <span class="font-kanit text-[9px] sm:text-xs tracking-widest text-flame uppercase block mt-0.5 sm:mt-1 font-semibold">Karate & Kickboxing</span>
+                    </div>
+                </a>
+
+                <!-- 2. Desktop Navigation Headings -->
+                <div class="hidden md:flex items-center gap-2 sm:gap-3">
+                    <a href="index.html" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold text-gray-200 hover:text-white bg-navy-800/90 hover:bg-navy-700 border border-navy-600 transition flex items-center gap-1.5 shadow-sm">
+                        <i class="fa-solid fa-house text-flame text-xs"></i>
+                        <span>Home</span>
+                    </a>
+                    <a href="admission.html" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-flame to-flame-light transition flex items-center gap-1.5 shadow-md shadow-flame/40 ring-2 ring-flame/40">
+                        <i class="fa-solid fa-user-plus text-xs"></i>
+                        <span>Admission</span>
+                    </a>
+                    <a href="student.html?login=1" onclick="sessionStorage.removeItem('volcano_student_roll'); sessionStorage.removeItem('volcano_student_name');" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold text-white bg-navy-800/90 hover:bg-navy-700 border border-navy-600 transition flex items-center gap-1.5 shadow-sm cursor-pointer">
+                        <i class="fa-solid fa-arrow-right-to-bracket text-flame text-xs"></i>
+                        <span>Log In</span>
+                    </a>
+                </div>
+
+                <!-- 3. Mobile Menu Button -->
+                <div class="flex items-center gap-3">
+                    <!-- Mobile Menu Button (< 768px) -->
+                    <button onclick="toggleMobileNav()" class="md:hidden text-gray-300 hover:text-white p-2 rounded-xl bg-navy-800 border border-navy-700 hover:border-flame transition flex items-center justify-center w-10 h-10" aria-label="Toggle Full Menu">
+                        <i class="fa-solid fa-bars text-lg" id="menuIcon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Drawer Menu (< 768px) -->
+        <div id="mobileDrawer" style="display: none;" class="hidden md:hidden bg-navy-900/95 backdrop-blur-xl border-b border-navy-700 px-4 py-5 space-y-2">
+            <a href="student.html?login=1" onclick="sessionStorage.removeItem('volcano_student_roll'); sessionStorage.removeItem('volcano_student_name'); toggleMobileNav();" style="display:flex; align-items:center; gap:12px; color:#fff; width:100%; text-align:left; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15); padding:11px 14px; border-radius:14px; font-size:15px; font-weight:700; margin-bottom:12px; text-decoration:none;">
+                <i class="fa-solid fa-arrow-right-to-bracket" style="color:#ff5e00; width:20px; text-align:center;"></i> Log In / Student Portal
+            </a>
+            <a href="index.html" class="flex items-center gap-2.5 text-gray-200 hover:text-flame py-2 text-base font-semibold">
+                <i class="fa-solid fa-house text-flame w-5"></i> Home
+            </a>
+            <a href="index.html#about" class="flex items-center gap-2.5 text-gray-300 hover:text-flame py-2 text-base font-medium">
+                <i class="fa-solid fa-info-circle text-flame w-5"></i> About Us
+            </a>
+            <a href="index.html#masters" class="flex items-center gap-2.5 text-gray-300 hover:text-flame py-2 text-base font-medium">
+                <i class="fa-solid fa-user-ninja text-flame w-5"></i> Our Masters
+            </a>
+            <a href="index.html#gallery" class="flex items-center gap-2.5 text-gray-300 hover:text-flame py-2 text-base font-medium">
+                <i class="fa-solid fa-images text-flame w-5"></i> Gallery
+            </a>
+            <a href="admission.html" class="flex items-center gap-2.5 text-flame py-2 text-base font-bold bg-flame/10 px-3 rounded-lg">
+                <i class="fa-solid fa-user-plus text-flame w-5"></i> Admission Procedure
+            </a>
+            <a href="student.html" class="flex items-center gap-2.5 text-sky-400 py-2 text-base font-bold">
+                <i class="fa-solid fa-graduation-cap text-sky-400 w-5"></i> Student Portal
+            </a>
+        </div>
+    </header>
+
+    <!-- MAIN ADMISSION PAGE CONTENT -->
+    <main class="pt-28 pb-20 flex-grow">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Breadcrumb Navigation -->
+            <div class="mb-8">
+                <a href="index.html" class="inline-flex items-center gap-2 text-xs font-semibold text-gray-400 hover:text-flame transition bg-navy-800/80 px-4 py-2 rounded-full border border-navy-700">
+                    <i class="fa-solid fa-arrow-left text-flame"></i> Back to Home
+                </a>
+            </div>
+
+            <!-- Page Header -->
+            <div class="text-center max-w-2xl mx-auto mb-14">
+                <span class="text-xs font-bold uppercase tracking-widest text-flame block mb-2">Enrollment Guide</span>
+                <h1 class="font-kanit text-3xl sm:text-5xl font-extrabold text-white uppercase tracking-tight">
+                    ADMISSION <span class="gradient-text-gold">PROCEDURE</span>
+                </h1>
+                <p class="text-gray-400 text-sm sm:text-base mt-3">Join Volcano Karate & Kick Boxing Academy in 4 simple steps</p>
+                <div class="w-24 h-1 bg-gradient-to-r from-gold to-flame mx-auto mt-4 rounded-full"></div>
+            </div>
+
+            <!-- 4 Step Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+                <!-- Step 1 -->
+                <div class="glass-panel rounded-2xl p-6 text-center relative border border-navy-600/50 hover:border-flame/50 transition">
+                    <div class="w-14 h-14 rounded-full bg-gradient-to-tr from-flame to-gold text-navy-900 font-extrabold text-xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-flame/30">
+                        1
+                    </div>
+                    <h3 class="font-kanit text-lg font-bold text-white mb-2">Online Inquiry</h3>
+                    <p class="text-gray-400 text-xs leading-relaxed">Fill out the quick enrollment form below with student contact details.</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="glass-panel rounded-2xl p-6 text-center relative border border-navy-600/50 hover:border-flame/50 transition">
+                    <div class="w-14 h-14 rounded-full bg-gradient-to-tr from-flame to-gold text-navy-900 font-extrabold text-xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-flame/30">
+                        2
+                    </div>
+                    <h3 class="font-kanit text-lg font-bold text-white mb-2">Batch Selection</h3>
+                    <p class="text-gray-400 text-xs leading-relaxed">Select suitable Morning, Evening, or Weekend training batches.</p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="glass-panel rounded-2xl p-6 text-center relative border border-navy-600/50 hover:border-flame/50 transition">
+                    <div class="w-14 h-14 rounded-full bg-gradient-to-tr from-flame to-gold text-navy-900 font-extrabold text-xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-flame/30">
+                        3
+                    </div>
+                    <h3 class="font-kanit text-lg font-bold text-white mb-2">Uniform & Gi</h3>
+                    <p class="text-gray-400 text-xs leading-relaxed">Collect official Karate Gi or Kickboxing gear & complete initial registration.</p>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="glass-panel rounded-2xl p-6 text-center relative border border-navy-600/50 hover:border-flame/50 transition">
+                    <div class="w-14 h-14 rounded-full bg-gradient-to-tr from-flame to-gold text-navy-900 font-extrabold text-xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-flame/30">
+                        4
+                    </div>
+                    <h3 class="font-kanit text-lg font-bold text-white mb-2">Begin Training</h3>
+                    <p class="text-gray-400 text-xs leading-relaxed">Start active practice under certified Dan-ranked Black Belt instructors.</p>
+                </div>
+            </div>
+
+            <!-- Inquiry Application Form Box -->
+            <div class="max-w-2xl mx-auto glass-panel p-8 sm:p-12 rounded-3xl border border-flame/30 relative shadow-2xl shadow-navy-950/80">
+                <div class="text-center mb-8">
+                    <div class="w-12 h-12 rounded-2xl bg-flame/15 border border-flame/30 flex items-center justify-center text-flame text-xl mx-auto mb-3 shadow-lg shadow-flame/20">
+                        <i class="fa-solid fa-file-signature"></i>
+                    </div>
+                    <h2 class="font-kanit text-2xl sm:text-3xl font-bold text-white flex items-center justify-center gap-2">
+                        Student Admission Inquiry
+                    </h2>
+                    <p class="text-gray-400 text-xs sm:text-sm mt-1">Submit your details to get connected instantly via official WhatsApp</p>
+                </div>
+                
+                <form id="admissionForm" onsubmit="handleInquirySubmit(event)" class="space-y-5">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-1.5">Student Name *</label>
+                            <input type="text" id="inquiryStudentName" required placeholder="Full Name" class="w-full bg-navy-900/90 border border-navy-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-flame transition">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-1.5">Phone / Whatsapp *</label>
+                            <input type="tel" id="inquiryPhone" required placeholder="+91 XXXXX XXXXX" class="w-full bg-navy-900/90 border border-navy-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-flame transition">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-1.5">Discipline</label>
+                            <select id="inquiryDiscipline" class="w-full bg-navy-900/90 border border-navy-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-flame transition">
+                                <option value="Karate">Karate</option>
+                                <option value="Kickboxing">Kickboxing</option>
+                                <option value="Combo (Karate & Kickboxing)">Combo (Karate & Kickboxing)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-1.5">Preferred Batch</label>
+                            <select id="inquiryBatch" class="w-full bg-navy-900/90 border border-navy-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-flame transition">
+                                <option value="Evening">Evening</option>
+                                <option value="Morning">Morning</option>
+                                <option value="Weekend Special Batch">Weekend Special Batch</option>
+                                <option value="Kids Beginner Batch">Kids Beginner Batch</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-1.5">Message / Special Requirements</label>
+                        <textarea id="inquiryMessage" rows="3" placeholder="Optional notes (age, previous martial arts experience, questions)..." class="w-full bg-navy-900/90 border border-navy-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-flame transition"></textarea>
+                    </div>
+
+                    <button type="submit" id="inquirySubmitBtn"
+                        style="background: linear-gradient(135deg, #25D366, #128C7E); box-shadow: 0 4px 20px rgba(37,211,102,0.35);"
+                        class="w-full text-white font-bold py-4 px-6 rounded-xl transition transform hover:-translate-y-0.5 hover:brightness-110 flex items-center justify-center gap-3 text-base cursor-pointer">
+                        <i class="fa-brands fa-whatsapp text-2xl"></i> Send to WhatsApp
+                    </button>
+                    
+                    <p class="text-center text-xs text-gray-400 mt-2">
+                        Direct official response within 24 hours. Your details are securely preserved.
+                    </p>
+                </form>
+            </div>
+
+            <!-- Quick Contacts Box -->
+            <div class="max-w-2xl mx-auto mt-12 grid grid-cols-1 sm:grid-cols-2 gap-4 text-center">
+                <div class="glass-panel p-5 rounded-2xl border border-navy-700/60 flex items-center justify-center gap-3">
+                    <i class="fa-solid fa-phone text-flame text-lg"></i>
+                    <div>
+                        <div class="text-xs text-gray-400">Direct Contact</div>
+                        <div class="text-sm font-bold text-white">+91 81369 08602</div>
+                    </div>
+                </div>
+                <div class="glass-panel p-5 rounded-2xl border border-navy-700/60 flex items-center justify-center gap-3">
+                    <i class="fa-brands fa-whatsapp text-emerald-400 text-lg"></i>
+                    <div>
+                        <div class="text-xs text-gray-400">WhatsApp Helpdesk</div>
+                        <div class="text-sm font-bold text-white">+91 81369 08602</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-navy-900 border-t border-navy-800 py-10 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="flex items-center justify-center gap-3 mb-4">
+                <div class="w-10 h-10 rounded-xl overflow-hidden bg-navy-800 border-2 border-flame shadow-lg shadow-flame/30 flex items-center justify-center p-0.5">
+                    <img src="logo.jpg" alt="Volcano Academy Logo" class="w-full h-full object-cover rounded-lg">
+                </div>
+                <span class="font-kanit font-extrabold text-xl tracking-wider text-white">VOLCANO ACADEMY</span>
+            </div>
+            
+            <div class="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-400 mb-6">
+                <a href="index.html" class="hover:text-flame transition">Home</a>
+                <a href="index.html#about" class="hover:text-flame transition">About</a>
+                <a href="index.html#masters" class="hover:text-flame transition">Masters</a>
+                <a href="index.html#gallery" class="hover:text-flame transition">Gallery</a>
+                <a href="admission.html" class="text-flame font-bold">Admission</a>
+                <a href="student.html" class="hover:text-flame transition">Student Portal</a>
+            </div>
+
+            <p class="text-xs text-gray-500">&copy; 2026 Volcano Karate & Kick Boxing Academy. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Script Application Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof initSupabase === 'function') {
+                initSupabase();
+            }
+
+            // Auto-select preferred batch if passed in query string (?batch=...)
+            const urlParams = new URLSearchParams(window.location.search);
+            const batchParam = urlParams.get('batch');
+            if (batchParam && document.getElementById('inquiryBatch')) {
+                const sel = document.getElementById('inquiryBatch');
+                const targetLower = batchParam.toLowerCase().trim();
+                for (let i = 0; i < sel.options.length; i++) {
+                    if (sel.options[i].value.toLowerCase().includes(targetLower)) {
+                        sel.selectedIndex = i;
+                        break;
+                    }
+                }
+            }
+        });
+
+        function toggleMobileNav() {
+            const drawer = document.getElementById('mobileDrawer');
+            const icon = document.getElementById('menuIcon');
+            if (drawer) {
+                const isHidden = drawer.classList.contains('hidden') || drawer.style.display === 'none';
+                if (isHidden) {
+                    drawer.style.display = 'block';
+                    drawer.classList.remove('hidden');
+                    if (icon) {
+                        icon.classList.remove('fa-bars');
+                        icon.classList.add('fa-xmark');
+                    }
+                } else {
+                    drawer.style.display = 'none';
+                    drawer.classList.add('hidden');
+                    if (icon) {
+                        icon.classList.remove('fa-xmark');
+                        icon.classList.add('fa-bars');
+                    }
+                }
+            }
+        }
+
+        function showToast(msg, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toastMsg');
+            const toastIcon = document.getElementById('toastIcon');
+            if (!toast) return;
+
+            toastMsg.innerText = msg;
+            if (type === 'success') {
+                toastIcon.className = "fa-solid fa-circle-check text-emerald-400 text-xl";
+            } else if (type === 'warning') {
+                toastIcon.className = "fa-solid fa-triangle-exclamation text-amber-400 text-xl";
+            } else {
+                toastIcon.className = "fa-solid fa-circle-info text-flame text-xl";
+            }
+
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3500);
+        }
+
+        async function handleInquirySubmit(e) {
+            e.preventDefault();
+
+            const name    = (document.getElementById('inquiryStudentName').value || '').trim();
+            const phone   = (document.getElementById('inquiryPhone').value || '').trim();
+            const disc    = document.getElementById('inquiryDiscipline').value || 'Karate';
+            const batch   = document.getElementById('inquiryBatch').value || '';
+            const message = (document.getElementById('inquiryMessage').value || '').trim();
+
+            if (!name) {
+                alert('⚠️ Please enter the student name.');
+                document.getElementById('inquiryStudentName').focus();
+                return;
+            }
+            if (!phone) {
+                alert('⚠️ Please enter your phone / WhatsApp number.');
+                document.getElementById('inquiryPhone').focus();
+                return;
+            }
+
+            // Build WhatsApp message
+            const lines = [
+                '🥋 *New Admission Inquiry – Volcano Academy*',
+                '',
+                `👤 *Name:* ${name}`,
+                `📞 *Phone / WhatsApp:* ${phone}`,
+                `🥊 *Discipline:* ${disc}`,
+                `📅 *Preferred Batch:* ${batch}`,
+            ];
+            if (message) lines.push(`📝 *Message:* ${message}`);
+            lines.push('', '_(Sent via Volcano Academy website)_');
+
+            const waUrl = 'https://wa.me/918136908602?text=' + encodeURIComponent(lines.join('\n'));
+
+            // Save to Supabase / localStorage in background
+            try {
+                if (typeof submitAdmissionInquiry === 'function') {
+                    await submitAdmissionInquiry({ name, phone, discipline: disc, batch, message });
+                }
+            } catch(err) {
+                console.warn('Admission save error:', err);
+            }
+
+            // ── Reverse-sync: add this student to Students & Fees (pending) ──
+            try {
+                const studentsKey = 'volcano_students_2026';
+                const existingStudents = JSON.parse(localStorage.getItem(studentsKey) || '[]');
+                // Avoid duplicate names (case-insensitive)
+                const alreadyExists = existingStudents.some(s =>
+                    (s.name || '').toLowerCase().trim() === name.toLowerCase().trim()
+                );
+                if (!alreadyExists) {
+                    const rollNum = 100 + existingStudents.length + 1;
+                    existingStudents.push({
+                        id: 'VOL-' + rollNum,
+                        name: name,
+                        batch: batch || 'Evening',
+                        belt: 'White Belt',
+                        status: 'Pending',
+                        attendance: 'Present',
+                        phone: phone,
+                        discipline: disc
+                    });
+                    localStorage.setItem(studentsKey, JSON.stringify(existingStudents));
+                    // Update admin badge if visible
+                    const badge = document.getElementById('studentsBadge');
+                    if (badge) {
+                        badge.textContent = existingStudents.length;
+                        badge.style.display = 'inline-flex';
+                    }
+                    console.log('[Volcano] Student added to Students & Fees:', name);
+                }
+            } catch(syncErr) {
+                console.warn('Students sync error:', syncErr);
+            }
+
+            document.getElementById('admissionForm').reset();
+            showToast("Inquiry submitted! Redirecting to WhatsApp...", "success");
+
+            // Open WhatsApp
+            setTimeout(() => {
+                window.location.href = waUrl;
+            }, 700);
+        }
+
+        // ==========================================
+        // AUTH MODAL LOGIC (Matches Reference Design)
+        // ==========================================
+        function openAuthModal() {
+            sessionStorage.removeItem('volcano_student_roll');
+            sessionStorage.removeItem('volcano_student_name');
+            window.location.href = 'student.html?login=1';
+        }
+
+        function closeAuthModal() {
+            const modal = document.getElementById('authModal');
+            if (modal) modal.style.display = 'none';
+        }
+
+        function handleGoogleAuth() {
+            window.location.href = 'student.html?login=1';
+        }
+
+        function handleAppleAuth() {
+            window.location.href = 'student.html?login=1';
+        }
+
+        function handlePhoneAuthSubmit(e) {
+            if (e) e.preventDefault();
+            window.location.href = 'student.html?login=1';
+        }
+
+        function handleRollAuthSubmit(e) {
+            if (e) e.preventDefault();
+            window.location.href = 'student.html?login=1';
+        }
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeAuthModal();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portal & Dashboard | Volcano Karate & Kick Boxing Academy</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+
+    <!-- Google Fonts: Kanit & Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-client.js"></script>
+
+    <!-- Tailwind CSS (Local with CDN Fallback) -->
+    <script src="tailwind.js"></script>
+    <script>
+        if (typeof tailwind === 'undefined') {
+            document.write('<script src="https://cdn.tailwindcss.com"><\/script>');
+        }
+    </script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: {
+                            900: '#0b111e',
+                            800: '#131c2e',
+                            700: '#1b273e',
+                            600: '#253552'
+                        },
+                        flame: {
+                            DEFAULT: '#ff5e00',
+                            glow: '#ff2a00',
+                            light: '#ff8800'
+                        },
+                        gold: {
+                            DEFAULT: '#ffbe0b',
+                            light: '#ffd154'
+                        }
+                    },
+                    fontFamily: {
+                        kanit: ['Kanit', 'sans-serif'],
+                        poppins: ['Poppins', 'sans-serif']
+                    }
+                }
+            }
+        };
+    </script>
+
+    <style>
+        .hidden { display: none !important; }
+
+        html { scroll-behavior: smooth; }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0b111e; }
+        ::-webkit-scrollbar-thumb { background: #253552; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #ff5e00; }
+
+        body {
+            background-color: #0b111e;
+            background-image: 
+                radial-gradient(at 10% 20%, rgba(255, 94, 0, 0.08) 0px, transparent 50%),
+                radial-gradient(at 90% 80%, rgba(255, 190, 11, 0.05) 0px, transparent 50%);
+            color: #f0f4f8;
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        .glass-panel {
+            background: rgba(19, 28, 46, 0.72);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .glass-header {
+            background: rgba(11, 17, 30, 0.92);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .gradient-text-orange {
+            background: linear-gradient(135deg, #ff5e00 0%, #ffbe0b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .gradient-text-gold {
+            background: linear-gradient(135deg, #ffbe0b 0%, #ff8800 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Printable Receipt Styles */
+        @media print {
+            body * {
+                visibility: hidden !important;
+            }
+            #printableReceipt, #printableReceipt * {
+                visibility: visible !important;
+            }
+            #printableReceipt {
+                position: absolute !important;
+                left: 0 !important;
+                top: 0 !important;
+                width: 100% !important;
+                background: #ffffff !important;
+                color: #000000 !important;
+                padding: 24px !important;
+                box-shadow: none !important;
+                border: 2px solid #000000 !important;
+            }
+            #printableReceipt .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+        <div class="glass-panel border-flame/40 text-white px-5 py-4 rounded-2xl shadow-2xl flex items-center gap-3">
+            <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400 text-xl"></i>
+            <span id="toastMsg" class="text-sm font-medium">Notification message</span>
+        </div>
+    </div>
+
+    <!-- Official Fee Receipt Modal -->
+    <div id="receiptModal" style="display:none;" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4">
+        <div class="bg-navy-900 border border-flame/40 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative text-white max-h-[90vh] overflow-y-auto">
+            <button onclick="closeReceiptModal()" class="absolute top-5 right-5 text-gray-400 hover:text-white transition p-2 cursor-pointer no-print">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <!-- Printable Content Card -->
+            <div id="printableReceipt" class="space-y-6">
+                <!-- Header -->
+                <div class="text-center pb-5 border-b border-navy-700">
+                    <div class="w-14 h-14 mx-auto rounded-2xl overflow-hidden border-2 border-flame p-0.5 mb-2.5 bg-navy-800">
+                        <img src="logo.jpg" alt="Volcano Academy Logo" class="w-full h-full object-cover rounded-xl">
+                    </div>
+                    <h3 class="font-kanit text-xl font-extrabold tracking-wider text-white">VOLCANO KARATE &amp; KICK BOXING ACADEMY</h3>
+                    <p class="text-xs text-flame font-semibold uppercase tracking-widest mt-0.5">Official Fee Payment Receipt</p>
+                    <p class="text-[11px] text-gray-400 mt-1">Affiliated Martial Arts Training Center &bull; Contact: +91 8136908602</p>
+                </div>
+
+                <!-- Receipt Metadata -->
+                <div class="grid grid-cols-2 gap-3 text-xs bg-navy-800/80 p-4 rounded-xl border border-navy-700">
+                    <div>
+                        <span class="text-gray-400 block text-[10px] uppercase">Receipt No:</span>
+                        <span id="receiptNumber" class="font-mono font-bold text-flame">RCP-VOL-101-2026</span>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-gray-400 block text-[10px] uppercase">Issued Date:</span>
+                        <span id="receiptDate" class="font-bold text-white">October 12, 2026</span>
+                    </div>
+                </div>
+
+                <!-- Student Info Table -->
+                <div class="space-y-2.5 text-xs">
+                    <div class="flex justify-between py-1.5 border-b border-navy-800">
+                        <span class="text-gray-400">Student Roll ID:</span>
+                        <span id="receiptRollId" class="font-mono font-bold text-white">VOL-101</span>
+                    </div>
+                    <div class="flex justify-between py-1.5 border-b border-navy-800">
+                        <span class="text-gray-400">Student Full Name:</span>
+                        <span id="receiptStudentName" class="font-bold text-white">Mohammed Sinan</span>
+                    </div>
+                    <div class="flex justify-between py-1.5 border-b border-navy-800">
+                        <span class="text-gray-400">Enrolled Batch:</span>
+                        <span id="receiptBatch" class="text-gray-200">Evening</span>
+                    </div>
+                    <div class="flex justify-between py-1.5 border-b border-navy-800">
+                        <span class="text-gray-400">Current Belt Rank:</span>
+                        <span id="receiptBelt" class="font-bold text-gold">Yellow Belt</span>
+                    </div>
+                    <div class="flex justify-between py-1.5 border-b border-navy-800">
+                        <span class="text-gray-400">Payment Status:</span>
+                        <span class="inline-flex items-center gap-1 font-bold text-emerald-400">
+                            <i class="fa-solid fa-circle-check"></i> PAID IN FULL
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Academy Signatory -->
+                <div class="pt-4 flex justify-between items-end text-xs border-t border-navy-700">
+                    <div>
+                        <span class="text-[10px] text-gray-500 uppercase block">Verification:</span>
+                        <span class="text-emerald-400 font-semibold text-[11px]"><i class="fa-solid fa-shield-halved"></i> Academy Record Verified</span>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-[10px] text-gray-400 font-serif italic mb-1">Authorized Seal</div>
+                        <div class="font-kanit font-bold text-xs text-gold">Grand Master Amjad Moosa</div>
+                        <div class="text-[10px] text-gray-400">7th Dan Black Belt &bull; Founder</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Action Buttons (Hidden on Print) -->
+            <div class="mt-6 flex gap-3 no-print">
+                <button onclick="window.print()" class="flex-1 bg-gradient-to-r from-flame to-flame-light hover:brightness-110 text-white font-bold py-3 rounded-xl transition text-sm flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-flame/20">
+                    <i class="fa-solid fa-print"></i> Print Receipt
+                </button>
+                <button onclick="closeReceiptModal()" class="px-5 py-3 bg-navy-800 hover:bg-navy-700 text-gray-300 font-medium rounded-xl transition text-sm cursor-pointer">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <header class="glass-header fixed top-0 left-0 right-0 z-40">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20 gap-2 sm:gap-4">
+                <!-- 1. Logo -->
+                <a href="index.html" class="flex items-center gap-2 sm:gap-3 group flex-shrink-0">
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl overflow-hidden bg-navy-800 border-2 border-flame shadow-lg shadow-flame/30 group-hover:scale-105 transition duration-300 flex items-center justify-center p-0.5">
+                        <img src="logo.jpg" alt="Volcano Academy Logo" class="w-full h-full object-cover rounded-lg sm:rounded-xl">
+                    </div>
+                    <div>
+                        <span class="font-kanit font-extrabold text-base sm:text-xl tracking-wider text-white block leading-none">VOLCANO</span>
+                        <span class="font-kanit text-[9px] sm:text-xs tracking-widest text-flame uppercase block mt-0.5 sm:mt-1 font-semibold">Karate &amp; Kickboxing</span>
+                    </div>
+                </a>
+
+                <!-- 2. Desktop Navigation Headings -->
+                <div class="hidden md:flex items-center gap-2 sm:gap-3">
+                    <a href="index.html" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold text-gray-200 hover:text-white bg-navy-800/90 hover:bg-navy-700 border border-navy-600 transition flex items-center gap-1.5 shadow-sm">
+                        <i class="fa-solid fa-house text-flame text-xs"></i>
+                        <span>Home</span>
+                    </a>
+                    <a href="admission.html" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold text-white bg-navy-800/90 hover:bg-navy-700 border border-navy-600 transition flex items-center gap-1.5 shadow-sm">
+                        <i class="fa-solid fa-user-plus text-flame text-xs"></i>
+                        <span>Admission</span>
+                    </a>
+                    <a href="student.html" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-flame to-flame-light transition flex items-center gap-1.5 shadow-md shadow-flame/40 ring-2 ring-flame/40">
+                        <i class="fa-solid fa-graduation-cap text-xs"></i>
+                        <span>Student Portal</span>
+                    </a>
+                </div>
+
+                <!-- 3. Mobile Menu Button -->
+                <div class="flex items-center gap-3">
+                    <button onclick="toggleMobileNav()" class="md:hidden text-gray-300 hover:text-white p-2 rounded-xl bg-navy-800 border border-navy-700 hover:border-flame transition flex items-center justify-center w-10 h-10" aria-label="Toggle Menu">
+                        <i class="fa-solid fa-bars text-lg" id="menuIcon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Drawer Menu (< 768px) -->
+        <div id="mobileDrawer" style="display: none;" class="hidden md:hidden bg-navy-900/95 backdrop-blur-xl border-b border-navy-700 px-4 py-5 space-y-2">
+            <a href="index.html" class="flex items-center gap-2.5 text-gray-200 hover:text-flame py-2 text-base font-semibold">
+                <i class="fa-solid fa-house text-flame w-5"></i> Home
+            </a>
+            <a href="admission.html" class="flex items-center gap-2.5 text-gray-300 hover:text-flame py-2 text-base font-medium">
+                <i class="fa-solid fa-user-plus text-flame w-5"></i> Admission Procedure
+            </a>
+            <a href="student.html" class="flex items-center gap-2.5 text-flame py-2 text-base font-bold bg-flame/10 px-3 rounded-lg">
+                <i class="fa-solid fa-graduation-cap text-flame w-5"></i> Student Portal
+            </a>
+        </div>
+    </header>
+
+    <!-- MAIN STUDENT PORTAL CONTENT -->
+    <main class="pt-28 pb-20 flex-grow">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <!-- Breadcrumb Navigation -->
+            <div class="mb-8">
+                <a href="index.html" class="inline-flex items-center gap-2 text-xs font-semibold text-gray-400 hover:text-flame transition bg-navy-800/80 px-4 py-2 rounded-full border border-navy-700">
+                    <i class="fa-solid fa-arrow-left text-flame"></i> Back to Home
+                </a>
+            </div>
+
+            <!-- Page Title Header -->
+            <div class="text-center max-w-2xl mx-auto mb-10">
+                <span class="text-xs font-bold uppercase tracking-widest text-gold block mb-2">Student Access</span>
+                <h1 class="font-kanit text-3xl sm:text-4xl font-extrabold text-white uppercase tracking-tight">
+                    STUDENT <span class="gradient-text-orange">PORTAL &amp; DASHBOARD</span>
+                </h1>
+                <p class="text-gray-400 text-sm mt-2">Log in with your official Volcano Academy Student Roll ID to check belt rank, batch schedule, and fee receipt.</p>
+                <div class="w-20 h-1 bg-gradient-to-r from-flame to-gold mx-auto mt-4 rounded-full"></div>
+            </div>
+
+            <!-- 1. LOGIN VIEW (Student Name Only) -->
+            <div id="studentLoginView" class="bg-white rounded-3xl max-w-md w-full mx-auto p-7 sm:p-9 text-center shadow-2xl border border-gray-100 relative animate-in fade-in duration-300">
+                <div class="w-14 h-14 mx-auto rounded-2xl bg-orange-50 border border-orange-200 text-flame flex items-center justify-center text-2xl mb-4 shadow-sm">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+
+                <h2 class="font-kanit text-2xl sm:text-[26px] font-extrabold text-gray-900 tracking-tight mb-1.5">Student Portal Login</h2>
+                <p class="text-gray-500 text-xs sm:text-[13px] leading-relaxed mb-5 px-1">
+                    Enter your registered student name to access your personal dashboard.
+                </p>
+
+                <!-- Dynamic Alert Box -->
+                <div id="loginAlertBox" style="display: none;" class="mb-5 p-4 rounded-2xl text-xs font-medium text-left border"></div>
+
+                <form onsubmit="handleStudentLogin(event)" autocomplete="off" class="space-y-4 text-left">
+                    <!-- Registered Student Full Name -->
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                            <i class="fa-solid fa-user text-flame text-xs"></i> Your Registered Name
+                        </label>
+                        <input type="text" id="studentNameInput" required placeholder="Enter your full name as registered" 
+                            autocomplete="off"
+                            class="w-full bg-gray-50 border border-gray-200 rounded-2xl px-4 py-3.5 text-gray-900 text-sm font-medium focus:outline-none focus:border-flame focus:bg-white transition shadow-sm">
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" id="studentLoginBtn"
+                        class="w-full py-4 rounded-full bg-gradient-to-r from-flame to-flame-light hover:brightness-105 active:scale-98 text-white font-bold text-sm uppercase tracking-wider shadow-lg shadow-flame/25 transition cursor-pointer flex items-center justify-center gap-2 mt-2">
+                        <i class="fa-solid fa-arrow-right-to-bracket"></i> Access My Portal
+                    </button>
+                </form>
+
+                <!-- Security Notice -->
+                <div class="mt-4 p-3 rounded-xl bg-gray-50 border border-gray-200/80 text-[11px] text-gray-500 leading-relaxed text-left flex items-start gap-2">
+                    <i class="fa-solid fa-lock text-flame mt-0.5 flex-shrink-0"></i>
+                    <span>Each student can only view their own personal dashboard. Access is verified against registered academy records.</span>
+                </div>
+
+                <!-- Registration Link for New Students -->
+                <div class="mt-5 pt-4 border-t border-gray-100 text-xs text-gray-500 space-y-2">
+                    <p>Not registered in Volcano Academy yet?</p>
+                    <a href="admission.html" class="inline-flex items-center gap-1.5 text-flame hover:underline font-bold text-xs bg-orange-50 hover:bg-orange-100 px-4 py-2 rounded-full border border-orange-200/70 transition">
+                        <i class="fa-solid fa-user-plus"></i> Complete Admission Registration
+                    </a>
+                    <p class="text-[11px] text-gray-400 pt-1">
+                        Need help? WhatsApp: <strong class="text-gray-700">+91 8136908602</strong>
+                    </p>
+                </div>
+            </div>
+
+            <!-- 2. STUDENT DASHBOARD VIEW (Shown once verified) -->
+            <div id="studentDashboardView" style="display: none;" class="space-y-8 animate-in fade-in duration-300">
+                
+                <!-- Welcome & Action Bar -->
+                <div class="glass-panel p-5 rounded-2xl border border-navy-600 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div class="flex items-center gap-3.5 text-center sm:text-left">
+                        <div class="w-12 h-12 rounded-2xl bg-flame/20 text-flame border border-flame/40 flex items-center justify-center text-xl flex-shrink-0">
+                            <i class="fa-solid fa-user-ninja"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs text-gray-400 uppercase tracking-wider">Welcome back</div>
+                            <h2 id="dashStudentName" class="font-kanit text-xl sm:text-2xl font-bold text-white leading-tight">Student Name</h2>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span id="dashRollBadge" class="bg-navy-900 border border-flame/40 text-flame font-mono text-xs px-3.5 py-1.5 rounded-xl font-bold">
+                            VOL-101
+                        </span>
+                        <button onclick="handleStudentLogout()" class="px-4 py-2 bg-navy-800 hover:bg-red-900/40 text-gray-300 hover:text-red-300 text-xs rounded-xl border border-navy-700 transition flex items-center gap-2 cursor-pointer">
+                            <i class="fa-solid fa-arrow-right-from-bracket"></i> Log Out
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Digital Student ID Card & Fee Summary Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                    
+                    <!-- Digital Identity Card (Left 7 Cols) -->
+                    <div class="lg:col-span-7 glass-panel rounded-3xl p-6 sm:p-8 border border-flame/30 relative overflow-hidden shadow-2xl">
+                        <!-- Background Glow Accent -->
+                        <div class="pointer-events-none absolute -right-16 -top-16 w-56 h-56 rounded-full bg-flame/15 blur-3xl"></div>
+                        <div class="pointer-events-none absolute -left-16 -bottom-16 w-56 h-56 rounded-full bg-gold/10 blur-3xl"></div>
+
+                        <!-- Card Top Bar -->
+                        <div class="flex items-center justify-between pb-5 border-b border-navy-700/80 relative z-10">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl overflow-hidden border border-flame p-0.5 bg-navy-800">
+                                    <img src="logo.jpg" alt="Logo" class="w-full h-full object-cover rounded-lg">
+                                </div>
+                                <div>
+                                    <span class="font-kanit font-extrabold text-sm sm:text-base text-white tracking-wider block leading-none">VOLCANO ACADEMY</span>
+                                    <span class="text-[9px] font-semibold text-flame uppercase tracking-widest">Digital Student Card</span>
+                                </div>
+                            </div>
+                            <span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 flex items-center gap-1.5">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Active
+                            </span>
+                        </div>
+
+                        <!-- Card Body Details -->
+                        <div class="py-6 space-y-5 relative z-10">
+                            <div>
+                                <span class="text-[11px] text-gray-400 uppercase tracking-wider block font-medium">Martial Arts Student</span>
+                                <div id="cardStudentName" class="font-kanit text-2xl sm:text-3xl font-bold text-white mt-0.5">Mohammed Sinan</div>
+                            </div>
+
+                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-2">
+                                <div class="bg-navy-900/70 p-3.5 rounded-2xl border border-navy-700">
+                                    <span class="text-[10px] text-gray-400 uppercase tracking-wider block font-medium">Roll ID</span>
+                                    <span id="cardRollId" class="font-mono text-sm sm:text-base font-bold text-flame block mt-1">VOL-101</span>
+                                </div>
+                                <div class="bg-navy-900/70 p-3.5 rounded-2xl border border-navy-700">
+                                    <span class="text-[10px] text-gray-400 uppercase tracking-wider block font-medium">Current Belt</span>
+                                    <span id="cardBelt" class="font-kanit text-sm sm:text-base font-bold text-gold block mt-1">Yellow Belt</span>
+                                </div>
+                                <div class="bg-navy-900/70 p-3.5 rounded-2xl border border-navy-700 col-span-2 sm:col-span-1">
+                                    <span class="text-[10px] text-gray-400 uppercase tracking-wider block font-medium">Batch</span>
+                                    <span id="cardBatch" class="text-xs sm:text-sm font-semibold text-gray-200 block mt-1 truncate">Evening</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card Footer -->
+                        <div class="pt-4 border-t border-navy-700/80 flex flex-wrap items-center justify-between gap-3 text-xs text-gray-400 relative z-10">
+                            <span class="flex items-center gap-1.5 text-[11px]">
+                                <i class="fa-solid fa-certificate text-gold"></i> Certified Training Program
+                            </span>
+                            <span class="text-[11px] font-mono text-gray-500">Volcano Martial Arts &bull; Calicut</span>
+                        </div>
+                    </div>
+
+                    <!-- Fee Status & Receipt Card (Right 5 Cols) -->
+                    <div class="lg:col-span-5 glass-panel rounded-3xl p-6 sm:p-8 border border-navy-600 flex flex-col justify-between shadow-2xl">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="font-kanit text-lg font-bold text-white">Tuition &amp; Fees</h3>
+                                <div id="dashFeeStatusBadge">
+                                    <!-- Dynamic badge: Paid or Pending -->
+                                </div>
+                            </div>
+                            <p class="text-gray-400 text-xs leading-relaxed mb-6">
+                                Academy monthly training fees cover structured syllabus instruction, equipment upkeep, and belt assessment access.
+                            </p>
+
+                            <!-- Paid Status Details Box -->
+                            <div id="dashPaidDetailsBox" style="display:none;" class="bg-emerald-500/10 border border-emerald-500/30 p-4 rounded-2xl space-y-2 mb-6">
+                                <div class="flex items-center gap-2 text-emerald-400 font-bold text-sm">
+                                    <i class="fa-solid fa-circle-check"></i> Account Up-to-Date
+                                </div>
+                                <p class="text-[11px] text-gray-300">
+                                    Your current tuition status is officially marked as <strong>PAID</strong> in the academy records.
+                                </p>
+                            </div>
+
+                            <!-- Pending Status Details Box -->
+                            <div id="dashPendingDetailsBox" style="display:none;" class="bg-red-500/10 border border-red-500/30 p-4 rounded-2xl space-y-2 mb-6">
+                                <div class="flex items-center gap-2 text-red-400 font-bold text-sm">
+                                    <i class="fa-solid fa-clock"></i> Fee Payment Pending
+                                </div>
+                                <p class="text-[11px] text-gray-300">
+                                    Your tuition status is marked as pending. Please settle at the academy desk or contact the office directly via WhatsApp.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="space-y-3 pt-4">
+                            <button id="viewReceiptBtn" onclick="openReceiptModal()" style="display:none;"
+                                class="w-full bg-gradient-to-r from-flame to-flame-light hover:brightness-110 text-white font-bold py-3 rounded-xl transition text-sm flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-flame/20">
+                                <i class="fa-solid fa-receipt"></i> View Official Receipt
+                            </button>
+                            <a id="contactAccountsBtn" href="https://wa.me/918136908602" target="_blank"
+                                class="w-full block bg-navy-800 hover:bg-navy-700 text-gray-200 hover:text-white font-semibold py-3 rounded-xl border border-navy-600 transition text-sm text-center">
+                                <i class="fa-brands fa-whatsapp text-emerald-400 mr-1.5"></i> Contact Academy Accounts
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Training Batch Timings Schedule -->
+                <div class="glass-panel rounded-3xl p-6 sm:p-8 border border-navy-600">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-10 h-10 rounded-xl bg-flame/15 text-flame flex items-center justify-center text-lg border border-flame/30">
+                            <i class="fa-regular fa-calendar-check"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-kanit text-lg sm:text-xl font-bold text-white">Your Batch Training Schedule</h3>
+                            <span class="text-xs text-gray-400">Regular attendance is mandatory for belt promotion</span>
+                        </div>
+                    </div>
+
+                    <div id="batchScheduleCard" class="bg-navy-900/80 p-5 rounded-2xl border border-navy-700 space-y-3">
+                        <!-- Populated dynamically via JS -->
+                    </div>
+                </div>
+
+                <!-- Belt Promotion Roadmap -->
+                <div class="glass-panel rounded-3xl p-6 sm:p-8 border border-navy-600">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-10 h-10 rounded-xl bg-gold/15 text-gold flex items-center justify-center text-lg border border-gold/30">
+                            <i class="fa-solid fa-stairs"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-kanit text-lg sm:text-xl font-bold text-white">Belt Promotion Roadmap</h3>
+                            <span class="text-xs text-gray-400">Volcano Karate grading syllabus from White to Black Belt Dan degree</span>
+                        </div>
+                    </div>
+
+                    <!-- Belt Step Progression -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3 text-center">
+                        <!-- 1. White -->
+                        <div id="beltStepWhite" class="p-3.5 rounded-xl border transition border-navy-700 bg-navy-900/60">
+                            <div class="w-8 h-8 mx-auto rounded-full bg-white text-navy-900 font-bold flex items-center justify-center text-xs mb-2 shadow-md">1</div>
+                            <span class="font-kanit text-xs font-bold text-white block">White</span>
+                            <span class="text-[10px] text-gray-400">Beginner</span>
+                        </div>
+                        <!-- 2. Yellow -->
+                        <div id="beltStepYellow" class="p-3.5 rounded-xl border transition border-navy-700 bg-navy-900/60">
+                            <div class="w-8 h-8 mx-auto rounded-full bg-yellow-400 text-navy-900 font-bold flex items-center justify-center text-xs mb-2 shadow-md">2</div>
+                            <span class="font-kanit text-xs font-bold text-yellow-400 block">Yellow</span>
+                            <span class="text-[10px] text-gray-400">Basic Kata</span>
+                        </div>
+                        <!-- 3. Orange -->
+                        <div id="beltStepOrange" class="p-3.5 rounded-xl border transition border-navy-700 bg-navy-900/60">
+                            <div class="w-8 h-8 mx-auto rounded-full bg-orange-500 text-white font-bold flex items-center justify-center text-xs mb-2 shadow-md">3</div>
+                            <span class="font-kanit text-xs font-bold text-orange-400 block">Orange</span>
+                            <span class="text-[10px] text-gray-400">Technique</span>
+                        </div>
+                        <!-- 4. Green -->
+                        <div id="beltStepGreen" class="p-3.5 rounded-xl border transition border-navy-700 bg-navy-900/60">
+                            <div class="w-8 h-8 mx-auto rounded-full bg-emerald-500 text-white font-bold flex items-center justify-center text-xs mb-2 shadow-md">4</div>
+                            <span class="font-kanit text-xs font-bold text-emerald-400 block">Green</span>
+                            <span class="text-[10px] text-gray-400">Intermediate</span>
+                        </div>
+                        <!-- 5. Blue -->
+                        <div id="beltStepBlue" class="p-3.5 rounded-xl border transition border-navy-700 bg-navy-900/60">
+                            <div class="w-8 h-8 mx-auto rounded-full bg-blue-500 text-white font-bold flex items-center justify-center text-xs mb-2 shadow-md">5</div>
+                            <span class="font-kanit text-xs font-bold text-blue-400 block">Blue</span>
+                            <span class="text-[10px] text-gray-400">Kumite</span>
+                        </div>
+                        <!-- 6. Purple -->
+                        <div id="beltStepPurple" class="p-3.5 rounded-xl border transition border-navy-700 bg-navy-900/60">
+                            <div class="w-8 h-8 mx-auto rounded-full bg-purple-500 text-white font-bold flex items-center justify-center text-xs mb-2 shadow-md">6</div>
+                            <span class="font-kanit text-xs font-bold text-purple-400 block">Purple</span>
+                            <span class="text-[10px] text-gray-400">Advance</span>
+                        </div>
+                        <!-- 7. Brown -->
+                        <div id="beltStepBrown" class="p-3.5 rounded-xl border transition border-navy-700 bg-navy-900/60">
+                            <div class="w-8 h-8 mx-auto rounded-full bg-amber-800 text-white font-bold flex items-center justify-center text-xs mb-2 shadow-md">7</div>
+                            <span class="font-kanit text-xs font-bold text-amber-500 block">Brown</span>
+                            <span class="text-[10px] text-gray-400">Pre-Dan</span>
+                        </div>
+                        <!-- 8. Black -->
+                        <div id="beltStepBlack" class="p-3.5 rounded-xl border transition border-navy-700 bg-navy-900/60">
+                            <div class="w-8 h-8 mx-auto rounded-full bg-black text-gold border border-gold/40 font-bold flex items-center justify-center text-xs mb-2 shadow-md">8</div>
+                            <span class="font-kanit text-xs font-bold text-gold block">Black 1st Dan</span>
+                            <span class="text-[10px] text-gray-400">Mastery</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dojo Code of Conduct & Help -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="glass-panel rounded-2xl p-6 border border-navy-700">
+                        <h4 class="font-kanit text-base font-bold text-white mb-3 flex items-center gap-2">
+                            <i class="fa-solid fa-scroll text-flame"></i> Academy Dojo Rules
+                        </h4>
+                        <ul class="text-xs text-gray-300 space-y-2 list-disc list-inside">
+                            <li>Bow upon entering and exiting the dojo tatami.</li>
+                            <li>Wear clean uniform (Gi or kickboxing shorts) at all times.</li>
+                            <li>Maintain discipline, respect towards Sensei and fellow martial artists.</li>
+                            <li>Never use martial arts outside the dojo except in genuine self-defense.</li>
+                        </ul>
+                    </div>
+                    <div class="glass-panel rounded-2xl p-6 border border-navy-700 flex flex-col justify-between">
+                        <div>
+                            <h4 class="font-kanit text-base font-bold text-white mb-2 flex items-center gap-2">
+                                <i class="fa-solid fa-headset text-gold"></i> Need Assistance?
+                            </h4>
+                            <p class="text-xs text-gray-300 leading-relaxed mb-4">
+                                Contact the Volcano Academy office for belt examination dates, uniform orders, or tournament participation entries.
+                            </p>
+                        </div>
+                        <a href="https://wa.me/918136908602" target="_blank"
+                            class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 hover:brightness-110 text-white font-bold text-xs transition shadow-md shadow-emerald-500/20">
+                            <i class="fa-brands fa-whatsapp text-base"></i> Chat with Academy Helpdesk
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-navy-900 border-t border-navy-800 py-10 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
+            <div class="flex items-center justify-center gap-3">
+                <div class="w-8 h-8 rounded-lg overflow-hidden border border-flame">
+                    <img src="logo.jpg" alt="Logo" class="w-full h-full object-cover">
+                </div>
+                <span class="font-kanit font-bold text-white text-base">VOLCANO KARATE &amp; KICK BOXING ACADEMY</span>
+            </div>
+            <div class="flex flex-wrap items-center justify-center gap-6 text-xs text-gray-400">
+                <a href="index.html" class="hover:text-flame transition">Home</a>
+                <a href="admission.html" class="hover:text-flame transition">Admission Procedure</a>
+                <a href="student.html" class="hover:text-flame transition text-flame font-semibold">Student Portal</a>
+            </div>
+            <p class="text-xs text-gray-500">&copy; 2026 Volcano Karate &amp; Kick Boxing Academy. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Script Application Logic -->
+    <script>
+        // Sample default students in case Supabase is not reachable
+        const fallbackStudents = [
+            { id: "VOL-101", name: "Mohammed Sinan", batch: "Evening", belt: "Yellow Belt", status: "Paid" },
+            { id: "VOL-102", name: "Rahul V", batch: "Morning", belt: "Green Belt", status: "Pending" },
+            { id: "VOL-103", name: "Ameen K", batch: "Evening", belt: "White Belt", status: "Paid" },
+            { id: "VOL-104", name: "Ananya S", batch: "Weekend Special", belt: "Brown Belt", status: "Paid" },
+            { id: "VOL-105", name: "Faris Ali", batch: "Morning", belt: "Orange Belt", status: "Pending" },
+            { id: "VOL-106", name: "Zayan Ahmed", batch: "Kids Beginner", belt: "Yellow Belt", status: "Paid" }
+        ];
+
+        let currentStudent = null;
+
+        function escapeHtml(str) {
+            return String(str || '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (typeof initSupabase === 'function') {
+                initSupabase();
+            }
+
+            // Check if verified student session is active
+            const urlParams = new URLSearchParams(window.location.search);
+            const forceLogin = urlParams.get('login') === '1' || urlParams.get('action') === 'login';
+            const savedRoll = sessionStorage.getItem('volcano_student_roll');
+            const savedName = sessionStorage.getItem('volcano_student_name');
+
+            // If login requested or if no verified student name in session, always show the login view
+            if (forceLogin || !savedRoll || !savedName) {
+                sessionStorage.removeItem('volcano_student_roll');
+                sessionStorage.removeItem('volcano_student_name');
+                currentStudent = null;
+                document.getElementById('studentLoginView').style.display = 'block';
+                document.getElementById('studentDashboardView').style.display = 'none';
+                const nameInput = document.getElementById('studentNameInput');
+                if (nameInput) setTimeout(() => nameInput.focus(), 100);
+            } else {
+                await verifyAndLoadStudentByRoll(savedRoll, false);
+            }
+        });
+
+        function toggleMobileNav() {
+            const drawer = document.getElementById('mobileDrawer');
+            const icon = document.getElementById('menuIcon');
+            if (drawer) {
+                const isHidden = drawer.style.display === 'none' || drawer.style.display === '';
+                if (isHidden) {
+                    drawer.style.display = 'block';
+                    drawer.classList.remove('hidden');
+                    if (icon) {
+                        icon.classList.remove('fa-bars');
+                        icon.classList.add('fa-xmark');
+                    }
+                } else {
+                    drawer.style.display = 'none';
+                    drawer.classList.add('hidden');
+                    if (icon) {
+                        icon.classList.remove('fa-xmark');
+                        icon.classList.add('fa-bars');
+                    }
+                }
+            }
+        }
+
+        function showToast(msg, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toastMsg');
+            const toastIcon = document.getElementById('toastIcon');
+            if (!toast) return;
+
+            toastMsg.innerText = msg;
+            if (type === 'success') {
+                toastIcon.className = "fa-solid fa-circle-check text-emerald-400 text-xl";
+            } else if (type === 'warning') {
+                toastIcon.className = "fa-solid fa-triangle-exclamation text-amber-400 text-xl";
+            } else {
+                toastIcon.className = "fa-solid fa-circle-info text-flame text-xl";
+            }
+
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3500);
+        }
+
+        // Retrieve all student records from Cloud DB, localStorage, and fallback records
+        async function getAllStudentRecordList() {
+            let list = [];
+
+            // 1. Fetch from Supabase if connected
+            if (typeof supabaseClient !== 'undefined' && supabaseClient) {
+                try {
+                    const { data, error } = await supabaseClient.from('students').select('*');
+                    if (!error && data && data.length > 0) {
+                        data.forEach(s => {
+                            list.push({
+                                id: (s.roll_id || s.id || '').trim().toUpperCase(),
+                                db_id: s.id,
+                                name: (s.name || '').trim(),
+                                batch: s.batch,
+                                belt: s.belt,
+                                status: s.fee_status,
+                                created_at: s.created_at
+                            });
+                        });
+                    }
+                } catch(e) {
+                    console.warn("Supabase student list fetch failed:", e);
+                }
+            }
+
+            // 2. Add local storage students from admin portal
+            const localStored = localStorage.getItem('volcano_students_2026');
+            if (localStored) {
+                try {
+                    const arr = JSON.parse(localStored);
+                    arr.forEach(s => {
+                        const rollUpper = (s.id || '').trim().toUpperCase();
+                        if (!list.some(ex => ex.id === rollUpper)) {
+                            list.push({ ...s, id: rollUpper, name: (s.name || '').trim() });
+                        }
+                    });
+                } catch(e) {}
+            }
+
+            // 3. Add academy fallback students
+            fallbackStudents.forEach(s => {
+                const rollUpper = (s.id || '').trim().toUpperCase();
+                if (!list.some(ex => ex.id === rollUpper)) {
+                    list.push({ ...s, id: rollUpper, name: (s.name || '').trim() });
+                }
+            });
+
+            return list;
+        }
+
+        function showLoginAlert(htmlMsg, type = "error") {
+            const alertBox = document.getElementById('loginAlertBox');
+            if (!alertBox) return;
+
+            if (type === "error") {
+                alertBox.className = "mb-5 p-4 rounded-2xl text-xs font-medium text-left bg-red-50 text-red-800 border border-red-200 animate-in fade-in duration-200";
+            } else {
+                alertBox.className = "mb-5 p-4 rounded-2xl text-xs font-medium text-left bg-amber-50 text-amber-900 border border-amber-200 animate-in fade-in duration-200";
+            }
+            alertBox.innerHTML = htmlMsg;
+            alertBox.style.display = 'block';
+        }
+
+        async function handleStudentLogin(e) {
+            if (e) e.preventDefault();
+
+            const nameInput = document.getElementById('studentNameInput');
+            const alertBox = document.getElementById('loginAlertBox');
+            const loginBtn = document.getElementById('studentLoginBtn');
+
+            const enteredName = (nameInput ? nameInput.value : '').trim();
+
+            // Reset previous alerts
+            if (alertBox) {
+                alertBox.style.display = 'none';
+                alertBox.innerHTML = '';
+            }
+
+            if (!enteredName) {
+                showLoginAlert("⚠️ Please enter your registered student name.", "warning");
+                if (nameInput) nameInput.focus();
+                return;
+            }
+
+            if (loginBtn) {
+                loginBtn.disabled = true;
+                loginBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Checking Academy Records...';
+            }
+
+            const allStudents = await getAllStudentRecordList();
+
+            // Check by name — case-insensitive, partial match allowed
+            const cleanEntered = enteredName.toLowerCase().trim();
+            const matched = allStudents.filter(s => {
+                const sName = (s.name || '').toLowerCase().trim();
+                return sName === cleanEntered
+                    || sName.includes(cleanEntered)
+                    || cleanEntered.includes(sName);
+            });
+
+            if (loginBtn) {
+                loginBtn.disabled = false;
+                loginBtn.innerHTML = '<i class="fa-solid fa-arrow-right-to-bracket"></i> Access My Portal';
+            }
+
+            if (matched.length === 0) {
+                showLoginAlert(
+                    `<strong>⚠️ Name Not Found:</strong> "<strong>${escapeHtml(enteredName)}</strong>" is not registered in Volcano Academy records.<br>
+                    <span class="text-[11px] text-gray-600 mt-1 block">Please enter your name <em>exactly</em> as registered by the academy admin. Contact us if you need help.</span>
+                    <div class="mt-3 flex flex-wrap gap-2">
+                      <a href="admission.html" class="inline-flex items-center gap-1.5 bg-flame text-white font-bold px-3.5 py-1.5 rounded-xl text-xs transition shadow-sm hover:brightness-110">
+                        <i class="fa-solid fa-user-plus text-xs"></i> Register Admission
+                      </a>
+                      <a href="https://wa.me/918136908602?text=${encodeURIComponent('Hi, my name is ' + enteredName + '. I cannot log into the student portal. Please help.')}" target="_blank" class="inline-flex items-center gap-1.5 bg-emerald-500 text-white font-bold px-3.5 py-1.5 rounded-xl text-xs transition shadow-sm hover:brightness-110">
+                        <i class="fa-brands fa-whatsapp text-xs"></i> Contact Academy
+                      </a>
+                    </div>`,
+                    "error"
+                );
+                showToast(`"${enteredName}" not found in records.`, "warning");
+                return;
+            }
+
+            // If multiple matches, use first. If only 1, use that.
+            const verifiedStudent = matched[0];
+
+            // Grant access to THIS specific student
+            currentStudent = verifiedStudent;
+            sessionStorage.setItem('volcano_student_roll', verifiedStudent.id);
+            sessionStorage.setItem('volcano_student_name', verifiedStudent.name);
+
+            renderStudentDashboard(verifiedStudent);
+
+            document.getElementById('studentLoginView').style.display = 'none';
+            document.getElementById('studentDashboardView').style.display = 'block';
+
+            showToast(`Welcome, ${verifiedStudent.name}! 🥋`, "success");
+        }
+
+        async function verifyAndLoadStudentByRoll(rollId, showFeedback = true) {
+            const cleanRoll = rollId.trim().toUpperCase();
+            const allStudents = await getAllStudentRecordList();
+            const student = allStudents.find(s => s.id === cleanRoll);
+
+            if (!student) {
+                if (showFeedback) {
+                    showToast(`⚠️ Student session expired or Roll ID "${rollId}" not found.`, "warning");
+                }
+                sessionStorage.removeItem('volcano_student_roll');
+                document.getElementById('studentLoginView').style.display = 'block';
+                document.getElementById('studentDashboardView').style.display = 'none';
+                return null;
+            }
+
+            currentStudent = student;
+            sessionStorage.setItem('volcano_student_roll', student.id);
+            sessionStorage.setItem('volcano_student_name', student.name);
+
+            renderStudentDashboard(student);
+
+            document.getElementById('studentLoginView').style.display = 'none';
+            document.getElementById('studentDashboardView').style.display = 'block';
+
+            if (showFeedback) {
+                showToast(`Welcome Sensei Student ${student.name}!`, "success");
+            }
+
+            return student;
+        }
+
+        function renderStudentDashboard(s) {
+            // Header
+            document.getElementById('dashStudentName').innerText = s.name;
+            document.getElementById('dashRollBadge').innerText = s.id;
+
+            // ID Card
+            document.getElementById('cardStudentName').innerText = s.name;
+            document.getElementById('cardRollId').innerText = s.id;
+            document.getElementById('cardBelt').innerText = s.belt;
+            document.getElementById('cardBatch').innerText = s.batch;
+
+            // Fee Status
+            const isPaid = (s.status || '').toLowerCase() === 'paid';
+            const statusBadge = document.getElementById('dashFeeStatusBadge');
+            const paidBox = document.getElementById('dashPaidDetailsBox');
+            const pendingBox = document.getElementById('dashPendingDetailsBox');
+            const viewReceiptBtn = document.getElementById('viewReceiptBtn');
+
+            if (isPaid) {
+                statusBadge.innerHTML = `<span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"><i class="fa-solid fa-circle-check"></i> Paid</span>`;
+                paidBox.style.display = 'block';
+                pendingBox.style.display = 'none';
+                viewReceiptBtn.style.display = 'flex';
+            } else {
+                statusBadge.innerHTML = `<span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-red-500/15 text-red-400 border border-red-500/30"><i class="fa-solid fa-clock"></i> Pending</span>`;
+                paidBox.style.display = 'none';
+                pendingBox.style.display = 'block';
+                viewReceiptBtn.style.display = 'none';
+
+                // WhatsApp pre-filled message for pending fees
+                const contactBtn = document.getElementById('contactAccountsBtn');
+                if (contactBtn) {
+                    const waText = encodeURIComponent(`🥋 Volcano Academy Accounts:\n\nHello, I am ${s.name} (Roll ID: ${s.id}). I would like to settle my tuition fee for batch "${s.batch}".`);
+                    contactBtn.href = `https://wa.me/918136908602?text=${waText}`;
+                }
+            }
+
+            // Populate Batch Schedule Info
+            renderBatchSchedule(s.batch);
+
+            // Highlight Belt Roadmap
+            highlightBeltRoadmap(s.belt);
+        }
+
+        function renderBatchSchedule(batchName) {
+            const container = document.getElementById('batchScheduleCard');
+            if (!container) return;
+
+            let scheduleData = {
+                title: (batchName && (batchName.toLowerCase().includes('evening') || batchName === 'Evening')) ? "Evening" : (batchName || "Evening"),
+                time: "05:30 PM – 07:00 PM",
+                days: "Monday to Saturday",
+                instructor: "Grand Master Amjad Moosa (7th Dan)",
+                focus: "Kihon fundamentals, Kata syllabus, and Sparring Kumite"
+            };
+
+            const bLower = (batchName || '').toLowerCase();
+            if (bLower.includes('kickboxing') || bLower.includes('morning')) {
+                scheduleData = {
+                    title: "Morning",
+                    time: "06:00 AM – 07:30 AM",
+                    days: "Monday, Wednesday, Friday",
+                    instructor: "Senior Kickboxing Instructors",
+                    focus: "High-intensity cardio, pad drills, kick mechanics, and athletic conditioning"
+                };
+            } else if (bLower.includes('kids')) {
+                scheduleData = {
+                    title: "Kids Beginner Batch",
+                    time: "04:30 PM – 05:30 PM",
+                    days: "Tuesday, Thursday, Saturday",
+                    instructor: "Youth Dan Instructors",
+                    focus: "Discipline, flexibility, basic blocks, agility drills, and anti-bullying awareness"
+                };
+            } else if (bLower.includes('weekend')) {
+                scheduleData = {
+                    title: "Weekend Special Intensive",
+                    time: "08:00 AM – 10:30 AM",
+                    days: "Saturday & Sunday",
+                    instructor: "Senior Dan Ranked Masters",
+                    focus: "Intensive 2.5-hour combat masterclasses, self-defense tactics, and tournament prep"
+                };
+            }
+
+            container.innerHTML = `
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-navy-700/80 gap-2">
+                    <div>
+                        <span class="text-flame font-kanit font-bold text-base sm:text-lg">${scheduleData.title}</span>
+                        <div class="text-xs text-gray-400 mt-0.5">Focus: ${scheduleData.focus}</div>
+                    </div>
+                    <span class="text-xs font-mono font-semibold text-gold bg-gold/10 px-3 py-1 rounded-full border border-gold/30 self-start sm:self-auto">
+                        ${scheduleData.days}
+                    </span>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs pt-2">
+                    <div class="flex items-center gap-2 text-gray-300">
+                        <i class="fa-regular fa-clock text-flame text-sm"></i>
+                        <span>Timing: <strong class="text-white">${scheduleData.time}</strong></span>
+                    </div>
+                    <div class="flex items-center gap-2 text-gray-300">
+                        <i class="fa-solid fa-user-tie text-gold text-sm"></i>
+                        <span>Chief Coach: <strong class="text-white">${scheduleData.instructor}</strong></span>
+                    </div>
+                </div>
+            `;
+        }
+
+        function highlightBeltRoadmap(currentBelt) {
+            const steps = [
+                { id: 'beltStepWhite', name: 'white' },
+                { id: 'beltStepYellow', name: 'yellow' },
+                { id: 'beltStepOrange', name: 'orange' },
+                { id: 'beltStepGreen', name: 'green' },
+                { id: 'beltStepBlue', name: 'blue' },
+                { id: 'beltStepPurple', name: 'purple' },
+                { id: 'beltStepBrown', name: 'brown' },
+                { id: 'beltStepBlack', name: 'black' }
+            ];
+
+            const curLower = (currentBelt || '').toLowerCase();
+
+            steps.forEach(step => {
+                const el = document.getElementById(step.id);
+                if (!el) return;
+
+                if (curLower.includes(step.name)) {
+                    el.className = "p-3.5 rounded-xl border-2 border-flame bg-flame/15 scale-105 shadow-lg shadow-flame/20 transition";
+                } else {
+                    el.className = "p-3.5 rounded-xl border border-navy-700 bg-navy-900/60 opacity-80 hover:opacity-100 transition";
+                }
+            });
+        }
+
+        function openReceiptModal() {
+            if (!currentStudent) return;
+
+            document.getElementById('receiptNumber').innerText = `RCP-${currentStudent.id}-2026`;
+            document.getElementById('receiptDate').innerText = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+            document.getElementById('receiptRollId').innerText = currentStudent.id;
+            document.getElementById('receiptStudentName').innerText = currentStudent.name;
+            document.getElementById('receiptBatch').innerText = currentStudent.batch;
+            document.getElementById('receiptBelt').innerText = currentStudent.belt;
+
+            const modal = document.getElementById('receiptModal');
+            if (modal) {
+                modal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeReceiptModal() {
+            const modal = document.getElementById('receiptModal');
+            if (modal) {
+                modal.style.display = 'none';
+                document.body.style.overflow = '';
+            }
+        }
+
+        function handleStudentLogout() {
+            sessionStorage.removeItem('volcano_student_roll');
+            sessionStorage.removeItem('volcano_student_name');
+            currentStudent = null;
+            const nameEl = document.getElementById('studentNameInput');
+            if (nameEl) nameEl.value = '';
+            const alertBox = document.getElementById('loginAlertBox');
+            if (alertBox) {
+                alertBox.style.display = 'none';
+                alertBox.innerHTML = '';
+            }
+            document.getElementById('studentDashboardView').style.display = 'none';
+            document.getElementById('studentLoginView').style.display = 'block';
+            showToast("Logged out of student portal.", "info");
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,2853 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Volcano Karate & Kick Boxing Academy</title>
+    
+    <!-- Site Icon / Favicon -->
+    <link rel="icon" type="image/jpeg" href="logo.jpg">
+    <link rel="shortcut icon" type="image/jpeg" href="logo.jpg">
+    <link rel="apple-touch-icon" href="logo.jpg">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,400;0,600;0,700;0,800;1,700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Supabase CDN library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Supabase Integration (inlined) -->
+    <script>
+        // ── Volcano Academy · Supabase Credentials ─────────────────────────
+        const DEFAULT_SUPABASE_URL  = "https://dsaxiujskwwrgpjtzjdk.supabase.co";
+        const DEFAULT_SUPABASE_ANON_KEY = "sb_publishable_EflQhKvhiYhO57PDmm3l-w_De3BOkXT";
+
+        let currentSupabaseUrl = localStorage.getItem('volcano_supabase_url') || DEFAULT_SUPABASE_URL;
+        let currentSupabaseKey = localStorage.getItem('volcano_supabase_key') || DEFAULT_SUPABASE_ANON_KEY;
+        let supabaseClient = null;
+
+        function isSupabaseConfigured() {
+            return currentSupabaseUrl &&
+                   !currentSupabaseUrl.includes('your-project-id') &&
+                   currentSupabaseKey &&
+                   !currentSupabaseKey.includes('your-supabase-anon-key');
+        }
+
+        function initSupabase() {
+            if (window.supabase && isSupabaseConfigured()) {
+                try {
+                    supabaseClient = window.supabase.createClient(currentSupabaseUrl, currentSupabaseKey);
+                    console.log("✅ Volcano Academy connected to Supabase cloud.");
+                } catch (e) {
+                    console.error("Supabase init failed:", e);
+                    supabaseClient = null;
+                }
+            }
+        }
+
+        // Public admission inquiry → Supabase admissions table
+        async function submitAdmissionInquiry(inquiryData) {
+            if (supabaseClient) {
+                try {
+                    const { error } = await supabaseClient.from('admissions').insert([{
+                        student_name: inquiryData.name,
+                        phone: inquiryData.phone,
+                        discipline: inquiryData.discipline,
+                        preferred_batch: inquiryData.batch,
+                        message: inquiryData.message || ''
+                    }]);
+                    if (error) throw error;
+                    return { success: true, cloud: true };
+                } catch (err) {
+                    console.warn("Supabase insert failed, saving locally:", err);
+                }
+            }
+            let local = JSON.parse(localStorage.getItem('volcano_admissions') || '[]');
+            local.unshift({ ...inquiryData, created_at: new Date().toISOString() });
+            localStorage.setItem('volcano_admissions', JSON.stringify(local));
+            return { success: true, cloud: false };
+        }
+
+        // Admin: fetch all student records
+        async function getStudentRecords() {
+            if (supabaseClient) {
+                try {
+                    const { data, error } = await supabaseClient
+                        .from('students').select('*').order('id', { ascending: true });
+                    if (error) throw error;
+                    if (data && data.length > 0) {
+                        return data.map(s => ({
+                            id: s.roll_id || s.id, db_id: s.id,
+                            name: s.name, batch: s.batch,
+                            belt: s.belt, status: s.fee_status
+                        }));
+                    }
+                } catch (err) {
+                    console.warn("Supabase fetch failed, using local:", err);
+                }
+            }
+            const saved = localStorage.getItem('volcano_students_2026');
+            if (saved) { try { return JSON.parse(saved); } catch (e) {} }
+            return null;
+        }
+
+        // Admin: save (add/edit) student record
+        async function saveStudentRecord(student, isEdit = false) {
+            if (supabaseClient) {
+                try {
+                    if (isEdit && student.db_id) {
+                        const { error } = await supabaseClient.from('students').update({
+                            name: student.name, batch: student.batch,
+                            belt: student.belt, fee_status: student.status, roll_id: student.id
+                        }).eq('id', student.db_id);
+                        if (error) throw error;
+                    } else {
+                        const { error } = await supabaseClient.from('students').insert([{
+                            roll_id: student.id, name: student.name,
+                            batch: student.batch, belt: student.belt, fee_status: student.status
+                        }]);
+                        if (error) throw error;
+                    }
+                    return true;
+                } catch (err) { console.warn("Supabase save failed:", err); }
+            }
+            return false;
+        }
+
+        // Admin: delete student record
+        async function deleteStudentRecord(student) {
+            if (supabaseClient && student.db_id) {
+                try {
+                    const { error } = await supabaseClient.from('students').delete().eq('id', student.db_id);
+                    if (error) throw error;
+                    return true;
+                } catch (err) { console.warn("Supabase delete failed:", err); }
+            }
+            return false;
+        }
+
+        // Admin: fetch all admission inquiries
+        async function getAdmissionInquiries() {
+            if (supabaseClient) {
+                try {
+                    const { data, error } = await supabaseClient
+                        .from('admissions').select('*').order('created_at', { ascending: false });
+                    if (error) throw error;
+                    return data || [];
+                } catch (err) { console.warn("Failed to fetch admissions:", err); }
+            }
+            return JSON.parse(localStorage.getItem('volcano_admissions') || '[]');
+        }
+    </script>
+    
+    <!-- Tailwind CSS (Local with CDN Fallback) -->
+    <script src="tailwind.js"></script>
+    <script>
+        if (typeof tailwind === 'undefined') {
+            document.write('<script src="https://cdn.tailwindcss.com"><\/script>');
+        }
+    </script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: {
+                            900: '#0b111e',
+                            800: '#131c2e',
+                            700: '#1b273e',
+                            600: '#253552'
+                        },
+                        flame: {
+                            DEFAULT: '#ff5e00',
+                            glow: '#ff2a00',
+                            light: '#ff8800'
+                        },
+                        gold: {
+                            DEFAULT: '#ffbe0b',
+                            light: '#ffd154'
+                        }
+                    },
+                    fontFamily: {
+                        kanit: ['Kanit', 'sans-serif'],
+                        poppins: ['Poppins', 'sans-serif']
+                    }
+                }
+            }
+        };
+    </script>
+
+    <style>
+
+        /* Custom Scrollbar & Utility Styles */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0b111e;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #253552;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ff5e00;
+        }
+
+        /* Custom Orange Slide Bar for Masters Slider */
+        #mastersContainer::-webkit-scrollbar {
+            height: 6px;
+            display: block;
+        }
+        #mastersContainer::-webkit-scrollbar-track {
+            background: rgba(11, 17, 32, 0.85);
+            border-radius: 999px;
+            margin: 0 20px;
+        }
+        #mastersContainer::-webkit-scrollbar-thumb {
+            background: linear-gradient(90deg, #ff5e00, #ff8800);
+            border-radius: 999px;
+            box-shadow: 0 0 10px rgba(255, 94, 0, 0.5);
+        }
+        #mastersContainer::-webkit-scrollbar-thumb:hover {
+            background: #ff7700;
+        }
+        #mastersContainer {
+            -ms-overflow-style: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #ff5e00 rgba(11, 17, 32, 0.85);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Prevent fixed header from overlapping section headings when jumping via anchor */
+        #home, #about, #masters, #gallery, #admission, #portal, section {
+            scroll-margin-top: 85px;
+        }
+
+        body {
+            background-color: #0b111e;
+            background-image: 
+                radial-gradient(at 10% 20%, rgba(255, 94, 0, 0.08) 0px, transparent 50%),
+                radial-gradient(at 90% 80%, rgba(255, 190, 11, 0.05) 0px, transparent 50%);
+            color: #f0f4f8;
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Glassmorphism Classes */
+        .glass-panel {
+            background: rgba(19, 28, 46, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .glass-panel-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-panel-hover:hover {
+            background: rgba(27, 39, 62, 0.85);
+            border-color: rgba(255, 94, 0, 0.4);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(255, 94, 0, 0.15);
+        }
+
+        .glass-header {
+            background: rgba(11, 17, 30, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* Text Gradients */
+        .gradient-text-orange {
+            background: linear-gradient(135deg, #ff5e00 0%, #ffbe0b 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .gradient-text-gold {
+            background: linear-gradient(135deg, #ffbe0b 0%, #fff 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Custom Glowing Effect */
+        .glow-orange {
+            box-shadow: 0 0 20px rgba(255, 94, 0, 0.4);
+        }
+        .glow-gold {
+            box-shadow: 0 0 20px rgba(255, 190, 11, 0.3);
+        }
+
+        /* Animated Pulse Ring */
+        @keyframes pulse-ring {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            50% { transform: scale(1.05); opacity: 0.4; }
+            100% { transform: scale(0.95); opacity: 0.8; }
+        }
+        .pulse-ring-effect {
+            animation: pulse-ring 3s infinite ease-in-out;
+        }
+
+        /* Cinematic Hero Background */
+        .hero-cinematic {
+            position: relative;
+            background-color: #0b1120;
+            background-image: 
+                linear-gradient(to right, rgba(11,17,30,0.92) 0%, rgba(11,17,30,0.75) 35%, rgba(11,17,30,0.15) 65%, rgba(11,17,30,0) 85%),
+                url('hero-bg.jpg');
+            background-position: right center;
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+
+        @media (max-width: 768px) {
+            .hero-cinematic {
+                background-image: 
+                    linear-gradient(180deg, rgba(11,17,30,0.92) 0%, rgba(11,17,30,0.82) 55%, rgba(11,17,30,0.65) 100%),
+                    url('hero-bg.jpg');
+                background-position: 80% center;
+            }
+        }
+
+
+
+
+        /* Subtle Floating Embers Animation */
+        @keyframes float-ember {
+            0% { transform: translateY(0) scale(1); opacity: 0; }
+            30% { opacity: 0.7; }
+            80% { opacity: 0.3; }
+            100% { transform: translateY(-160px) scale(0.4); opacity: 0; }
+        }
+        .ember {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #ff5e00;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #ffbe0b;
+            animation: float-ember 6s infinite ease-in-out;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-flame selection:text-white">
+
+    <!-- Custom Toast Alert Container -->
+    <div id="toastContainer" class="fixed top-20 right-5 z-50 flex flex-col gap-3 pointer-events-none"></div>
+
+    <!-- Student Modal (Add/Edit) -->
+    <div id="studentModal" style="display: none;" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="glass-panel border-flame/40 rounded-2xl max-w-md w-full p-6 relative animate-in fade-in zoom-in duration-200">
+            <button onclick="closeStudentModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white transition">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <h3 id="modalHeaderTitle" class="font-kanit text-2xl font-bold gradient-text-orange mb-6 flex items-center gap-2">
+                <i class="fa-solid fa-user-plus text-flame"></i> Add Student Record
+            </h3>
+            
+            <form id="studentForm" onsubmit="handleStudentFormSubmit(event)" class="space-y-4">
+                <input type="hidden" id="studentEditIndex" value="">
+                
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-1">Roll ID / Reg No</label>
+                    <input type="text" id="modalRollId" required placeholder="e.g. VOL-2026-01" class="w-full bg-navy-900/90 border border-navy-600 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-flame transition">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-1">Full Name</label>
+                    <input type="text" id="modalStudentName" required placeholder="Enter student name" class="w-full bg-navy-900/90 border border-navy-600 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-flame transition">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-1">Batch / Class</label>
+                        <select id="modalBatch" class="w-full bg-navy-900/90 border border-navy-600 rounded-lg px-3 py-2.5 text-white focus:outline-none focus:border-flame transition">
+                            <option value="Evening">Evening</option>
+                            <option value="Morning">Morning</option>
+                            <option value="Weekend Special">Weekend Special</option>
+                            <option value="Kids Beginner">Kids Beginner</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-1">Belt Rank</label>
+                        <select id="modalBelt" class="w-full bg-navy-900/90 border border-navy-600 rounded-lg px-3 py-2.5 text-white focus:outline-none focus:border-flame transition">
+                            <option value="White Belt">White Belt</option>
+                            <option value="Yellow Belt">Yellow Belt</option>
+                            <option value="Orange Belt">Orange Belt</option>
+                            <option value="Green Belt">Green Belt</option>
+                            <option value="Blue Belt">Blue Belt</option>
+                            <option value="Purple Belt">Purple Belt</option>
+                            <option value="Brown Belt">Brown Belt</option>
+                            <option value="Black Belt">Black Belt</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-1">Fee Payment Status</label>
+                    <select id="modalFeeStatus" class="w-full bg-navy-900/90 border border-navy-600 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-flame transition">
+                        <option value="Paid">Paid (Current Month)</option>
+                        <option value="Pending">Pending (Overdue)</option>
+                    </select>
+                </div>
+
+                <div class="flex gap-3 pt-4">
+                    <button type="submit" class="flex-1 bg-gradient-to-r from-flame to-flame-light hover:from-flame-light hover:to-flame text-white font-semibold py-2.5 px-4 rounded-lg shadow-lg shadow-flame/20 transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-floppy-disk"></i> Save Student
+                    </button>
+                    <button type="button" onclick="closeStudentModal()" class="px-4 py-2.5 bg-navy-700 hover:bg-navy-600 text-gray-300 rounded-lg transition">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Custom Delete Confirmation Modal — Admission Lead -->
+    <div id="deleteLeadModal" style="display:none;" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="glass-panel border border-red-500/40 rounded-2xl max-w-sm w-full p-7 text-center shadow-2xl animate-in fade-in duration-200">
+            <!-- Icon -->
+            <div class="w-16 h-16 bg-red-500/20 text-red-400 rounded-full flex items-center justify-center text-2xl mx-auto mb-4 border border-red-500/30">
+                <i class="fa-solid fa-trash-can"></i>
+            </div>
+            <!-- Title -->
+            <h3 class="font-kanit text-xl font-bold text-white mb-1">Delete Admission Inquiry?</h3>
+            <p class="text-gray-400 text-sm mb-2">You are about to remove</p>
+            <p id="deleteLeadName" class="text-flame font-semibold text-base mb-5">this applicant</p>
+            <p class="text-xs text-gray-500 mb-6">⚠️ This action cannot be undone.</p>
+            <!-- Buttons -->
+            <div class="flex gap-3">
+                <button id="confirmDeleteLeadBtn"
+                    class="flex-1 bg-red-600 hover:bg-red-500 text-white font-bold py-2.5 rounded-xl transition text-sm flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-trash"></i> Yes, Delete
+                </button>
+                <button onclick="closeDeleteLeadModal()"
+                    class="flex-1 bg-navy-700 hover:bg-navy-600 text-gray-300 font-medium py-2.5 rounded-xl transition text-sm">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Delete Confirmation Modal -->
+    <div id="deleteModal" style="display: none;" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="glass-panel border-red-500/40 rounded-2xl max-w-sm w-full p-6 text-center">
+            <div class="w-16 h-16 bg-red-500/20 text-red-500 rounded-full flex items-center justify-center text-2xl mx-auto mb-4 border border-red-500/30">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h3 class="font-kanit text-xl font-bold text-white mb-2">Delete Student Record?</h3>
+            <p class="text-gray-400 text-sm mb-6">Are you sure you want to remove <span id="deleteStudentName" class="text-white font-semibold"></span>? This action cannot be undone.</p>
+            <div class="flex gap-3">
+                <button id="confirmDeleteBtn" class="flex-1 bg-red-600 hover:bg-red-500 text-white font-medium py-2 rounded-lg transition">Yes, Delete</button>
+                <button onclick="closeDeleteModal()" class="flex-1 bg-navy-700 hover:bg-navy-600 text-gray-300 font-medium py-2 rounded-lg transition">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gallery Image Lightbox Modal (Pop-up view) -->
+    <div id="imageLightbox" style="display: none;" class="hidden fixed inset-0 bg-black/95 backdrop-blur-md z-50 flex items-center justify-center p-4 sm:p-6" onclick="closeLightbox()">
+        <div class="relative max-w-4xl w-full max-h-[90vh] flex flex-col items-center justify-center" onclick="event.stopPropagation()">
+            <!-- Close Button (Top Right) -->
+            <button type="button" onclick="closeLightbox()" class="absolute -top-12 right-0 sm:-right-4 text-white hover:text-flame transition text-2xl sm:text-3xl p-2 bg-navy-800/90 hover:bg-navy-700 rounded-full w-10 h-10 flex items-center justify-center cursor-pointer shadow-lg border border-navy-600" aria-label="Close">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <img id="lightboxImg" src="gallery-ring.jpg" alt="Gallery Lightbox" class="max-h-[78vh] w-auto max-w-full object-contain rounded-2xl border-2 border-flame/40 shadow-2xl bg-navy-950" onerror="this.src='gallery-ring.jpg'">
+            <div class="mt-3 text-center px-4">
+                <p id="lightboxCaption" class="text-white font-kanit text-base sm:text-lg font-semibold tracking-wide"></p>
+                <span class="text-xs text-gray-400">Volcano Martial Arts Academy</span>
+            </div>
+        </div>
+    </div>
+    <!-- LOG IN MODAL (Student Name & Identity Verification)      -->
+    <!-- ======================================================== -->
+    <div id="authModal" style="display: none;" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4" onclick="handleAuthModalBackdropClick(event)">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-7 sm:p-8 text-center shadow-2xl relative animate-in fade-in zoom-in duration-200 border border-gray-100" onclick="event.stopPropagation()">
+            <!-- Close Button (Top Left) -->
+            <button type="button" onclick="closeAuthModal()" class="absolute top-5 left-5 text-gray-400 hover:text-gray-700 transition p-1.5 rounded-full hover:bg-gray-100 cursor-pointer" aria-label="Close modal">
+                <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+
+            <!-- Main View: Student Portal Verification -->
+            <div id="authMainView">
+                <div class="w-12 h-12 mx-auto rounded-2xl bg-orange-50 border border-orange-200 text-flame flex items-center justify-center text-xl mb-3 shadow-sm">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <h3 class="font-kanit text-2xl font-extrabold text-gray-900 tracking-tight mb-1">Student Portal Login</h3>
+                <p class="text-gray-500 text-xs leading-relaxed mb-4 px-1">
+                    Enter your registered student name and assigned Roll ID to securely access your personal dashboard.
+                </p>
+
+                <!-- Dynamic Alert Box for Name Not Found or Identity Mismatch -->
+                <div id="authModalAlertBox" style="display: none;" class="mb-4 p-3.5 rounded-2xl text-xs font-medium text-left border"></div>
+
+                <!-- Student Login & Identity Form -->
+                <form onsubmit="handleAuthModalSubmit(event)" autocomplete="off" class="space-y-3.5 text-left">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1 flex items-center gap-1.5">
+                            <i class="fa-solid fa-user text-flame text-xs"></i> Registered Student Name
+                        </label>
+                        <input type="text" id="authStudentName" required placeholder="e.g. Rahul V / Ameen K / Mohammed Sinan" 
+                            class="w-full bg-gray-50 border border-gray-200 rounded-2xl px-4 py-3 text-gray-900 text-sm font-medium focus:outline-none focus:border-flame focus:bg-white transition shadow-sm">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1 flex items-center justify-between">
+                            <span class="flex items-center gap-1.5">
+                                <i class="fa-solid fa-id-badge text-flame text-xs"></i> Student Roll ID
+                            </span>
+                            <span class="text-[10px] text-gray-400 font-normal lowercase">(for identity security)</span>
+                        </label>
+                        <input type="text" id="authRollInput" required placeholder="e.g. VOL-102" 
+                            class="w-full bg-gray-50 border border-gray-200 rounded-2xl px-4 py-3 text-gray-900 font-mono text-sm uppercase tracking-wider focus:outline-none focus:border-flame focus:bg-white transition shadow-sm">
+                    </div>
+
+                    <button id="authModalSubmitBtn" type="submit" 
+                        class="w-full py-3.5 rounded-full bg-gradient-to-r from-flame to-flame-light hover:brightness-105 active:scale-98 text-white font-bold text-xs uppercase tracking-wider shadow-md shadow-flame/20 transition cursor-pointer flex items-center justify-center gap-2 mt-2">
+                        <i class="fa-solid fa-shield-halved text-gold"></i> Verify &amp; Access My Portal
+                    </button>
+                </form>
+
+                <p class="text-[11px] text-gray-400 mt-4">
+                    New student? <a href="admission.html" class="text-flame hover:underline font-semibold">Complete Admission Registration</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 1. Admin Verification Modal for Adding Gallery Photo -->
+    <div id="galleryAuthModal" style="display: none;" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="glass-panel border border-flame/40 rounded-3xl max-w-sm w-full p-7 text-center shadow-2xl animate-in fade-in duration-200">
+            <div class="w-16 h-16 bg-flame/20 text-flame rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4 border border-flame/30 shadow-lg shadow-flame/20">
+                <i class="fa-solid fa-lock"></i>
+            </div>
+            <h3 class="font-kanit text-xl font-bold text-white mb-1">Admin Verification</h3>
+            <p class="text-gray-300 text-xs mb-5">Enter your Admin Passcode to add or manage photos in the academy gallery.</p>
+            
+            <form onsubmit="verifyGalleryAdminPasscode(event)" autocomplete="off" class="space-y-4">
+                <div class="relative">
+                    <i class="fa-solid fa-key absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                    <input type="password" id="galleryAdminPasscode" required autocomplete="new-password" placeholder="Enter Admin Passcode..." class="w-full bg-navy-900 border border-navy-600 rounded-xl pl-11 pr-11 py-3 text-white text-center font-mono tracking-wider text-sm focus:outline-none focus:border-flame transition">
+                    <button type="button" onclick="togglePasscodeVisibility('galleryAdminPasscode', this)" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition p-1" title="Show/Hide Passcode">
+                        <i class="fa-solid fa-eye text-sm"></i>
+                    </button>
+                </div>
+                <div class="flex gap-3">
+                    <button type="submit" class="flex-1 bg-gradient-to-r from-flame to-flame-light hover:from-flame-light hover:to-flame text-white font-bold py-2.5 rounded-xl transition text-sm flex items-center justify-center gap-2 shadow-lg shadow-flame/20">
+                        <i class="fa-solid fa-unlock"></i> Verify & Open
+                    </button>
+                    <button type="button" onclick="closeGalleryAuthModal()" class="flex-1 bg-navy-700 hover:bg-navy-600 text-gray-300 font-medium py-2.5 rounded-xl transition text-sm">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 2. Add New Gallery Photo Modal -->
+    <div id="addPhotoModal" style="display: none;" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
+        <div class="glass-panel border border-flame/40 rounded-3xl max-w-md w-full p-6 sm:p-7 text-left shadow-2xl my-8 animate-in fade-in duration-200">
+            <div class="flex items-center justify-between pb-4 border-b border-navy-700 mb-5">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-flame/20 text-flame flex items-center justify-center text-lg border border-flame/30">
+                        <i class="fa-solid fa-camera"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-kanit text-lg font-bold text-white">Add Photo to Gallery</h3>
+                        <p class="text-[11px] text-gray-400">Authorized Admin Gallery Uploader</p>
+                    </div>
+                </div>
+                <button type="button" onclick="closeAddPhotoModal()" class="text-gray-400 hover:text-white text-lg p-1.5 transition">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form onsubmit="handleSaveNewPhoto(event)" class="space-y-4">
+                <!-- Tab Switcher: Upload File vs Image URL -->
+                <div class="flex gap-2 p-1 bg-navy-900 rounded-xl border border-navy-700 text-xs font-semibold">
+                    <button type="button" id="photoTabUploadBtn" onclick="switchPhotoUploadTab('upload')" class="flex-1 py-2 rounded-lg bg-flame text-white transition">
+                        <i class="fa-solid fa-upload mr-1"></i> Upload Image
+                    </button>
+                    <button type="button" id="photoTabUrlBtn" onclick="switchPhotoUploadTab('url')" class="flex-1 py-2 rounded-lg text-gray-300 hover:text-white transition">
+                        <i class="fa-solid fa-link mr-1"></i> Image URL
+                    </button>
+                </div>
+
+                <!-- Option A: File Upload -->
+                <div id="photoUploadSection" class="space-y-2">
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-gray-300">Choose Image File</label>
+                    <div class="border-2 border-dashed border-navy-600 hover:border-flame rounded-2xl p-4 text-center cursor-pointer transition bg-navy-900/50" onclick="document.getElementById('photoFileInput').click()">
+                        <i class="fa-solid fa-cloud-arrow-up text-3xl text-flame mb-2 block"></i>
+                        <span class="text-xs text-gray-300 block font-medium">Click to select photo from device</span>
+                        <span class="text-[11px] text-gray-500 block mt-0.5">JPG, PNG, WEBP supported (Auto-compressed)</span>
+                        <input type="file" id="photoFileInput" accept="image/*" onchange="handlePhotoFileSelected(event)" class="hidden">
+                    </div>
+                </div>
+
+                <!-- Option B: Direct URL -->
+                <div id="photoUrlSection" style="display: none;" class="space-y-2">
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-gray-300">Image Web Link (URL)</label>
+                    <input type="url" id="photoUrlInput" placeholder="https://images.unsplash.com/... or https://..." oninput="handlePhotoUrlInput(event)" class="w-full bg-navy-900 border border-navy-600 rounded-xl px-4 py-2.5 text-white text-xs focus:outline-none focus:border-flame transition">
+                </div>
+
+                <!-- Caption / Title -->
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-1.5">Photo Caption / Event Title</label>
+                    <input type="text" id="photoCaptionInput" required placeholder="e.g. State Championship Celebration 2026" oninput="updatePhotoPreviewCaption(this.value)" class="w-full bg-navy-900 border border-navy-600 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-flame transition">
+                </div>
+
+                <!-- Live Preview -->
+                <div id="photoPreviewContainer" style="display: none;" class="space-y-1.5">
+                    <span class="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Preview:</span>
+                    <div class="w-full h-44 rounded-xl overflow-hidden border border-flame/50 relative bg-navy-900">
+                        <img id="photoPreviewImg" src="" alt="Preview" class="w-full h-full object-cover">
+                        <span id="photoPreviewCaption" class="absolute bottom-2 left-2 right-2 bg-black/75 backdrop-blur-sm text-white text-xs px-2.5 py-1 rounded-lg truncate"></span>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex gap-3 pt-2">
+                    <button type="submit" id="savePhotoSubmitBtn" class="flex-1 bg-gradient-to-r from-flame to-flame-light hover:from-flame-light hover:to-flame text-white font-bold py-3 rounded-xl transition text-sm shadow-lg shadow-flame/30 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-plus"></i> Add to Gallery
+                    </button>
+                    <button type="button" onclick="closeAddPhotoModal()" class="px-5 py-3 bg-navy-700 hover:bg-navy-600 text-gray-300 text-sm font-medium rounded-xl transition">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <header class="glass-header fixed top-0 left-0 right-0 z-40">
+        <div style="max-width:1280px; margin:0 auto; padding:0 12px;">
+            <div style="display:flex; align-items:center; justify-content:space-between; height:72px; gap:12px;">
+                <!-- 1. Logo -->
+                <a href="#home" style="display:flex; align-items:center; gap:10px; text-decoration:none; flex-shrink:0;">
+                    <div style="width:44px; height:44px; border-radius:14px; overflow:hidden; border:2px solid #ff5e00; box-shadow:0 4px 16px rgba(255,94,0,0.35); flex-shrink:0;">
+                        <img src="logo.jpg" alt="Volcano Academy Logo" style="width:100%; height:100%; object-fit:cover;">
+                    </div>
+                    <div>
+                        <span style="font-family:'Kanit',sans-serif; font-weight:900; font-size:18px; color:#fff; display:block; line-height:1; letter-spacing:2px;">VOLCANO</span>
+                        <span style="font-family:'Kanit',sans-serif; font-size:9px; color:#ff5e00; text-transform:uppercase; letter-spacing:3px; display:block; margin-top:2px; font-weight:600;">Karate &amp; Kickboxing</span>
+                    </div>
+                </a>
+
+                <!-- 2. Desktop Pill Buttons (Home, Admission, Log In, Admin) -->
+                <div id="desktopNavGroup" style="display:flex; align-items:center; gap:8px;">
+                    <a href="./index.html#work" style="padding:7px 14px; border-radius:12px; font-size:13px; font-weight:700; color:#38bdf8; background:rgba(56,189,248,0.1); border:1px solid rgba(56,189,248,0.25); text-decoration:none; display:inline-flex; align-items:center; gap:6px;">
+                        <i class="fa-solid fa-arrow-left" style="font-size:11px;"></i> Back to Portfolio
+                    </a>
+                    <a href="#home" style="padding:7px 14px; border-radius:12px; font-size:13px; font-weight:700; color:#e2e8f0; background:rgba(19,28,46,0.9); border:1px solid rgba(255,255,255,0.12); text-decoration:none; display:inline-flex; align-items:center; gap:6px;">
+                        <i class="fa-solid fa-house" style="color:#ff5e00; font-size:11px;"></i> Home
+                    </a>
+                    <a href="admission.html" style="padding:7px 16px; border-radius:12px; font-size:13px; font-weight:700; color:#fff; background:linear-gradient(135deg,#ff5e00,#ff8800); text-decoration:none; display:inline-flex; align-items:center; gap:6px; box-shadow:0 4px 14px rgba(255,94,0,0.35);">
+                        <i class="fa-solid fa-user-plus" style="font-size:11px;"></i> Admission
+                    </a>
+                    <a href="student.html?login=1" onclick="sessionStorage.removeItem('volcano_student_roll'); sessionStorage.removeItem('volcano_student_name');" style="padding:7px 15px; border-radius:12px; font-size:13px; font-weight:700; color:#fff; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.22); text-decoration:none; display:inline-flex; align-items:center; gap:6px; cursor:pointer; transition:all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.18)'" onmouseout="this.style.background='rgba(255,255,255,0.08)'">
+                        <i class="fa-solid fa-arrow-right-to-bracket" style="color:#ff5e00; font-size:11px;"></i> Student Login
+                    </a>
+
+                </div>
+
+                <!-- 3. Hamburger Button (hidden on desktop) -->
+                <button id="hamburgerBtn" onclick="toggleMobileNav()" aria-label="Toggle Menu"
+                    style="display:none; align-items:center; justify-content:center; width:42px; height:42px; border-radius:12px; background:rgba(19,28,46,0.9); border:1px solid rgba(255,255,255,0.15); color:#e2e8f0; cursor:pointer; flex-shrink:0;">
+                    <i class="fa-solid fa-bars text-lg" id="menuIcon"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Drawer Menu -->
+        <div id="mobileDrawer" style="display:none; background:rgba(11,17,30,0.97); border-top:1px solid rgba(255,255,255,0.08); padding:16px;">
+            <a href="./index.html#work" style="display:flex; align-items:center; gap:12px; color:#38bdf8; text-decoration:none; padding:10px 0; font-size:15px; font-weight:700; border-bottom:1px solid rgba(255,255,255,0.06);">
+                <i class="fa-solid fa-arrow-left" style="width:20px; text-align:center;"></i> Back to ZENVORA Portfolio
+            </a>
+            <a href="student.html?login=1" onclick="sessionStorage.removeItem('volcano_student_roll'); sessionStorage.removeItem('volcano_student_name'); toggleMobileNav();" style="display:flex; align-items:center; gap:12px; color:#fff; width:100%; text-align:left; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15); padding:11px 14px; border-radius:14px; font-size:15px; font-weight:700; margin-bottom:12px; text-decoration:none;">
+                <i class="fa-solid fa-arrow-right-to-bracket" style="color:#ff5e00; width:20px; text-align:center;"></i> Log In / Student Portal
+            </a>
+            <a href="#home" onclick="toggleMobileNav()" style="display:flex; align-items:center; gap:12px; color:#e2e8f0; text-decoration:none; padding:10px 0; font-size:16px; font-weight:700; border-bottom:1px solid rgba(255,255,255,0.06);">
+                <i class="fa-solid fa-house" style="color:#ff5e00; width:20px; text-align:center;"></i> Home
+            </a>
+            <a href="#about" onclick="toggleMobileNav()" style="display:flex; align-items:center; gap:12px; color:#cbd5e1; text-decoration:none; padding:10px 0; font-size:15px; font-weight:500; border-bottom:1px solid rgba(255,255,255,0.06);">
+                <i class="fa-solid fa-info-circle" style="color:#ff5e00; width:20px; text-align:center;"></i> About Us
+            </a>
+            <a href="#masters" onclick="toggleMobileNav()" style="display:flex; align-items:center; gap:12px; color:#cbd5e1; text-decoration:none; padding:10px 0; font-size:15px; font-weight:500; border-bottom:1px solid rgba(255,255,255,0.06);">
+                <i class="fa-solid fa-user-ninja" style="color:#ff5e00; width:20px; text-align:center;"></i> Our Masters
+            </a>
+            <a href="#gallery" onclick="toggleMobileNav()" style="display:flex; align-items:center; gap:12px; color:#cbd5e1; text-decoration:none; padding:10px 0; font-size:15px; font-weight:500; border-bottom:1px solid rgba(255,255,255,0.06);">
+                <i class="fa-solid fa-images" style="color:#ff5e00; width:20px; text-align:center;"></i> Gallery
+            </a>
+            <a href="admission.html" style="display:flex; align-items:center; gap:12px; color:#ff5e00; text-decoration:none; padding:10px 0; font-size:15px; font-weight:700; border-bottom:1px solid rgba(255,255,255,0.06);">
+                <i class="fa-solid fa-user-plus" style="width:20px; text-align:center;"></i> Admission Procedure
+            </a>
+            <a href="student.html" style="display:flex; align-items:center; gap:12px; color:#38bdf8; text-decoration:none; padding:10px 0; font-size:15px; font-weight:700; border-bottom:1px solid rgba(255,255,255,0.06);">
+                <i class="fa-solid fa-graduation-cap" style="width:20px; text-align:center;"></i> Student Portal
+            </a>
+
+            <a href="admission.html" style="display:flex; align-items:center; justify-content:center; gap:8px; margin-top:12px; background:linear-gradient(135deg,#ff5e00,#ff8800); color:#fff; font-weight:800; font-size:15px; padding:13px; border-radius:14px; text-decoration:none; box-shadow:0 4px 16px rgba(255,94,0,0.4);">
+                <i class="fa-solid fa-bolt"></i> Join Academy Now
+            </a>
+        </div>
+
+        <!-- Responsive CSS for nav -->
+        <style>
+            @media (max-width: 767px) {
+                #desktopNavGroup { display: none !important; }
+                #hamburgerBtn { display: flex !important; }
+            }
+            @media (min-width: 768px) {
+                #desktopNavGroup { display: flex !important; }
+                #hamburgerBtn { display: none !important; }
+                #mobileDrawer { display: none !important; }
+            }
+        </style>
+    </header>
+
+    <!-- MAIN CONTENT WRAPPER -->
+    <main class="pt-20">
+
+        <!-- Hero Section (Cinematic Karate Fighter Background) -->
+        <section id="home" class="hero-cinematic py-16 md:py-24 overflow-hidden border-b border-navy-700/60">
+            <!-- Ambient Floating Ember Particles -->
+            <div class="pointer-events-none absolute inset-0 overflow-hidden">
+                <span class="ember" style="left: 12%; top: 75%; animation-delay: 0s;"></span>
+                <span class="ember" style="left: 28%; top: 85%; animation-delay: 2.5s;"></span>
+                <span class="ember" style="left: 62%; top: 65%; animation-delay: 1.2s;"></span>
+                <span class="ember" style="left: 78%; top: 80%; animation-delay: 3.8s;"></span>
+                <span class="ember" style="left: 48%; top: 92%; animation-delay: 4.8s;"></span>
+            </div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="grid grid-cols-1 gap-12 items-center">
+                    
+                    <!-- Hero Content (Full Width) -->
+                    <div class="space-y-6 text-left max-w-2xl">
+
+                        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass-panel border-flame/30 text-xs font-semibold uppercase tracking-widest text-gold shadow-lg shadow-flame/10">
+                            <span class="w-2 h-2 rounded-full bg-flame animate-ping"></span>
+                            Official Training Center
+                        </div>
+
+                        <h1 class="font-kanit font-extrabold text-4xl sm:text-5xl lg:text-6xl text-white tracking-tight leading-[1.1]">
+                            UNLEASH YOUR <br>
+                            <span class="gradient-text-orange">INNER WARRIOR</span>
+                        </h1>
+
+                        <p class="text-gray-300 text-base sm:text-lg max-w-2xl mx-auto lg:mx-0 leading-relaxed font-normal">
+                            Welcome to <strong class="text-white font-semibold">Volcano Karate & Kick Boxing Academy</strong>. Master disciplined self-defense, high-intensity kickboxing, and championship-grade martial arts under certified Dan-ranked instructors.
+                        </p>
+
+                        <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
+                            <a href="admission.html" class="bg-gradient-to-r from-flame to-flame-light hover:from-flame-light hover:to-flame text-white font-bold text-base px-8 py-3.5 rounded-xl shadow-xl shadow-flame/30 transition transform hover:-translate-y-1 flex items-center gap-3">
+                                <i class="fa-solid fa-user-plus text-gold"></i> Get Admission
+                            </a>
+                        </div>
+
+                        <!-- Stats Quick Bar with Dynamic Animated Counters -->
+                        <div id="heroStatsBar" class="grid grid-cols-3 gap-4 pt-8 border-t border-navy-700/60 max-w-lg mx-auto lg:mx-0">
+                            <div class="text-center lg:text-left">
+                                <span class="font-kanit text-2xl sm:text-3xl font-extrabold text-gold block"><span class="stat-counter" data-target="15">15</span>+</span>
+                                <span class="text-xs text-gray-400 font-medium uppercase tracking-wider">Years Active</span>
+                            </div>
+                            <div class="text-center lg:text-left">
+                                <span class="font-kanit text-2xl sm:text-3xl font-extrabold text-flame block"><span class="stat-counter" data-target="10">10</span></span>
+                                <span class="text-xs text-gray-400 font-medium uppercase tracking-wider">Black Belt Masters</span>
+                            </div>
+                            <div class="text-center lg:text-left">
+                                <span class="font-kanit text-2xl sm:text-3xl font-extrabold text-white block"><span class="stat-counter" data-target="500">500</span>+</span>
+                                <span class="text-xs text-gray-400 font-medium uppercase tracking-wider">Trained Students</span>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="py-20 bg-navy-800/40 border-y border-navy-700/50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-2xl mx-auto mb-16">
+                    <span class="text-xs font-bold uppercase tracking-widest text-gold block mb-2">Our Discipline & Mission</span>
+                    <h2 class="font-kanit text-3xl sm:text-4xl font-extrabold text-white uppercase tracking-tight">
+                        WHY TRAIN AT <span class="gradient-text-orange">VOLCANO ACADEMY</span>
+                    </h2>
+                    <div class="w-20 h-1 bg-gradient-to-r from-flame to-gold mx-auto mt-4 rounded-full"></div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Pillar 1 -->
+                    <div class="glass-panel glass-panel-hover rounded-2xl p-8 relative overflow-hidden group">
+                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-flame/20 to-gold/10 border border-flame/40 flex items-center justify-center text-flame text-2xl mb-6 group-hover:scale-110 transition duration-300">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </div>
+                        <h3 class="font-kanit text-xl font-bold text-white mb-3">Tactical Self Defense</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed">
+                            Practical, real-world defense techniques designed for all age groups to develop instincts, quick reflexes, and unshakeable personal safety confidence.
+                        </p>
+                    </div>
+
+                    <!-- Pillar 2 -->
+                    <div class="glass-panel glass-panel-hover rounded-2xl p-8 relative overflow-hidden group">
+                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-gold/20 to-flame/10 border border-gold/40 flex items-center justify-center text-gold text-2xl mb-6 group-hover:scale-110 transition duration-300">
+                            <i class="fa-solid fa-trophy"></i>
+                        </div>
+                        <h3 class="font-kanit text-xl font-bold text-white mb-3">Tournament Coaching</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed">
+                            Structured Kata and Kumite training programs aiming for District, State, and National level championship medal positions.
+                        </p>
+                    </div>
+
+                    <!-- Pillar 3 -->
+                    <div class="glass-panel glass-panel-hover rounded-2xl p-8 relative overflow-hidden group">
+                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-flame/20 to-gold/10 border border-flame/40 flex items-center justify-center text-flame text-2xl mb-6 group-hover:scale-110 transition duration-300">
+                            <i class="fa-solid fa-hand-fist"></i>
+                        </div>
+                        <h3 class="font-kanit text-xl font-bold text-white mb-3">Kickboxing Fitness</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed">
+                            High-calorie burn cardio, pad work, heavy bag drills, and full-body stamina enhancement in a motivating group environment.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Programs Section -->
+        <section id="programs" class="py-20 bg-navy-900/60 border-b border-navy-700/50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-2xl mx-auto mb-16">
+                    <span class="text-xs font-bold uppercase tracking-widest text-gold block mb-2">Curriculum &amp; Discipline</span>
+                    <h2 class="font-kanit text-3xl sm:text-4xl font-extrabold text-white uppercase tracking-tight">
+                        ACADEMY <span class="gradient-text-orange">TRAINING PROGRAMS</span>
+                    </h2>
+                    <p class="text-gray-400 text-sm mt-3">Structured belt syllabus, authentic martial discipline, and high-energy combat training for every age group.</p>
+                    <div class="w-20 h-1 bg-gradient-to-r from-flame to-gold mx-auto mt-4 rounded-full"></div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Program 1 -->
+                    <div class="glass-panel glass-panel-hover rounded-2xl p-7 flex flex-col justify-between border border-navy-700/70 relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 w-28 h-28 bg-flame/10 rounded-full blur-2xl group-hover:bg-flame/20 transition"></div>
+                        <div>
+                            <div class="flex items-center justify-between mb-5">
+                                <span class="text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-gold/15 text-gold border border-gold/30">Kids (Ages 5-12)</span>
+                                <div class="w-12 h-12 rounded-xl bg-navy-800 border border-navy-600 flex items-center justify-center text-flame text-xl shadow-md">
+                                    <i class="fa-solid fa-child-reaching"></i>
+                                </div>
+                            </div>
+                            <h3 class="font-kanit text-2xl font-bold text-white mb-3">Junior Karate Academy</h3>
+                            <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                                Cultivates respect, laser-sharp focus, agility, and anti-bullying awareness in a positive, safe, and disciplined environment.
+                            </p>
+                            <ul class="space-y-2.5 text-xs text-gray-300 mb-6">
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-flame"></i> Basic stances, blocks, and strikes</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-flame"></i> Anti-bullying &amp; situational awareness</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-flame"></i> White to Yellow belt fundamentals</li>
+                            </ul>
+                        </div>
+                        <a href="admission.html?batch=Kids+Beginner" class="w-full py-3 rounded-xl bg-navy-800 hover:bg-flame text-gray-200 hover:text-white font-semibold text-xs tracking-wider uppercase text-center transition flex items-center justify-center gap-2 border border-navy-600 hover:border-flame shadow-sm">
+                            Enroll in Junior Batch <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                        </a>
+                    </div>
+
+                    <!-- Program 2 -->
+                    <div class="glass-panel glass-panel-hover rounded-2xl p-7 flex flex-col justify-between border border-flame/40 relative overflow-hidden group shadow-xl shadow-flame/5">
+                        <div class="absolute -top-10 -right-10 w-32 h-32 bg-flame/20 rounded-full blur-3xl group-hover:bg-flame/30 transition"></div>
+                        <div>
+                            <div class="flex items-center justify-between mb-5">
+                                <span class="text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-flame/20 text-flame border border-flame/40">All Ages • Dan Grading</span>
+                                <div class="w-12 h-12 rounded-xl bg-flame/20 border border-flame/40 flex items-center justify-center text-flame text-xl shadow-md">
+                                    <i class="fa-solid fa-user-ninja"></i>
+                                </div>
+                            </div>
+                            <h3 class="font-kanit text-2xl font-bold text-white mb-3">Traditional Karate &amp; Kata</h3>
+                            <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                                Complete Shotokan and Okinawan curriculum covering traditional Kata forms, tactical Kumite sparring, and Dan-level belt grading examinations.
+                            </p>
+                            <ul class="space-y-2.5 text-xs text-gray-300 mb-6">
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-flame"></i> Mastery of traditional Kata forms</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-flame"></i> Point Kumite &amp; combat sparring</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-flame"></i> Official Black Belt graduation path</li>
+                            </ul>
+                        </div>
+                        <a href="admission.html?batch=Evening" class="w-full py-3 rounded-xl bg-gradient-to-r from-flame to-flame-light text-white font-bold text-xs tracking-wider uppercase text-center transition shadow-lg shadow-flame/30 flex items-center justify-center gap-2 hover:brightness-110">
+                            Join Traditional Karate <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                        </a>
+                    </div>
+
+                    <!-- Program 3 -->
+                    <div class="glass-panel glass-panel-hover rounded-2xl p-7 flex flex-col justify-between border border-navy-700/70 relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 w-28 h-28 bg-gold/10 rounded-full blur-2xl group-hover:bg-gold/20 transition"></div>
+                        <div>
+                            <div class="flex items-center justify-between mb-5">
+                                <span class="text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-gold/15 text-gold border border-gold/30">Teens &amp; Adults</span>
+                                <div class="w-12 h-12 rounded-xl bg-navy-800 border border-navy-600 flex items-center justify-center text-gold text-xl shadow-md">
+                                    <i class="fa-solid fa-fire-flame-curved"></i>
+                                </div>
+                            </div>
+                            <h3 class="font-kanit text-2xl font-bold text-white mb-3">Kickboxing &amp; Conditioning</h3>
+                            <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                                High-intensity combat fitness combining Dutch-style kickboxing combinations, heavy bag circuits, agility pad drills, and core endurance.
+                            </p>
+                            <ul class="space-y-2.5 text-xs text-gray-300 mb-6">
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-gold"></i> Heavy bag striking &amp; pad combinations</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-gold"></i> High-calorie burn cardio &amp; core conditioning</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-gold"></i> Practical striking self-defense</li>
+                            </ul>
+                        </div>
+                        <a href="admission.html?batch=Morning" class="w-full py-3 rounded-xl bg-navy-800 hover:bg-flame text-gray-200 hover:text-white font-semibold text-xs tracking-wider uppercase text-center transition flex items-center justify-center gap-2 border border-navy-600 hover:border-flame shadow-sm">
+                            Enroll in Kickboxing <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Weekly Class Schedules Section -->
+        <section id="schedule" class="py-20 bg-navy-800/40 border-b border-navy-700/50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-2xl mx-auto mb-16">
+                    <span class="text-xs font-bold uppercase tracking-widest text-gold block mb-2">Training Timetable</span>
+                    <h2 class="font-kanit text-3xl sm:text-4xl font-extrabold text-white uppercase tracking-tight">
+                        WEEKLY <span class="gradient-text-orange">CLASS SCHEDULES</span>
+                    </h2>
+                    <p class="text-gray-400 text-sm mt-3">Find the training batch that fits your lifestyle. Multiple morning, evening, and weekend slots available.</p>
+                    <div class="w-20 h-1 bg-gradient-to-r from-flame to-gold mx-auto mt-4 rounded-full"></div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Batch 1 -->
+                    <div class="glass-panel glass-panel-hover rounded-2xl p-6 border border-navy-700 relative">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-flame/15 text-flame flex items-center justify-center text-lg border border-flame/30">
+                                <i class="fa-solid fa-sun"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-kanit text-lg font-bold text-white">Morning</h4>
+                                <span class="text-[11px] text-gray-400">Adults &amp; Fitness</span>
+                            </div>
+                        </div>
+                        <div class="space-y-3 py-3 border-y border-navy-700/80 text-xs">
+                            <div class="flex items-center justify-between text-gray-300">
+                                <span class="text-gray-400 flex items-center gap-1.5"><i class="fa-regular fa-clock text-flame"></i> Time:</span>
+                                <span class="font-semibold text-white">06:00 AM – 07:30 AM</span>
+                            </div>
+                            <div class="flex items-center justify-between text-gray-300">
+                                <span class="text-gray-400 flex items-center gap-1.5"><i class="fa-regular fa-calendar-days text-flame"></i> Days:</span>
+                                <span class="font-semibold text-white">Mon, Wed, Fri</span>
+                            </div>
+                            <div class="flex items-center justify-between text-gray-300">
+                                <span class="text-gray-400 flex items-center gap-1.5"><i class="fa-solid fa-user-tie text-flame"></i> Coaches:</span>
+                                <span class="font-semibold text-gold">Master Saleem &amp; Team</span>
+                            </div>
+                        </div>
+                        <a href="admission.html?batch=Morning" class="mt-4 w-full block py-2.5 rounded-lg bg-navy-800 hover:bg-flame text-gray-300 hover:text-white text-xs font-semibold text-center transition border border-navy-600 hover:border-flame">
+                            Choose This Batch
+                        </a>
+                    </div>
+
+                    <!-- Batch 2 -->
+                    <div class="glass-panel glass-panel-hover rounded-2xl p-6 border border-flame/40 relative shadow-lg shadow-flame/5">
+                        <div class="absolute -top-3 right-4 bg-flame text-white text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full shadow-md">Popular</div>
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-flame/20 text-flame flex items-center justify-center text-lg border border-flame/40">
+                                <i class="fa-solid fa-moon"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-kanit text-lg font-bold text-white">Evening</h4>
+                                <span class="text-[11px] text-gray-400">Belt Syllabus &amp; Kata</span>
+                            </div>
+                        </div>
+                        <div class="space-y-3 py-3 border-y border-navy-700/80 text-xs">
+                            <div class="flex items-center justify-between text-gray-300">
+                                <span class="text-gray-400 flex items-center gap-1.5"><i class="fa-regular fa-clock text-flame"></i> Time:</span>
+                                <span class="font-semibold text-white">05:30 PM – 07:00 PM</span>
+                            </div>
+                            <div class="flex items-center justify-between text-gray-300">
+                                <span class="text-gray-400 flex items-center gap-1.5"><i class="fa-regular fa-calendar-days text-flame"></i> Days:</span>
+                                <span class="font-semibold text-white">Monday to Saturday</span>
+                            </div>
+                            <div class="flex items-center justify-between text-gray-300">
+                                <span class="text-gray-400 flex items-center gap-1.5"><i class="fa-solid fa-user-tie text-flame"></i> Head:</span>
+                                <span class="font-semibold text-gold">Grand Master Amjad Moosa</span>
+                            </div>
+                        </div>
+                        <a href="admission.html?batch=Evening" class="mt-4 w-full block py-2.5 rounded-lg bg-gradient-to-r from-flame to-flame-light text-white text-xs font-bold text-center transition shadow-md shadow-flame/20 hover:brightness-110">
+                            Choose This Batch
+                        </a>
+                    </div>
+
+                    <!-- Batch 3 -->
+                    <div class="glass-panel glass-panel-hover rounded-2xl p-6 border border-navy-700 relative">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-gold/15 text-gold flex items-center justify-center text-lg border border-gold/30">
+                                <i class="fa-solid fa-shapes"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-kanit text-lg font-bold text-white">Kids Beginner</h4>
+                                <span class="text-[11px] text-gray-400">Ages 5-12</span>
+                            </div>
+                        </div>
+                        <div class="space-y-3 py-3 border-y border-navy-700/80 text-xs">
+                            <div class="flex items-center justify-between text-gray-300">
+                                <span class="text-gray-400 flex items-center gap-1.5"><i class="fa-regular fa-clock text-gold"></i> Time:</span>
+                                <span class="font-semibold text-white">04:30 PM – 05:30 PM</span>
+                            </div>
+                            <div class="flex items-center justify-between text-gray-300">
+                                <span class="text-gray-400 flex items-center gap-1.5"><i class="fa-regular fa-calendar-days text-gold"></i> Days:</span>
+                                <span class="font-semibold text-white">Tue, Thu, Sat</span>
+                            </div>
+                            <div class="flex items-center justify-between text-gray-300">
+                                <span class="text-gray-400 flex items-center gap-1.5"><i class="fa-solid fa-user-tie text-gold"></i> Coaches:</span>
+                                <span class="font-semibold text-gold">Youth Dan Instructors</span>
+                            </div>
+                        </div>
+                        <a href="admission.html?batch=Kids+Beginner" class="mt-4 w-full block py-2.5 rounded-lg bg-navy-800 hover:bg-flame text-gray-300 hover:text-white text-xs font-semibold text-center transition border border-navy-600 hover:border-flame">
+                            Choose This Batch
+                        </a>
+                    </div>
+
+                    <!-- Batch 4 -->
+                    <div class="glass-panel glass-panel-hover rounded-2xl p-6 border border-navy-700 relative">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-flame/15 text-flame flex items-center justify-center text-lg border border-flame/30">
+                                <i class="fa-solid fa-medal"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-kanit text-lg font-bold text-white">Weekend Special</h4>
+                                <span class="text-[11px] text-gray-400">Intensive Combat</span>
+                            </div>
+                        </div>
+                        <div class="space-y-3 py-3 border-y border-navy-700/80 text-xs">
+                            <div class="flex items-center justify-between text-gray-300">
+                                <span class="text-gray-400 flex items-center gap-1.5"><i class="fa-regular fa-clock text-flame"></i> Time:</span>
+                                <span class="font-semibold text-white">08:00 AM – 10:30 AM</span>
+                            </div>
+                            <div class="flex items-center justify-between text-gray-300">
+                                <span class="text-gray-400 flex items-center gap-1.5"><i class="fa-regular fa-calendar-days text-flame"></i> Days:</span>
+                                <span class="font-semibold text-white">Saturday &amp; Sunday</span>
+                            </div>
+                            <div class="flex items-center justify-between text-gray-300">
+                                <span class="text-gray-400 flex items-center gap-1.5"><i class="fa-solid fa-user-tie text-flame"></i> Coaches:</span>
+                                <span class="font-semibold text-gold">Senior Dan Masters</span>
+                            </div>
+                        </div>
+                        <a href="admission.html?batch=Weekend+Special" class="mt-4 w-full block py-2.5 rounded-lg bg-navy-800 hover:bg-flame text-gray-300 hover:text-white text-xs font-semibold text-center transition border border-navy-600 hover:border-flame">
+                            Choose This Batch
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+       <!-- Masters Section (Horizontal Slider Style) -->
+<section id="masters" style="padding: 60px 16px; background-color: #0b1120;">
+    <div style="max-width: 1200px; margin: 0 auto; text-align: center; margin-bottom: 40px;">
+        <span style="color: #ff6b00; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; font-size: 12px; display: block; margin-bottom: 8px;">Certified Leadership</span>
+        <h2 style="color: #ffffff; font-size: 32px; font-weight: 800; text-transform: uppercase; margin: 0;">MEET OUR <span style="color: #ff6b00;">BLACK BELT MASTERS</span></h2>
+        <div style="width: 70px; height: 4px; background: #ff6b00; margin: 12px auto 0 auto; border-radius: 10px;"></div>
+    </div>
+
+    <!-- Slider Outer Wrapper -->
+    <div style="max-width: 1200px; margin: 0 auto; position: relative; overflow: hidden;">
+
+
+        <!-- Horizontal Scroll Cards Container -->
+        <div id="mastersContainer" style="display: flex; flex-wrap: nowrap; overflow-x: auto; scroll-behavior: smooth; gap: 22px; padding: 20px 8px; width: 100%; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;">
+            
+            <!-- Master 1: Amjad Moosa -->
+            <div style="flex: 0 0 auto; scroll-snap-align: start; background: linear-gradient(180deg, #ff6b00 0%, #e65100 100%); border-radius: 28px; padding: 28px 18px; text-align: center; width: 250px; box-shadow: 0 12px 25px rgba(255, 107, 0, 0.3); display: flex; flex-direction: column; align-items: center;">
+                <div style="width: 145px; height: 145px; border-radius: 50%; overflow: hidden; border: 4px solid #0b1120; background-color: #1f2937; margin-bottom: 16px; flex-shrink: 0; box-shadow: 0 4px 14px rgba(0,0,0,0.3);">
+                    <img src="https://i.postimg.cc/2S5XvpP5/1000080369.jpg" alt="Amjad Moosa" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=300&auto=format&fit=crop'">
+                </div>
+                <span style="font-size: 11.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #fff; background: rgba(0,0,0,0.3); padding: 5px 12px; border-radius: 20px; margin-bottom: 10px;">Grand Master</span>
+                <h3 style="color: #ffffff; font-weight: 800; font-size: 20px; margin: 0 0 5px 0;">Amjad Moosa</h3>
+                <p style="color: #ffe6d5; font-size: 14px; font-weight: 600; margin: 0;">7th Dan Black Belt</p>
+            </div>
+
+            <!-- Master 2: Koya Mon -->
+            <div style="flex: 0 0 auto; scroll-snap-align: start; background: linear-gradient(180deg, #ff6b00 0%, #e65100 100%); border-radius: 28px; padding: 28px 18px; text-align: center; width: 250px; box-shadow: 0 12px 25px rgba(255, 107, 0, 0.3); display: flex; flex-direction: column; align-items: center;">
+                <div style="width: 145px; height: 145px; border-radius: 50%; overflow: hidden; border: 4px solid #0b1120; background-color: #1f2937; margin-bottom: 16px; flex-shrink: 0; box-shadow: 0 4px 14px rgba(0,0,0,0.3);">
+                    <img src="https://i.postimg.cc/RZBdrnSg/1000080346.jpg" alt="Koya Mon" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=300&auto=format&fit=crop'">
+                </div>
+                <span style="font-size: 11.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #fff; background: rgba(0,0,0,0.3); padding: 5px 12px; border-radius: 20px; margin-bottom: 10px;">Chief Master</span>
+                <h3 style="color: #ffffff; font-weight: 800; font-size: 20px; margin: 0 0 5px 0;">Koya Mon</h3>
+                <p style="color: #ffe6d5; font-size: 14px; font-weight: 600; margin: 0;">3rd Dan Black Belt</p>
+            </div>
+
+            <!-- Master 3: Mufeed A -->
+            <div style="flex: 0 0 auto; scroll-snap-align: start; background: linear-gradient(180deg, #ff6b00 0%, #e65100 100%); border-radius: 28px; padding: 28px 18px; text-align: center; width: 250px; box-shadow: 0 12px 25px rgba(255, 107, 0, 0.3); display: flex; flex-direction: column; align-items: center;">
+                <div style="width: 145px; height: 145px; border-radius: 50%; overflow: hidden; border: 4px solid #0b1120; background-color: #1f2937; margin-bottom: 16px; flex-shrink: 0; box-shadow: 0 4px 14px rgba(0,0,0,0.3);">
+                    <img src="https://i.postimg.cc/WpMKcwGD/1000080365.jpg" alt="Mufeed A" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=300&auto=format&fit=crop'">
+                </div>
+                <span style="font-size: 11.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #fff; background: rgba(0,0,0,0.3); padding: 5px 12px; border-radius: 20px; margin-bottom: 10px;">Instructor</span>
+                <h3 style="color: #ffffff; font-weight: 800; font-size: 20px; margin: 0 0 5px 0;">Mufeed A</h3>
+                <p style="color: #ffe6d5; font-size: 14px; font-weight: 600; margin: 0;">2nd Dan Black Belt</p>
+            </div> 
+
+            <!-- Master 4: Shufaiq -->
+            <div style="flex: 0 0 auto; scroll-snap-align: start; background: linear-gradient(180deg, #ff6b00 0%, #e65100 100%); border-radius: 28px; padding: 28px 18px; text-align: center; width: 250px; box-shadow: 0 12px 25px rgba(255, 107, 0, 0.3); display: flex; flex-direction: column; align-items: center;">
+                <div style="width: 145px; height: 145px; border-radius: 50%; overflow: hidden; border: 4px solid #0b1120; background-color: #1f2937; margin-bottom: 16px; flex-shrink: 0; box-shadow: 0 4px 14px rgba(0,0,0,0.3);">
+                    <img src="shufaiq.jpg" alt="Shufaiq" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=300&auto=format&fit=crop'">
+                </div>
+                <span style="font-size: 11.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #fff; background: rgba(0,0,0,0.3); padding: 5px 12px; border-radius: 20px; margin-bottom: 10px;">Late</span>
+                <h3 style="color: #ffffff; font-weight: 800; font-size: 20px; margin: 0 0 5px 0;">Shufaiq</h3>
+                <p style="color: #ffe6d5; font-size: 14px; font-weight: 600; margin: 0;">2nd Dan Black Belt</p>
+            </div>
+
+            <!-- Master 5: Shabeer -->
+            <div style="flex: 0 0 auto; scroll-snap-align: start; background: linear-gradient(180deg, #ff6b00 0%, #e65100 100%); border-radius: 28px; padding: 28px 18px; text-align: center; width: 250px; box-shadow: 0 12px 25px rgba(255, 107, 0, 0.3); display: flex; flex-direction: column; align-items: center;">
+                <div style="width: 145px; height: 145px; border-radius: 50%; overflow: hidden; border: 4px solid #0b1120; background-color: #1f2937; margin-bottom: 16px; flex-shrink: 0; box-shadow: 0 4px 14px rgba(0,0,0,0.3);">
+                    <img src="https://i.postimg.cc/QNcK2YFD/1000080355.jpg" alt="Shabeer" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=300&auto=format&fit=crop'">
+                </div>
+                <span style="font-size: 11.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #fff; background: rgba(0,0,0,0.3); padding: 5px 12px; border-radius: 20px; margin-bottom: 10px;">Instructor</span>
+                <h3 style="color: #ffffff; font-weight: 800; font-size: 20px; margin: 0 0 5px 0;">Shabeer</h3>
+                <p style="color: #ffe6d5; font-size: 14px; font-weight: 600; margin: 0;">2nd Dan Black Belt</p>
+            </div>
+
+            <!-- Master 6: Sidheeq -->
+            <div style="flex: 0 0 auto; scroll-snap-align: start; background: linear-gradient(180deg, #ff6b00 0%, #e65100 100%); border-radius: 28px; padding: 28px 18px; text-align: center; width: 250px; box-shadow: 0 12px 25px rgba(255, 107, 0, 0.3); display: flex; flex-direction: column; align-items: center;">
+                <div style="width: 145px; height: 145px; border-radius: 50%; overflow: hidden; border: 4px solid #0b1120; background-color: #1f2937; margin-bottom: 16px; flex-shrink: 0; box-shadow: 0 4px 14px rgba(0,0,0,0.3);">
+                    <img src="https://i.postimg.cc/XqNw5yj0/Chat-GPT-Image-Sep-30-2026-10-13-51-PM.png" alt="Sidheeq" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=300&auto=format&fit=crop'">
+                </div>
+                <span style="font-size: 11.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #fff; background: rgba(0,0,0,0.3); padding: 5px 12px; border-radius: 20px; margin-bottom: 10px;">Instructor</span>
+                <h3 style="color: #ffffff; font-weight: 800; font-size: 20px; margin: 0 0 5px 0;">Sidheeq</h3>
+                <p style="color: #ffe6d5; font-size: 14px; font-weight: 600; margin: 0;">2nd Dan Black Belt</p>
+            </div>
+
+            <!-- Master 7: Muneer -->
+            <div style="flex: 0 0 auto; scroll-snap-align: start; background: linear-gradient(180deg, #ff6b00 0%, #e65100 100%); border-radius: 28px; padding: 28px 18px; text-align: center; width: 250px; box-shadow: 0 12px 25px rgba(255, 107, 0, 0.3); display: flex; flex-direction: column; align-items: center;">
+                <div style="width: 145px; height: 145px; border-radius: 50%; overflow: hidden; border: 4px solid #0b1120; background-color: #1f2937; margin-bottom: 16px; flex-shrink: 0; box-shadow: 0 4px 14px rgba(0,0,0,0.3);">
+                    <img src="https://i.postimg.cc/1zMNj8X4/1000080358.jpg" alt="Muneer" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=300&auto=format&fit=crop'">
+                </div>
+                <span style="font-size: 11.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #fff; background: rgba(0,0,0,0.3); padding: 5px 12px; border-radius: 20px; margin-bottom: 10px;">Instructor</span>
+                <h3 style="color: #ffffff; font-weight: 800; font-size: 20px; margin: 0 0 5px 0;">Muneer</h3>
+                <p style="color: #ffe6d5; font-size: 14px; font-weight: 600; margin: 0;">2nd Dan Black Belt</p>
+            </div>
+
+            <!-- Master 8: Saleem -->
+            <div style="flex: 0 0 auto; scroll-snap-align: start; background: linear-gradient(180deg, #ff6b00 0%, #e65100 100%); border-radius: 28px; padding: 28px 18px; text-align: center; width: 250px; box-shadow: 0 12px 25px rgba(255, 107, 0, 0.3); display: flex; flex-direction: column; align-items: center;">
+                <div style="width: 145px; height: 145px; border-radius: 50%; overflow: hidden; border: 4px solid #0b1120; background-color: #1f2937; margin-bottom: 16px; flex-shrink: 0; box-shadow: 0 4px 14px rgba(0,0,0,0.3);">
+                    <img src="https://i.postimg.cc/0Nt0JWpM/1000080340.jpg" alt="Saleem" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=300&auto=format&fit=crop'">
+                </div>
+                <span style="font-size: 11.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #fff; background: rgba(0,0,0,0.3); padding: 5px 12px; border-radius: 20px; margin-bottom: 10px;">Instructor</span>
+                <h3 style="color: #ffffff; font-weight: 800; font-size: 20px; margin: 0 0 5px 0;">Saleem</h3>
+                <p style="color: #ffe6d5; font-size: 14px; font-weight: 600; margin: 0;">2nd Dan Black Belt</p>
+            </div> 
+
+            <!-- Master 9: Agney -->
+            <div style="flex: 0 0 auto; scroll-snap-align: start; background: linear-gradient(180deg, #ff6b00 0%, #e65100 100%); border-radius: 28px; padding: 28px 18px; text-align: center; width: 250px; box-shadow: 0 12px 25px rgba(255, 107, 0, 0.3); display: flex; flex-direction: column; align-items: center;">
+                <div style="width: 145px; height: 145px; border-radius: 50%; overflow: hidden; border: 4px solid #0b1120; background-color: #1f2937; margin-bottom: 16px; flex-shrink: 0; box-shadow: 0 4px 14px rgba(0,0,0,0.3);">
+                    <img src="https://i.postimg.cc/hPrzjJ81/1000080343.jpg" alt="Agney" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=300&auto=format&fit=crop'">
+                </div>
+                <span style="font-size: 11.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #fff; background: rgba(0,0,0,0.3); padding: 5px 12px; border-radius: 20px; margin-bottom: 10px;">Instructor</span>
+                <h3 style="color: #ffffff; font-weight: 800; font-size: 20px; margin: 0 0 5px 0;">Agney</h3>
+                <p style="color: #ffe6d5; font-size: 14px; font-weight: 600; margin: 0;">1st Dan Black Belt</p>
+            </div>
+
+            <!-- Master 10: Sinan A -->
+            <div style="flex: 0 0 auto; scroll-snap-align: start; background: linear-gradient(180deg, #ff6b00 0%, #e65100 100%); border-radius: 28px; padding: 28px 18px; text-align: center; width: 250px; box-shadow: 0 12px 25px rgba(255, 107, 0, 0.3); display: flex; flex-direction: column; align-items: center;">
+                <div style="width: 145px; height: 145px; border-radius: 50%; overflow: hidden; border: 4px solid #0b1120; background-color: #1f2937; margin-bottom: 16px; flex-shrink: 0; box-shadow: 0 4px 14px rgba(0,0,0,0.3);">
+                    <img src="sinan.jpg" alt="Sinan A" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=300&auto=format&fit=crop'">
+                </div>
+                <span style="font-size: 11.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #fff; background: rgba(0,0,0,0.3); padding: 5px 12px; border-radius: 20px; margin-bottom: 10px;">Instructor</span>
+                <h3 style="color: #ffffff; font-weight: 800; font-size: 20px; margin: 0 0 5px 0;">Sinan A</h3>
+                <p style="color: #ffe6d5; font-size: 14px; font-weight: 600; margin: 0;">1st Dan Black Belt</p>
+            </div>
+        </div>
+
+        <!-- Masters Slide Bar & Navigation Controls -->
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; margin-top: 24px; padding: 0 16px;">
+            <div style="display: flex; align-items: center; justify-content: center; gap: 18px; width: 100%; max-width: 480px;">
+                <!-- Left Slide Button -->
+                <button type="button" onclick="scrollMasters('left')" aria-label="Slide Left"
+                    style="width: 42px; height: 42px; border-radius: 50%; background: #0b1120; border: 1.5px solid #ff6b00; color: #ff6b00; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; transition: all 0.2s ease; box-shadow: 0 4px 14px rgba(0,0,0,0.4); flex-shrink: 0;"
+                    onmouseover="this.style.background='rgba(255,107,0,0.2)'; this.style.borderColor='#ff8800'; this.style.transform='scale(1.08)';"
+                    onmouseout="this.style.background='#0b1120'; this.style.borderColor='#ff6b00'; this.style.transform='scale(1)';"
+                    onmousedown="this.style.transform='scale(0.94)';"
+                    onmouseup="this.style.transform='scale(1.08)';">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+
+                <!-- Interactive Slide Bar Track -->
+                <div id="mastersSlideBarTrack" onclick="handleMastersSlideBarClick(event)"
+                    style="flex: 1; height: 8px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 999px; position: relative; cursor: pointer; overflow: hidden; padding: 1px;"
+                    title="Click or drag to slide masters">
+                    <div id="mastersSlideBarThumb"
+                        style="width: 35%; height: 100%; background: linear-gradient(90deg, #ff5e00, #ff8800); border-radius: 999px; box-shadow: 0 0 12px rgba(255, 94, 0, 0.7); transform: translateX(0px); transition: transform 0.12s ease-out; pointer-events: none;">
+                    </div>
+                </div>
+
+                <!-- Right Slide Button -->
+                <button type="button" onclick="scrollMasters('right')" aria-label="Slide Right"
+                    style="width: 42px; height: 42px; border-radius: 50%; background: #0b1120; border: 1.5px solid #ff6b00; color: #ff6b00; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; transition: all 0.2s ease; box-shadow: 0 4px 14px rgba(0,0,0,0.4); flex-shrink: 0;"
+                    onmouseover="this.style.background='rgba(255,107,0,0.2)'; this.style.borderColor='#ff8800'; this.style.transform='scale(1.08)';"
+                    onmouseout="this.style.background='#0b1120'; this.style.borderColor='#ff6b00'; this.style.transform='scale(1)';"
+                    onmousedown="this.style.transform='scale(0.94)';"
+                    onmouseup="this.style.transform='scale(1.08)';">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </button>
+            </div>
+            <span style="font-size: 11px; color: #94a3b8; letter-spacing: 0.5px; display: inline-flex; align-items: center; gap: 6px;">
+                <i class="fa-solid fa-arrows-left-right text-flame" style="font-size: 10px;"></i> Slide or drag to view all 10 masters
+            </span>
+        </div>
+
+    </div>
+</section>
+
+<!-- Achievements Section -->
+<section id="achievements" class="py-20 bg-navy-800/40 border-y border-navy-700/50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto mb-14">
+            <span class="text-xs font-bold uppercase tracking-widest text-gold block mb-2">Milestones &amp; Honors</span>
+            <h2 class="font-kanit text-3xl sm:text-4xl font-extrabold text-white uppercase tracking-tight">
+                ACADEMY <span class="gradient-text-orange">ACHIEVEMENTS</span>
+            </h2>
+            <p class="text-gray-400 text-sm mt-3">Building champions through authentic Dan-ranked martial arts discipline, belt progression, and tournament excellence.</p>
+            <div class="w-20 h-1 bg-gradient-to-r from-flame to-gold mx-auto mt-4 rounded-full"></div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Achievement 1 -->
+            <div class="glass-panel glass-panel-hover rounded-2xl p-6 text-center border border-navy-700">
+                <div class="w-14 h-14 mx-auto rounded-2xl bg-flame/15 text-flame border border-flame/30 flex items-center justify-center text-2xl mb-4">
+                    <i class="fa-solid fa-trophy"></i>
+                </div>
+                <h4 class="font-kanit text-lg font-bold text-white mb-2">Championship Training</h4>
+                <p class="text-xs text-gray-400 leading-relaxed">
+                    Dedicated Kata and Kumite coaching preparing athletes for District, State, and National martial arts championships.
+                </p>
+            </div>
+
+            <!-- Achievement 2 -->
+            <div class="glass-panel glass-panel-hover rounded-2xl p-6 text-center border border-navy-700">
+                <div class="w-14 h-14 mx-auto rounded-2xl bg-gold/15 text-gold border border-gold/30 flex items-center justify-center text-2xl mb-4">
+                    <i class="fa-solid fa-award"></i>
+                </div>
+                <h4 class="font-kanit text-lg font-bold text-white mb-2">10 Black Belt Masters</h4>
+                <p class="text-xs text-gray-400 leading-relaxed">
+                    Under Grand Master Amjad Moosa (7th Dan), our dojo is led by 10 certified Dan-ranked senseis ensuring authentic instruction.
+                </p>
+            </div>
+
+            <!-- Achievement 3 -->
+            <div class="glass-panel glass-panel-hover rounded-2xl p-6 text-center border border-navy-700">
+                <div class="w-14 h-14 mx-auto rounded-2xl bg-flame/15 text-flame border border-flame/30 flex items-center justify-center text-2xl mb-4">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <h4 class="font-kanit text-lg font-bold text-white mb-2">500+ Belt Certifications</h4>
+                <p class="text-xs text-gray-400 leading-relaxed">
+                    Systematic belt grading syllabus from White Belt basics through Yellow, Green, Brown, to Black Belt Dan degrees.
+                </p>
+            </div>
+
+            <!-- Achievement 4 -->
+            <div class="glass-panel glass-panel-hover rounded-2xl p-6 text-center border border-navy-700">
+                <div class="w-14 h-14 mx-auto rounded-2xl bg-gold/15 text-gold border border-gold/30 flex items-center justify-center text-2xl mb-4">
+                    <i class="fa-solid fa-medal"></i>
+                </div>
+                <h4 class="font-kanit text-lg font-bold text-white mb-2">15+ Years Legacy</h4>
+                <p class="text-xs text-gray-400 leading-relaxed">
+                    Over 15 years of uninterrupted martial arts mentorship, physical fitness, and disciplined self-defense empowering students.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Gallery Section (Infinite Auto-Scroll + Admin Add Photo) -->
+<section id="gallery" style="padding: 60px 0; background-color: #0b1120; overflow: hidden;">
+    <div style="max-width: 1200px; margin: 0 auto 24px auto; text-align: center; padding: 0 16px;">
+        <span style="color: #ff6b00; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; font-size: 15px; display: block; margin-bottom: 8px;">Our Moments</span>
+        <h2 style="color: #ffffff; font-size: 40px; font-weight: 800; text-transform: uppercase; margin: 0;">OUR <span style="color: #ff6b00;">GALLERY</span></h2>
+
+        <div style="width: 70px; height: 4px; background: #ff6b00; margin: 16px auto 0 auto; border-radius: 10px;"></div>
+    </div>
+
+    <!-- Infinite Auto-Scroll Track -->
+    <div style="overflow: hidden; width: 100%; position: relative;">
+        <div id="galleryTrack" style="display: flex; flex-wrap: nowrap; gap: 24px; padding: 15px 0; width: max-content; animation: galleryInfiniteScroll 28s linear infinite; will-change: transform;">
+            <!-- Populated by renderGallery() — items are doubled for seamless loop -->
+        </div>
+    </div>
+</section>
+
+
+<style>
+/* Hide Scrollbars for Gallery */
+#galleryContainer::-webkit-scrollbar {
+    display: none;
+}
+#galleryContainer {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* ── Gallery Infinite Auto-Scroll Animation ── */
+@keyframes galleryInfiniteScroll {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+#galleryTrack {
+    animation: galleryInfiniteScroll 28s linear infinite;
+    will-change: transform;
+}
+
+#galleryTrack:hover,
+#galleryTrack.paused {
+    animation-play-state: paused;
+}
+
+.gallery-card {
+    flex: 0 0 auto;
+    width: 380px;
+    height: 260px;
+    border-radius: 22px;
+    overflow: hidden;
+    border: 2px solid #ff6b00;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+    position: relative;
+    background-color: #131c2e;
+    transition: transform 0.3s cubic-bezier(0.4,0,0.2,1), box-shadow 0.3s ease, border-color 0.3s ease;
+    display: inline-block;
+    user-select: none;
+}
+
+.gallery-card:hover {
+    transform: translateY(-6px) scale(1.03);
+    border-color: #ffbe0b;
+    box-shadow: 0 16px 32px rgba(255,94,0,0.35);
+}
+
+.gallery-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    pointer-events: none;
+    transition: transform 0.4s ease;
+}
+
+.gallery-card:hover img {
+    transform: scale(1.06);
+}
+
+.gallery-delete-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(220,38,38,0.92);
+    color: #fff;
+    border: 2px solid rgba(255,255,255,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    z-index: 15;
+    transition: transform 0.2s, background 0.2s;
+}
+.gallery-delete-btn:hover { transform: scale(1.15); background: #ef4444; }
+
+.gallery-card-badge {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    background: rgba(11,17,30,0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #f0f4f8;
+    border: 1px solid rgba(255,255,255,0.15);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 5px 12px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    pointer-events: none;
+    transition: background 0.3s, color 0.3s;
+}
+.gallery-card:hover .gallery-card-badge { background: #ff5e00; color: #fff; }
+
+@media (max-width: 768px) {
+    .gallery-card { width: 82vw; height: 230px; }
+}
+</style>
+
+        <!-- Join Academy / Admission CTA Banner -->
+        <section class="py-20 relative overflow-hidden">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="glass-panel p-8 sm:p-14 rounded-3xl border border-flame/40 text-center relative shadow-2xl">
+
+                    <h2 class="font-kanit text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight mb-4">
+                        READY TO MASTER <span class="gradient-text-orange">MARTIAL ARTS?</span>
+                    </h2>
+                    <p class="text-gray-300 text-sm sm:text-base max-w-2xl mx-auto mb-8 leading-relaxed">
+                        Join Volcano Karate & Kick Boxing Academy. Training batches available for kids, teens, and adults under certified Dan-ranked Black Belt instructors.
+                    </p>
+                    <div class="flex flex-wrap items-center justify-center gap-4">
+                        <a href="admission.html" class="bg-gradient-to-r from-flame to-flame-light hover:brightness-110 text-white font-bold text-base px-8 py-4 rounded-xl shadow-xl shadow-flame/30 transition transform hover:-translate-y-0.5 flex items-center gap-3">
+                            <i class="fa-solid fa-user-plus text-gold"></i> Get Admission Online
+                        </a>
+                        <a href="https://wa.me/918136908602" target="_blank" class="glass-panel hover:bg-navy-700 text-white font-semibold text-base px-7 py-4 rounded-xl border border-emerald-500/40 transition flex items-center gap-2 text-emerald-400">
+                            <i class="fa-brands fa-whatsapp text-emerald-400 text-xl"></i> Chat on WhatsApp
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-navy-900 border-t border-navy-800 py-12 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="flex items-center justify-center gap-3 mb-4">
+                <div class="w-12 h-12 rounded-2xl overflow-hidden bg-navy-800 border-2 border-flame shadow-lg shadow-flame/30 flex items-center justify-center p-0.5">
+                    <img src="logo.jpg" alt="Volcano Academy Logo" class="w-full h-full object-cover rounded-xl">
+                </div>
+                <span class="font-kanit font-extrabold text-2xl tracking-wider text-white">VOLCANO ACADEMY</span>
+            </div>
+            
+            <p class="text-gray-400 text-sm max-w-md mx-auto mb-6">Building discipline, confidence, physical conditioning, and martial arts champions.</p>
+            
+            <div class="flex flex-wrap items-center justify-center gap-6 text-gray-400 mb-8">
+                <a href="#home" class="hover:text-flame transition">Home</a>
+                <a href="#about" class="hover:text-flame transition">About</a>
+                <a href="#masters" class="hover:text-flame transition">Masters</a>
+                <a href="#gallery" class="hover:text-flame transition">Gallery</a>
+                <a href="admission.html" class="hover:text-flame transition">Admission</a>
+                <a href="student.html" class="hover:text-flame transition">Student Portal</a>
+
+            </div>
+
+            <p class="text-xs text-gray-500">&copy; 2026 Volcano Karate & Kick Boxing Academy. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // Masters Slider Functionality & Slide Bar Controls
+        function scrollMasters(direction) {
+            const container = document.getElementById('mastersContainer');
+            if (!container) return;
+            const scrollAmount = 280;
+            if (direction === 'left') {
+                container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+            } else {
+                container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+            }
+        }
+
+        function updateMastersSlideBar() {
+            const container = document.getElementById('mastersContainer');
+            const thumb = document.getElementById('mastersSlideBarThumb');
+            const track = document.getElementById('mastersSlideBarTrack');
+            if (!container || !thumb || !track) return;
+            const maxScroll = container.scrollWidth - container.clientWidth;
+            if (maxScroll <= 0) return;
+            const scrollPercent = Math.min(1, Math.max(0, container.scrollLeft / maxScroll));
+            const trackWidth = track.clientWidth;
+            const thumbWidth = thumb.clientWidth;
+            const maxTranslate = trackWidth - thumbWidth;
+            thumb.style.transform = `translateX(${scrollPercent * maxTranslate}px)`;
+        }
+
+        function handleMastersSlideBarClick(e) {
+            const container = document.getElementById('mastersContainer');
+            const track = document.getElementById('mastersSlideBarTrack');
+            if (!container || !track) return;
+            const rect = track.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const clickPercent = Math.min(1, Math.max(0, clickX / rect.width));
+            const maxScroll = container.scrollWidth - container.clientWidth;
+            container.scrollTo({ left: clickPercent * maxScroll, behavior: 'smooth' });
+        }
+
+        function initMastersSlideBar() {
+            const container = document.getElementById('mastersContainer');
+            if (!container) return;
+
+            container.addEventListener('scroll', updateMastersSlideBar, { passive: true });
+            window.addEventListener('resize', updateMastersSlideBar, { passive: true });
+            setTimeout(updateMastersSlideBar, 300);
+
+            // Drag-to-scroll support for desktop
+            let isDown = false;
+            let startX;
+            let scrollLeft;
+
+            container.addEventListener('mousedown', (e) => {
+                isDown = true;
+                container.style.cursor = 'grabbing';
+                startX = e.pageX - container.offsetLeft;
+                scrollLeft = container.scrollLeft;
+            });
+
+            container.addEventListener('mouseleave', () => {
+                isDown = false;
+                container.style.cursor = 'grab';
+            });
+
+            container.addEventListener('mouseup', () => {
+                isDown = false;
+                container.style.cursor = 'grab';
+            });
+
+            container.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - container.offsetLeft;
+                const walk = (x - startX) * 1.5;
+                container.scrollLeft = scrollLeft - walk;
+            });
+
+            container.style.cursor = 'grab';
+        }
+
+        // ==========================================
+        // DYNAMIC GALLERY & AUTO-SCROLL ANIMATION
+        // ==========================================
+        const defaultGalleryPhotos = [
+            {
+                id: 'def-ring',
+                url: 'gallery-ring.jpg',
+                caption: 'Professional Ring Sparring & Kickboxing'
+            },
+            {
+                id: 'def-stunts',
+                url: 'gallery-stunts.jpg',
+                caption: 'Martial Arts Stunts & Gymnastic Pyramids'
+            },
+            {
+                id: 'def-team',
+                url: 'gallery-team.jpg',
+                caption: 'Volcano Academy Instructors & Fighters'
+            },
+            {
+                id: 'def-1',
+                url: 'gallery-ring.jpg',
+                caption: 'Academy Award & Certification Ceremony'
+            },
+            {
+                id: 'def-4',
+                url: 'gallery-stunts.jpg',
+                caption: 'Boxing & Kickboxing Sparring Drills'
+            },
+            {
+                id: 'def-6',
+                url: 'gallery-team.jpg',
+                caption: 'Championship Kata & Technique Practice'
+            }
+        ];
+
+        function renderGallery() {
+            const track = document.getElementById('galleryTrack');
+            if (!track) return;
+
+            let customPhotos = [];
+            try {
+                customPhotos = JSON.parse(localStorage.getItem('volcano_custom_gallery') || '[]');
+            } catch(e) { customPhotos = []; }
+
+            const allPhotos = [...customPhotos, ...defaultGalleryPhotos];
+
+            // Build a single card's HTML
+            function buildCard(item, clone) {
+                const isCustom = !clone && Boolean(item.isCustom || (item.id && String(item.id).startsWith('custom-')));
+                const deleteBtn = isCustom
+                    ? `<button type="button" class="gallery-delete-btn" title="Delete Photo" onclick="event.stopPropagation(); handleDeleteCustomPhoto('${item.id}')"><i class="fa-solid fa-trash"></i></button>`
+                    : '';
+                const safeUrl = (item.url || 'gallery-ring.jpg').replace(/'/g, "\\'");
+                const safeCaption = (item.caption || 'Volcano Academy Gallery').replace(/'/g, "\\'");
+                return `<div class="gallery-card" onclick="openLightbox(this, '${safeUrl}', '${safeCaption}')">
+                    ${deleteBtn}
+                    <img src="${item.url}" alt="${item.caption||''}" loading="lazy" onerror="this.src='gallery-ring.jpg'">
+                    <div class="gallery-card-badge"><i class="fa-solid fa-expand"></i> Tap to View</div>
+                </div>`;
+            }
+
+            // Original set + duplicate for seamless CSS loop (translateX -50%)
+            const originalHtml = allPhotos.map(p => buildCard(p, false)).join('');
+            const cloneHtml    = allPhotos.map(p => buildCard(p, true)).join('');
+            track.innerHTML = originalHtml + cloneHtml;
+
+            // Adjust animation speed based on number of photos
+            const duration = Math.max(20, allPhotos.length * 5);
+            track.style.animationDuration = duration + 's';
+        }
+
+        // Pause/resume CSS animation on touch/hover (handled in CSS too, JS for touch)
+        function initGalleryListeners() {
+            const track = document.getElementById('galleryTrack');
+            if (!track) return;
+            track.addEventListener('touchstart', () => track.classList.add('paused'),    { passive: true });
+            track.addEventListener('touchend',   () => setTimeout(() => track.classList.remove('paused'), 1500), { passive: true });
+        }
+
+        // ==========================================
+        // TOAST NOTIFICATION UTILITY
+        // ==========================================
+        function showToast(message, type = "info") {
+            let container = document.getElementById('toastContainer');
+            if (!container) {
+                container = document.createElement('div');
+                container.id = 'toastContainer';
+                container.className = 'fixed top-20 right-5 z-50 flex flex-col gap-3 pointer-events-none';
+                document.body.appendChild(container);
+            }
+            const toast = document.createElement('div');
+            
+            let bgClass = "bg-navy-800 border-navy-600 text-white";
+            let icon = `<i class="fa-solid fa-circle-info text-flame"></i>`;
+            
+            if (type === "success") {
+                bgClass = "bg-emerald-900/90 border-emerald-500 text-white";
+                icon = `<i class="fa-solid fa-circle-check text-emerald-400"></i>`;
+            } else if (type === "warning") {
+                bgClass = "bg-amber-900/90 border-amber-500 text-white";
+                icon = `<i class="fa-solid fa-triangle-exclamation text-gold"></i>`;
+            } else if (type === "error") {
+                bgClass = "bg-rose-900/90 border-rose-500 text-white";
+                icon = `<i class="fa-solid fa-circle-xmark text-rose-400"></i>`;
+            }
+
+            toast.className = `${bgClass} border px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3 text-sm font-medium transition duration-300 transform translate-x-full pointer-events-auto`;
+            toast.innerHTML = `${icon} <span>${typeof escapeHtml === 'function' ? escapeHtml(message) : message}</span>`;
+            
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.remove('translate-x-full');
+            }, 50);
+
+            setTimeout(() => {
+                toast.classList.add('translate-x-full', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+
+        // ==========================================
+        // AUTH MODAL LOGIC (Matches Reference Design)
+        // ==========================================
+        function openAuthModal() {
+            const modal = document.getElementById('authModal');
+            if (!modal) return;
+            showMainAuthView();
+            modal.style.display = 'flex';
+        }
+
+        function closeAuthModal() {
+            const modal = document.getElementById('authModal');
+            if (modal) modal.style.display = 'none';
+        }
+
+        function handleAuthModalBackdropClick(e) {
+            if (e.target && e.target.id === 'authModal') {
+                closeAuthModal();
+            }
+        }
+
+        function showAuthModalAlert(htmlMsg, type = "error") {
+            const alertBox = document.getElementById('authModalAlertBox');
+            if (!alertBox) return;
+            if (type === "error") {
+                alertBox.className = "mb-4 p-3.5 rounded-2xl text-xs font-medium text-left bg-red-50 text-red-800 border border-red-200 animate-in fade-in duration-200";
+            } else {
+                alertBox.className = "mb-4 p-3.5 rounded-2xl text-xs font-medium text-left bg-amber-50 text-amber-900 border border-amber-200 animate-in fade-in duration-200";
+            }
+            alertBox.innerHTML = htmlMsg;
+            alertBox.style.display = 'block';
+        }
+
+        async function handleAuthModalSubmit(e) {
+            if (e) e.preventDefault();
+            const nameInput = document.getElementById('authStudentName');
+            const rollInput = document.getElementById('authRollInput');
+            const alertBox = document.getElementById('authModalAlertBox');
+            const submitBtn = document.getElementById('authModalSubmitBtn');
+
+            const enteredName = (nameInput ? nameInput.value : '').trim();
+            const enteredRoll = (rollInput ? rollInput.value : '').trim().toUpperCase();
+
+            if (alertBox) {
+                alertBox.style.display = 'none';
+                alertBox.innerHTML = '';
+            }
+
+            if (!enteredName) {
+                showAuthModalAlert("⚠️ Please enter your registered student name.", "warning");
+                if (nameInput) nameInput.focus();
+                return;
+            }
+
+            if (!enteredRoll) {
+                showAuthModalAlert("⚠️ Please enter your assigned Roll ID to verify your identity.", "warning");
+                if (rollInput) rollInput.focus();
+                return;
+            }
+
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Verifying Identity...';
+            }
+
+            // Gather all student records from Supabase, localStorage, and default list
+            let list = [];
+            if (typeof supabaseClient !== 'undefined' && supabaseClient) {
+                try {
+                    const { data, error } = await supabaseClient.from('students').select('*');
+                    if (!error && data && data.length > 0) {
+                        data.forEach(s => {
+                            list.push({
+                                id: (s.roll_id || s.id || '').trim().toUpperCase(),
+                                name: (s.name || '').trim(),
+                                batch: s.batch,
+                                belt: s.belt,
+                                status: s.fee_status
+                            });
+                        });
+                    }
+                } catch(err) {}
+            }
+
+            const localStored = localStorage.getItem('volcano_students_2026');
+            if (localStored) {
+                try {
+                    const arr = JSON.parse(localStored);
+                    arr.forEach(s => {
+                        const rollUpper = (s.id || '').trim().toUpperCase();
+                        if (!list.some(ex => ex.id === rollUpper)) {
+                            list.push({ ...s, id: rollUpper, name: (s.name || '').trim() });
+                        }
+                    });
+                } catch(err) {}
+            }
+
+            const defStudents = [
+                { id: "VOL-101", name: "Mohammed Sinan", batch: "Evening", belt: "Yellow Belt", status: "Paid" },
+                { id: "VOL-102", name: "Rahul V", batch: "Morning", belt: "Orange Belt", status: "Paid" },
+                { id: "VOL-103", name: "Ameen K", batch: "Evening", belt: "Green Belt", status: "Pending" },
+                { id: "VOL-104", name: "Ananya S", batch: "Kids Beginner", belt: "Yellow Belt", status: "Paid" },
+                { id: "VOL-105", name: "Faris Ali", batch: "Morning", belt: "Blue Belt", status: "Paid" },
+                { id: "VOL-106", name: "Zayan Ahmed", batch: "Weekend Special", belt: "Brown Belt", status: "Paid" }
+            ];
+
+            defStudents.forEach(s => {
+                const rollUpper = (s.id || '').trim().toUpperCase();
+                if (!list.some(ex => ex.id === rollUpper)) {
+                    list.push({ ...s, id: rollUpper, name: (s.name || '').trim() });
+                }
+            });
+
+            // STEP 1: Check whether that student's name exists in the system
+            const cleanEnteredName = enteredName.toLowerCase();
+            const matchedByName = list.filter(s => {
+                const sName = (s.name || '').toLowerCase();
+                return sName === cleanEnteredName || sName.includes(cleanEnteredName) || cleanEnteredName.includes(sName);
+            });
+
+            if (matchedByName.length === 0) {
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fa-solid fa-shield-halved text-gold"></i> Verify &amp; Access My Portal';
+                }
+                showAuthModalAlert(
+                    `<strong>⚠️ Name Not Found:</strong> The student name "<strong>${escapeHtml(enteredName)}</strong>" is not registered in Volcano Academy records.<br><span class="text-[11px] text-gray-600 mt-1 block">Please enter your exact registered name or complete the admission registration process.</span><div class="mt-3"><a href="admission.html" class="inline-flex items-center gap-1.5 bg-flame hover:bg-flame-light text-white font-bold px-3.5 py-1.5 rounded-xl text-xs transition shadow-sm"><i class="fa-solid fa-user-plus text-xs"></i> Register New Admission</a></div>`,
+                    "error"
+                );
+                showToast(`Student "${enteredName}" not found in records.`, "warning");
+                return;
+            }
+
+            // STEP 2: Validate student identity (Roll ID matching)
+            const verifiedStudent = matchedByName.find(s => s.id === enteredRoll);
+
+            if (!verifiedStudent) {
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fa-solid fa-shield-halved text-gold"></i> Verify &amp; Access My Portal';
+                }
+                showAuthModalAlert(
+                    `<strong>🔒 Identity Verification Failed:</strong> The Roll ID entered ("${escapeHtml(enteredRoll)}") does not match the registered records for "<strong>${escapeHtml(matchedByName[0].name)}</strong>".<br><span class="text-[11px] text-gray-600 mt-1 block">For privacy and security, each student can only access their own verified portal.</span>`,
+                    "error"
+                );
+                showToast("Identity verification failed. Roll ID mismatch.", "error");
+                return;
+            }
+
+            // STEP 3: Grant access to THIS specific student!
+            sessionStorage.setItem('volcano_student_roll', verifiedStudent.id);
+            sessionStorage.setItem('volcano_student_name', verifiedStudent.name);
+
+            showToast(`Welcome Sensei Student ${verifiedStudent.name}! Redirecting...`, "success");
+            setTimeout(() => {
+                window.location.href = 'student.html';
+            }, 350);
+        }
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeAuthModal();
+            }
+        });
+
+        // ==========================================
+        // ADMIN-ONLY ADD PHOTO WORKFLOW
+        // ==========================================
+        function handleOpenAddPhoto() {
+            const isLogged = sessionStorage.getItem('volcano_admin_logged') === 'true';
+            if (isLogged) {
+                openAddPhotoModal();
+            } else {
+                openGalleryAuthModal();
+            }
+        }
+
+        function openGalleryAuthModal() {
+            const modal = document.getElementById('galleryAuthModal');
+            const passInput = document.getElementById('galleryAdminPasscode');
+            if (passInput) passInput.value = '';
+            if (modal) modal.style.display = 'flex';
+        }
+
+        function closeGalleryAuthModal() {
+            const modal = document.getElementById('galleryAuthModal');
+            const passInput = document.getElementById('galleryAdminPasscode');
+            if (passInput) passInput.value = '';
+            if (modal) modal.style.display = 'none';
+        }
+
+        function verifyGalleryAdminPasscode(e) {
+            e.preventDefault();
+            const passInput = document.getElementById('galleryAdminPasscode');
+            const entered = passInput ? passInput.value : '';
+
+            if (validateAdminPasscode(entered)) {
+                if (passInput) passInput.value = '';
+                sessionStorage.setItem('volcano_admin_logged', 'true');
+                closeGalleryAuthModal();
+                openAddPhotoModal();
+                checkAdminSession();
+                showToast("Admin verified! You can now add photos.", "success");
+            } else {
+                if (passInput) passInput.value = '';
+                showToast("⚠️ Incorrect admin passcode! Please enter volcano2026", "warning");
+            }
+        }
+
+        let activePhotoUploadMode = 'upload';
+        let selectedPhotoDataUrl = '';
+
+        function openAddPhotoModal() {
+            selectedPhotoDataUrl = '';
+            const modal = document.getElementById('addPhotoModal');
+            const previewContainer = document.getElementById('photoPreviewContainer');
+            const captionInput = document.getElementById('photoCaptionInput');
+            const urlInput = document.getElementById('photoUrlInput');
+            const fileInput = document.getElementById('photoFileInput');
+
+            if (captionInput) captionInput.value = '';
+            if (urlInput) urlInput.value = '';
+            if (fileInput) fileInput.value = '';
+            if (previewContainer) previewContainer.style.display = 'none';
+            
+            switchPhotoUploadTab('upload');
+            if (modal) modal.style.display = 'flex';
+        }
+
+        function closeAddPhotoModal() {
+            const modal = document.getElementById('addPhotoModal');
+            if (modal) modal.style.display = 'none';
+            selectedPhotoDataUrl = '';
+        }
+
+        function switchPhotoUploadTab(mode) {
+            activePhotoUploadMode = mode;
+            const uploadBtn = document.getElementById('photoTabUploadBtn');
+            const urlBtn = document.getElementById('photoTabUrlBtn');
+            const uploadSection = document.getElementById('photoUploadSection');
+            const urlSection = document.getElementById('photoUrlSection');
+
+            if (mode === 'upload') {
+                if (uploadBtn) uploadBtn.className = 'flex-1 py-2 rounded-lg bg-flame text-white transition';
+                if (urlBtn) urlBtn.className = 'flex-1 py-2 rounded-lg text-gray-300 hover:text-white transition';
+                if (uploadSection) uploadSection.style.display = 'block';
+                if (urlSection) urlSection.style.display = 'none';
+            } else {
+                if (urlBtn) urlBtn.className = 'flex-1 py-2 rounded-lg bg-flame text-white transition';
+                if (uploadBtn) uploadBtn.className = 'flex-1 py-2 rounded-lg text-gray-300 hover:text-white transition';
+                if (uploadSection) uploadSection.style.display = 'none';
+                if (urlSection) urlSection.style.display = 'block';
+            }
+        }
+
+        function handlePhotoFileSelected(event) {
+            const file = event.target.files && event.target.files[0];
+            if (!file) return;
+
+            // Compress image using HTML5 Canvas to prevent filling localStorage
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const maxDimension = 1200;
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > height) {
+                        if (width > maxDimension) {
+                            height = Math.round((height * maxDimension) / width);
+                            width = maxDimension;
+                        }
+                    } else {
+                        if (height > maxDimension) {
+                            width = Math.round((width * maxDimension) / height);
+                            height = maxDimension;
+                        }
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    selectedPhotoDataUrl = canvas.toDataURL('image/jpeg', 0.82);
+                    showPhotoPreview(selectedPhotoDataUrl);
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function handlePhotoUrlInput(event) {
+            const url = event.target.value.trim();
+            if (url) {
+                selectedPhotoDataUrl = url;
+                showPhotoPreview(url);
+            }
+        }
+
+        function showPhotoPreview(src) {
+            const previewContainer = document.getElementById('photoPreviewContainer');
+            const previewImg = document.getElementById('photoPreviewImg');
+            const captionInput = document.getElementById('photoCaptionInput');
+            const previewCaption = document.getElementById('photoPreviewCaption');
+
+            if (previewImg) previewImg.src = src;
+            if (previewCaption) previewCaption.innerText = (captionInput && captionInput.value.trim()) || 'Preview Photo';
+            if (previewContainer) previewContainer.style.display = 'block';
+        }
+
+        function updatePhotoPreviewCaption(val) {
+            const previewCaption = document.getElementById('photoPreviewCaption');
+            if (previewCaption) previewCaption.innerText = val.trim() || 'Preview Photo';
+        }
+
+        function handleSaveNewPhoto(e) {
+            e.preventDefault();
+            const captionInput = document.getElementById('photoCaptionInput');
+            const caption = captionInput ? captionInput.value.trim() : 'Academy Moment';
+
+            if (!selectedPhotoDataUrl) {
+                showToast("⚠️ Please select an image file or enter an image link!", "warning");
+                return;
+            }
+
+            const newPhoto = {
+                id: 'custom-' + Date.now(),
+                url: selectedPhotoDataUrl,
+                caption: caption,
+                isCustom: true,
+                created_at: new Date().toISOString()
+            };
+
+            let customPhotos = [];
+            try {
+                customPhotos = JSON.parse(localStorage.getItem('volcano_custom_gallery') || '[]');
+            } catch(err) { customPhotos = []; }
+
+            customPhotos.unshift(newPhoto);
+
+            try {
+                localStorage.setItem('volcano_custom_gallery', JSON.stringify(customPhotos));
+            } catch(storageErr) {
+                showToast("⚠️ Browser storage full! Please enter an Image URL instead.", "warning");
+                return;
+            }
+
+            renderGallery();
+            closeAddPhotoModal();
+            showToast("📸 Photo added to academy gallery!", "success");
+
+            const container = document.getElementById('galleryContainer');
+            if (container) container.scrollTo({ left: 0, behavior: 'smooth' });
+        }
+
+        function handleDeleteCustomPhoto(photoId) {
+            const isLogged = sessionStorage.getItem('volcano_admin_logged') === 'true';
+            if (!isLogged) {
+                openGalleryAuthModal();
+                return;
+            }
+
+            if (!confirm("Are you sure you want to remove this photo from the gallery?")) return;
+
+            let customPhotos = [];
+            try {
+                customPhotos = JSON.parse(localStorage.getItem('volcano_custom_gallery') || '[]');
+            } catch(err) { customPhotos = []; }
+
+            customPhotos = customPhotos.filter(p => p.id !== photoId);
+            localStorage.setItem('volcano_custom_gallery', JSON.stringify(customPhotos));
+            renderGallery();
+            showToast("Photo removed from gallery.", "info");
+        }
+
+        // Default initial dataset
+        const defaultStudents = [
+            { id: "VOL-101", name: "Mohammed Sinan", batch: "Evening", belt: "Yellow Belt", status: "Paid" },
+            { id: "VOL-102", name: "Rahul V", batch: "Morning", belt: "Green Belt", status: "Pending" },
+            { id: "VOL-103", name: "Ameen K", batch: "Evening", belt: "White Belt", status: "Paid" },
+            { id: "VOL-104", name: "Ananya S", batch: "Weekend Special", belt: "Brown Belt", status: "Paid" },
+            { id: "VOL-105", name: "Faris Ali", batch: "Morning", belt: "Orange Belt", status: "Pending" },
+            { id: "VOL-106", name: "Zayan Ahmed", batch: "Kids Beginner", belt: "Yellow Belt", status: "Paid" }
+        ];
+
+        let students = [];
+        let admissionsLeads = [];
+        let pendingDeleteIndex = null;
+        let isAdminLoggedIn = false;
+
+        // Animated number counters for statistics
+        function initAnimatedCounters() {
+            const counters = document.querySelectorAll('.stat-counter');
+            if (!counters.length) return;
+            const observer = new IntersectionObserver((entries, obs) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const el = entry.target;
+                        const target = parseInt(el.getAttribute('data-target') || '0', 10);
+                        if (target > 0) {
+                            let start = 0;
+                            const duration = 1200;
+                            const stepTime = 20;
+                            const steps = duration / stepTime;
+                            const increment = target / steps;
+                            const timer = setInterval(() => {
+                                start += increment;
+                                if (start >= target) {
+                                    el.innerText = target;
+                                    clearInterval(timer);
+                                } else {
+                                    el.innerText = Math.floor(start);
+                                }
+                            }, stepTime);
+                        }
+                        obs.unobserve(el);
+                    }
+                });
+            }, { threshold: 0.25 });
+            counters.forEach(c => observer.observe(c));
+        }
+
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', async function() {
+            // 1. Initialize Supabase if configured
+            if (typeof initSupabase === 'function') {
+                initSupabase();
+            }
+
+            // 2. Animated Stats Counters
+            initAnimatedCounters();
+
+            // 3. Check Admin Session
+            checkAdminSession();
+
+            // 4. Render Gallery (CSS handles the auto-scroll animation)
+            renderGallery();
+            initGalleryListeners();
+
+            // 4b. Initialize Masters Slide Bar
+            initMastersSlideBar();
+
+            // 5. Load Student Data (from Supabase or Local Storage)
+            await loadStudentData();
+
+            // 6. Fill Supabase inputs in Settings Tab if available
+            if (document.getElementById('settingsSupabaseUrl') && typeof currentSupabaseUrl !== 'undefined') {
+                document.getElementById('settingsSupabaseUrl').value = (currentSupabaseUrl !== DEFAULT_SUPABASE_URL) ? currentSupabaseUrl : '';
+            }
+            if (document.getElementById('settingsSupabaseKey') && typeof currentSupabaseKey !== 'undefined') {
+                document.getElementById('settingsSupabaseKey').value = (currentSupabaseKey !== DEFAULT_SUPABASE_ANON_KEY) ? currentSupabaseKey : '';
+            }
+        });
+
+        // ==========================================
+        // ADMIN AUTHENTICATION & PASSCODE VALIDATION
+        // ==========================================
+        function togglePasscodeVisibility(inputId, btn) {
+            const input = document.getElementById(inputId);
+            if (!input) return;
+            const isPass = input.type === 'password';
+            input.type = isPass ? 'text' : 'password';
+            const icon = btn.querySelector('i');
+            if (icon) {
+                icon.className = isPass ? 'fa-solid fa-eye-slash text-sm text-flame' : 'fa-solid fa-eye text-sm';
+            }
+        }
+
+        function validateAdminPasscode(entered) {
+            if (!entered) return false;
+            const cleanEntered = entered.trim().replace(/\s+/g, '').toLowerCase();
+            const customPin = (localStorage.getItem('volcano_admin_pin') || '').trim();
+            const cleanCustomPin = customPin.replace(/\s+/g, '').toLowerCase();
+
+            // 1. Standard default pin (case-insensitive, trims spaces e.g. "volcano2026", "Volcano2026", "VOLCANO2026", "volcano 2026")
+            if (cleanEntered === 'volcano2026' || cleanEntered === 'volcano') {
+                return true;
+            }
+            // 2. Custom pin if configured in localStorage
+            if (cleanCustomPin && cleanEntered === cleanCustomPin) {
+                return true;
+            }
+            // 3. Raw exact matches
+            if (entered.trim() === 'volcano2026' || (customPin && entered.trim() === customPin)) {
+                return true;
+            }
+            return false;
+        }
+
+        function checkAdminSession() {
+            isAdminLoggedIn = sessionStorage.getItem('volcano_admin_logged') === 'true';
+            const lockView = document.getElementById('adminLockView');
+            const portalView = document.getElementById('adminUnlockedPortal');
+            const passInput = document.getElementById('adminPasscode');
+
+            if (isAdminLoggedIn) {
+                if (lockView) lockView.style.display = 'none';
+                if (portalView) portalView.style.display = 'block';
+                if (typeof filterStudentTable === 'function') {
+                    filterStudentTable();
+                } else if (typeof renderTable === 'function') {
+                    renderTable();
+                }
+                loadAdmissionsLeads();
+                updateDbBadge();
+                renderGallery();
+            } else {
+                if (passInput) passInput.value = '';
+                if (lockView) lockView.style.display = 'block';
+                if (portalView) portalView.style.display = 'none';
+                renderGallery();
+            }
+        }
+
+        function handleAdminLogin(e) {
+            e.preventDefault();
+            const passInput = document.getElementById('adminPasscode');
+            const entered = passInput ? passInput.value : '';
+
+            if (validateAdminPasscode(entered)) {
+                if (passInput) passInput.value = '';
+                sessionStorage.setItem('volcano_admin_logged', 'true');
+                checkAdminSession();
+                showToast("Admin access granted! Welcome Master.", "success");
+            } else {
+                if (passInput) passInput.value = '';
+                showToast("⚠️ Incorrect passcode! Enter: volcano2026", "warning");
+            }
+        }
+
+        function handleAdminLogout() {
+            sessionStorage.removeItem('volcano_admin_logged');
+            const passInput = document.getElementById('adminPasscode');
+            if (passInput) passInput.value = '';
+            checkAdminSession();
+            showToast("Admin session locked.", "info");
+        }
+
+        function switchAdminTab(tab) {
+            const tabs = ['students', 'admissions'];
+            tabs.forEach(t => {
+                const content = document.getElementById('tabContent' + t.charAt(0).toUpperCase() + t.slice(1));
+                const btn = document.getElementById('tabBtn' + t.charAt(0).toUpperCase() + t.slice(1));
+                if (content) content.style.display = (t === tab) ? 'block' : 'none';
+                if (btn) {
+                    if (t === tab) {
+                        btn.className = "px-4 py-2 rounded-lg text-xs font-semibold bg-flame text-white transition flex items-center gap-2";
+                    } else {
+                        btn.className = "px-4 py-2 rounded-lg text-xs font-semibold text-gray-300 hover:text-white transition flex items-center gap-2";
+                    }
+                }
+            });
+
+            if (tab === 'admissions') {
+                loadAdmissionsLeads();
+            }
+        }
+
+        function updateDbBadge() {
+            const badge = document.getElementById('dbStatusBadge');
+            if (!badge) return;
+            if (typeof isSupabaseConfigured === 'function' && isSupabaseConfigured()) {
+                badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Supabase Cloud Connected`;
+            } else {
+                badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-400"></span> Local Storage Mode (Cloud Ready)`;
+            }
+        }
+
+        // ==========================================
+        // STUDENT DATA MANAGEMENT
+        // ==========================================
+        async function loadStudentData() {
+            let data = null;
+            if (typeof getStudentRecords === 'function') {
+                data = await getStudentRecords();
+            }
+            if (data && data.length > 0) {
+                students = data;
+            } else {
+                const saved = localStorage.getItem('volcano_students_2026');
+                if (saved) {
+                    try { students = JSON.parse(saved); } catch(e) { students = [...defaultStudents]; }
+                } else {
+                    students = [...defaultStudents];
+                    saveToLocalStorage();
+                }
+            }
+            filterStudentTable();
+        }
+
+        function saveToLocalStorage() {
+            localStorage.setItem('volcano_students_2026', JSON.stringify(students));
+        }
+
+        function renderTable(dataToRender = students) {
+            const tbody = document.getElementById('studentTableBody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+
+            // Update stats count
+            const totalElem = document.getElementById('statTotalStudents');
+            if (totalElem) totalElem.innerText = students.length;
+            const paidCount = students.filter(s => s.status === 'Paid').length;
+            const pendingCount = students.filter(s => s.status === 'Pending').length;
+            const paidElem = document.getElementById('statPaidCount');
+            const pendingElem = document.getElementById('statPendingCount');
+            if (paidElem) paidElem.innerText = paidCount;
+            if (pendingElem) pendingElem.innerText = pendingCount;
+
+            if (dataToRender.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="p-8 text-center text-gray-400">
+                            <i class="fa-solid fa-folder-open text-3xl mb-2 text-navy-600 block"></i>
+                            No student records found.
+                        </td>
+                    </tr>`;
+                return;
+            }
+
+            dataToRender.forEach((student) => {
+                const actualIndex = students.indexOf(student);
+                const isPaid = student.status === 'Paid';
+                const statusBadge = isPaid 
+                    ? `<span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"><i class="fa-solid fa-circle-check"></i> Paid</span>`
+                    : `<span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-red-500/15 text-red-400 border border-red-500/30"><i class="fa-solid fa-clock"></i> Pending</span>`;
+
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-navy-800/50 transition border-b border-navy-700/40";
+                tr.innerHTML = `
+                    <td class="p-4 font-mono font-semibold text-flame">${escapeHtml(student.id)}</td>
+                    <td class="p-4 font-semibold text-white">${escapeHtml(student.name)}</td>
+                    <td class="p-4 text-gray-300">${escapeHtml(student.batch)}</td>
+                    <td class="p-4 text-gold">${escapeHtml(student.belt)}</td>
+                    <td class="p-4">${statusBadge}</td>
+                    <td class="p-4 text-center">
+                        <div class="flex items-center justify-center gap-2">
+                            <button onclick="toggleFeeStatus(${actualIndex})" title="Toggle Fee Status" class="px-3 py-1.5 rounded-lg bg-navy-700 hover:bg-navy-600 text-xs font-medium text-gray-200 border border-navy-600 transition">
+                                <i class="fa-solid fa-arrows-rotate text-flame"></i> Status
+                            </button>
+                            <button onclick="editStudent(${actualIndex})" title="Edit" class="p-1.5 rounded-lg bg-navy-700 hover:bg-flame text-gray-300 hover:text-white transition">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </button>
+                            <button onclick="promptDeleteStudent(${actualIndex})" title="Delete" class="p-1.5 rounded-lg bg-navy-700 hover:bg-red-600 text-gray-300 hover:text-white transition">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function filterStudentTable() {
+            const searchInput = document.getElementById('searchInput');
+            const query = (searchInput ? searchInput.value : '').trim().toLowerCase();
+            if (!query) {
+                renderTable(students);
+                return;
+            }
+            const filtered = students.filter(s => 
+                (s.name && s.name.toLowerCase().includes(query)) ||
+                (s.id && s.id.toLowerCase().includes(query)) ||
+                (s.batch && s.batch.toLowerCase().includes(query)) ||
+                (s.belt && s.belt.toLowerCase().includes(query)) ||
+                (s.status && s.status.toLowerCase().includes(query))
+            );
+            renderTable(filtered);
+        }
+
+        function renderStudentTable() {
+            filterStudentTable();
+        }
+
+        async function toggleFeeStatus(index) {
+            const student = students[index];
+            student.status = student.status === 'Paid' ? 'Pending' : 'Paid';
+            saveToLocalStorage();
+            if (typeof saveStudentRecord === 'function' && student.db_id) {
+                await saveStudentRecord(student, true);
+            }
+            filterStudentTable();
+            showToast(`Fee status for ${student.name} updated to ${student.status}`, "info");
+        }
+
+        // ==========================================
+        // STUDENT MODAL & ACTION HANDLERS
+        // ==========================================
+        function openAddStudentModal() {
+            const form = document.getElementById('studentForm');
+            if (form) form.reset();
+            const editIndexEl = document.getElementById('studentEditIndex');
+            if (editIndexEl) editIndexEl.value = '';
+            
+            const titleEl = document.getElementById('modalHeaderTitle');
+            if (titleEl) {
+                titleEl.innerHTML = '<i class="fa-solid fa-user-plus text-flame"></i> Add Student Record';
+            }
+
+            // Auto-suggest next roll ID if empty
+            const rollInput = document.getElementById('modalRollId');
+            if (rollInput && !rollInput.value) {
+                const nextId = (students.length + 101);
+                rollInput.value = `VOL-${nextId}`;
+            }
+
+            const modal = document.getElementById('studentModal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.style.display = 'flex';
+            }
+        }
+
+        function closeStudentModal() {
+            const modal = document.getElementById('studentModal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.style.display = 'none';
+            }
+        }
+
+        function editStudent(index) {
+            const student = students[index];
+            if (!student) return;
+
+            const editIndexEl = document.getElementById('studentEditIndex');
+            if (editIndexEl) editIndexEl.value = index;
+
+            const rollEl = document.getElementById('modalRollId');
+            if (rollEl) rollEl.value = student.id || '';
+
+            const nameEl = document.getElementById('modalStudentName');
+            if (nameEl) nameEl.value = student.name || '';
+
+            const batchEl = document.getElementById('modalBatch');
+            if (batchEl) batchEl.value = student.batch || 'Evening';
+
+            const beltEl = document.getElementById('modalBelt');
+            if (beltEl) beltEl.value = student.belt || 'White Belt';
+
+            const feeEl = document.getElementById('modalFeeStatus');
+            if (feeEl) feeEl.value = student.status || 'Paid';
+
+            const titleEl = document.getElementById('modalHeaderTitle');
+            if (titleEl) {
+                titleEl.innerHTML = '<i class="fa-solid fa-user-pen text-flame"></i> Edit Student Record';
+            }
+
+            const modal = document.getElementById('studentModal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.style.display = 'flex';
+            }
+        }
+
+        function promptDeleteStudent(index) {
+            pendingDeleteIndex = index;
+            const student = students[index];
+            if (!student) return;
+
+            const nameEl = document.getElementById('deleteStudentName');
+            if (nameEl) nameEl.innerText = student.name;
+
+            const modal = document.getElementById('deleteModal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.style.display = 'flex';
+            }
+
+            const confirmBtn = document.getElementById('confirmDeleteBtn');
+            if (confirmBtn) {
+                confirmBtn.onclick = confirmDeleteStudentRecordAction;
+            }
+        }
+
+        function closeDeleteModal() {
+            const modal = document.getElementById('deleteModal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.style.display = 'none';
+            }
+            pendingDeleteIndex = null;
+        }
+
+        async function confirmDeleteStudentRecordAction() {
+            if (pendingDeleteIndex === null) return;
+            const student = students[pendingDeleteIndex];
+            closeDeleteModal();
+
+            if (typeof deleteStudentRecord === 'function') {
+                await deleteStudentRecord(student);
+            }
+
+            students.splice(pendingDeleteIndex, 1);
+            saveToLocalStorage();
+            filterStudentTable();
+            showToast(`Student record for ${student.name} deleted.`, 'info');
+        }
+
+        function exportToExcel() {
+            if (!students || students.length === 0) {
+                showToast("No student records available to export.", "warning");
+                return;
+            }
+
+            const headers = ["Roll ID", "Student Name", "Batch / Discipline", "Belt Rank", "Fee Status"];
+            const rows = students.map(s => [
+                `"${(s.id || '').replace(/"/g, '""')}"`,
+                `"${(s.name || '').replace(/"/g, '""')}"`,
+                `"${(s.batch || '').replace(/"/g, '""')}"`,
+                `"${(s.belt || '').replace(/"/g, '""')}"`,
+                `"${(s.status || '').replace(/"/g, '""')}"`
+            ]);
+
+            const csvContent = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.setAttribute('href', url);
+            link.setAttribute('download', `volcano_students_${new Date().toISOString().slice(0,10)}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            showToast("Student data exported as CSV!", "success");
+        }
+
+        async function resetDefaultData() {
+            await loadStudentData();
+            showToast("Student records refreshed from database.", "info");
+        }
+
+        async function handleStudentFormSubmit(e) {
+            e.preventDefault();
+            const editIndex = document.getElementById('studentEditIndex').value;
+            const newStudent = {
+                id: document.getElementById('modalRollId').value.trim(),
+                name: document.getElementById('modalStudentName').value.trim(),
+                batch: document.getElementById('modalBatch').value,
+                belt: document.getElementById('modalBelt').value,
+                status: document.getElementById('modalFeeStatus').value
+            };
+
+            if (editIndex !== "") {
+                const old = students[editIndex];
+                newStudent.db_id = old.db_id;
+                students[editIndex] = newStudent;
+                if (typeof saveStudentRecord === 'function') {
+                    await saveStudentRecord(newStudent, true);
+                }
+                showToast("Student details updated!", "success");
+            } else {
+                students.push(newStudent);
+                if (typeof saveStudentRecord === 'function') {
+                    await saveStudentRecord(newStudent, false);
+                }
+                showToast("New student added successfully!", "success");
+            }
+
+            saveToLocalStorage();
+            filterStudentTable();
+            closeStudentModal();
+        }
+
+        // ==========================================
+        // PUBLIC ADMISSION PROCEDURE (STUDENT SUBMISSIONS)
+        // ==========================================
+        async function handleInquirySubmit(e) {
+            e.preventDefault();
+
+            // Collect form data
+            const name     = (document.getElementById('inquiryStudentName').value || '').trim();
+            const phone    = (document.getElementById('inquiryPhone').value || '').trim();
+            const disc     = document.getElementById('inquiryDiscipline').value || 'Karate';
+            const batch    = document.getElementById('inquiryBatch').value || '';
+            const message  = (document.getElementById('inquiryMessage').value || '').trim();
+
+            // Validate
+            if (!name) {
+                alert('⚠️ Please enter the student name.');
+                document.getElementById('inquiryStudentName').focus();
+                return;
+            }
+            if (!phone) {
+                alert('⚠️ Please enter your phone / WhatsApp number.');
+                document.getElementById('inquiryPhone').focus();
+                return;
+            }
+
+            // Build WhatsApp message
+            const lines = [
+                '🥋 *New Admission Inquiry – Volcano Academy*',
+                '',
+                `👤 *Name:* ${name}`,
+                `📞 *Phone / WhatsApp:* ${phone}`,
+                `🥊 *Discipline:* ${disc}`,
+                `📅 *Preferred Batch:* ${batch}`,
+            ];
+            if (message) lines.push(`📝 *Message:* ${message}`);
+            lines.push('', '_(Sent via Volcano Academy website)_');
+
+            const waUrl = 'https://wa.me/918136908602?text=' + encodeURIComponent(lines.join('\n'));
+
+            // Save to Supabase / localStorage in background
+            try {
+                if (typeof submitAdmissionInquiry === 'function') {
+                    submitAdmissionInquiry({ name, phone, discipline: disc, batch, message });
+                }
+            } catch(err) {}
+
+            // Reset form
+            document.getElementById('admissionForm').reset();
+
+            // ── Navigate to WhatsApp ───────────────────────────────────────────
+            // window.location.href is the ONLY method that works inside
+            // WebView apps (WebIntoApp / Android). Android intercepts the
+            // wa.me URL and opens the WhatsApp app automatically.
+            window.location.href = waUrl;
+        }
+
+        async function loadAdmissionsLeads() {
+            if (typeof getAdmissionInquiries === 'function') {
+                admissionsLeads = await getAdmissionInquiries();
+            } else {
+                admissionsLeads = JSON.parse(localStorage.getItem('volcano_admissions') || '[]');
+            }
+
+            const badge = document.getElementById('admissionsCountBadge');
+            if (badge) badge.innerText = admissionsLeads.length;
+
+            renderAdmissionsTable();
+        }
+
+        function refreshAdmissionsTable() {
+            loadAdmissionsLeads();
+            showToast("Admission leads refreshed!", "info");
+        }
+
+        function renderAdmissionsTable() {
+            const tbody = document.getElementById('admissionsTableBody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+
+            if (!admissionsLeads || admissionsLeads.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="p-8 text-center text-gray-400">
+                            <i class="fa-solid fa-inbox text-3xl mb-2 text-navy-600 block"></i>
+                            No admission inquiries received yet.
+                        </td>
+                    </tr>`;
+                return;
+            }
+
+            admissionsLeads.forEach((lead, idx) => {
+                const dateFormatted = lead.created_at ? new Date(lead.created_at).toLocaleDateString() : 'Recent';
+                const nameEsc = escapeHtml(lead.student_name || lead.name || 'Student');
+                const phoneEsc = escapeHtml(lead.phone || '-');
+                const discEsc = escapeHtml(lead.discipline || 'Karate');
+                const batchEsc = escapeHtml(lead.preferred_batch || lead.batch || 'Evening');
+                const msgEsc = escapeHtml(lead.message || lead.notes || '-');
+                const leadId = lead.id || null;
+
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-navy-800/50 transition border-b border-navy-700/40";
+                tr.innerHTML = `
+                    <td class="p-4 text-xs font-mono text-gray-400">${dateFormatted}</td>
+                    <td class="p-4 font-semibold text-white">${nameEsc}</td>
+                    <td class="p-4 text-gold font-mono text-xs">
+                        <a href="tel:${phoneEsc}" class="hover:underline flex items-center gap-1.5"><i class="fa-solid fa-phone text-flame"></i> ${phoneEsc}</a>
+                    </td>
+                    <td class="p-4 text-gray-300">${discEsc}</td>
+                    <td class="p-4 text-gray-300 text-xs">${batchEsc}</td>
+                    <td class="p-4 text-gray-400 text-xs max-w-xs truncate" title="${msgEsc}">${msgEsc}</td>
+                    <td class="p-4 text-center">
+                        <div class="flex items-center justify-center gap-2">
+                            <button onclick="enrollLeadAsStudent('${nameEsc}', '${batchEsc}')" class="px-3 py-1.5 bg-gradient-to-r from-flame to-flame-light hover:from-flame-light text-white text-xs font-medium rounded-lg shadow transition">
+                                <i class="fa-solid fa-user-check"></i> Enroll
+                            </button>
+                            <button onclick="deleteAdmissionLead(${idx}, ${leadId})" class="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-medium rounded-lg shadow transition">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // ── Admission Lead Delete — Custom Modal ───────────────────────────
+        let _deleteLeadPendingIdx = null;
+        let _deleteLeadPendingId  = null;
+
+        function deleteAdmissionLead(idx, supabaseId) {
+            const lead = admissionsLeads[idx];
+            const name = lead ? (lead.student_name || lead.name || 'this applicant') : 'this applicant';
+
+            // Show name in modal
+            const nameEl = document.getElementById('deleteLeadName');
+            if (nameEl) nameEl.textContent = name;
+
+            // Store pending delete info
+            _deleteLeadPendingIdx = idx;
+            _deleteLeadPendingId  = supabaseId;
+
+            // Open modal
+            const modal = document.getElementById('deleteLeadModal');
+            if (modal) modal.style.display = 'flex';
+
+            // Wire confirm button
+            const confirmBtn = document.getElementById('confirmDeleteLeadBtn');
+            if (confirmBtn) {
+                confirmBtn.onclick = confirmDeleteLeadAction;
+            }
+        }
+
+        function closeDeleteLeadModal() {
+            const modal = document.getElementById('deleteLeadModal');
+            if (modal) modal.style.display = 'none';
+            _deleteLeadPendingIdx = null;
+            _deleteLeadPendingId  = null;
+        }
+
+        async function confirmDeleteLeadAction() {
+            const idx        = _deleteLeadPendingIdx;
+            const supabaseId = _deleteLeadPendingId;
+            closeDeleteLeadModal();
+
+            if (idx === null) return;
+
+            // ── Delete from Supabase (primary source) ─────────────────────
+            if (supabaseClient && supabaseId) {
+                try {
+                    const { error } = await supabaseClient
+                        .from('admissions')
+                        .delete()
+                        .eq('id', Number(supabaseId));
+
+                    if (error) {
+                        console.error('Supabase delete error:', error);
+                        showToast('❌ Could not delete from cloud. Try again.', 'error');
+                        return; // stop — don't remove locally if cloud failed
+                    }
+                } catch (err) {
+                    console.error('Supabase delete exception:', err);
+                    showToast('❌ Delete failed. Check connection.', 'error');
+                    return;
+                }
+            }
+
+            // ── Remove from local array ────────────────────────────────────
+            admissionsLeads.splice(idx, 1);
+
+            // ── Clear localStorage cache so refresh fetches fresh from Supabase
+            localStorage.removeItem('volcano_admissions');
+
+            // ── Re-render immediately ──────────────────────────────────────
+            renderAdmissionsTable();
+            const badge = document.getElementById('admissionsCountBadge');
+            if (badge) badge.innerText = admissionsLeads.length;
+            showToast('✅ Admission inquiry deleted successfully.', 'info');
+        }
+        // ───────────────────────────────────────────────────────────────────
+
+        function enrollLeadAsStudent(name, batch) {
+            openAddStudentModal();
+            document.getElementById('modalStudentName').value = name;
+            // Generate next roll ID
+            const nextNum = students.length + 101;
+            document.getElementById('modalRollId').value = `VOL-${nextNum}`;
+            if (batch && (batch.includes('Kickboxing') || batch.includes('Morning'))) {
+                document.getElementById('modalBatch').value = 'Morning';
+            } else if (batch && batch.includes('Weekend')) {
+                document.getElementById('modalBatch').value = 'Weekend Special';
+            } else {
+                document.getElementById('modalBatch').value = 'Evening';
+            }
+        }
+
+        // ==========================================
+        // SUPABASE SETTINGS HANDLER
+        // ==========================================
+        function handleSaveSupabaseConfig(e) {
+            e.preventDefault();
+            const url = document.getElementById('settingsSupabaseUrl').value.trim();
+            const key = document.getElementById('settingsSupabaseKey').value.trim();
+
+            if (!url || !key) {
+                showToast("Please enter both Supabase URL and Anon Key!", "warning");
+                return;
+            }
+
+            localStorage.setItem('volcano_supabase_url', url);
+            localStorage.setItem('volcano_supabase_key', key);
+            currentSupabaseUrl = url;
+            currentSupabaseKey = key;
+
+            if (typeof initSupabase === 'function') {
+                initSupabase();
+            }
+
+            updateDbBadge();
+            loadStudentData();
+            loadAdmissionsLeads();
+            showToast("Supabase cloud connected and synced successfully!", "success");
+        }
+
+        function disconnectSupabase() {
+            localStorage.removeItem('volcano_supabase_url');
+            localStorage.removeItem('volcano_supabase_key');
+            currentSupabaseUrl = DEFAULT_SUPABASE_URL;
+            currentSupabaseKey = DEFAULT_SUPABASE_ANON_KEY;
+            supabaseClient = null;
+
+            if (document.getElementById('settingsSupabaseUrl')) document.getElementById('settingsSupabaseUrl').value = '';
+            if (document.getElementById('settingsSupabaseKey')) document.getElementById('settingsSupabaseKey').value = '';
+
+            updateDbBadge();
+            showToast("Reset to local database mode.", "info");
+        }
+
+        function toggleMobileNav() {
+            const drawer = document.getElementById('mobileDrawer');
+            const icon = document.getElementById('menuIcon');
+            if (drawer) {
+                const isHidden = drawer.style.display === 'none' || drawer.style.display === '';
+                if (isHidden) {
+                    drawer.style.display = 'block';
+                    if (icon) {
+                        icon.classList.remove('fa-bars');
+                        icon.classList.add('fa-xmark');
+                    }
+                } else {
+                    drawer.style.display = 'none';
+                    if (icon) {
+                        icon.classList.remove('fa-xmark');
+                        icon.classList.add('fa-bars');
+                    }
+                }
+            }
+        }
+
+        function openLightbox(cardEl, fallbackUrl, caption) {
+            const lightbox = document.getElementById('imageLightbox');
+            const img = document.getElementById('lightboxImg');
+            const captionElem = document.getElementById('lightboxCaption');
+            if (!lightbox || !img) return;
+
+            // Grab the actual rendered image from the clicked card
+            let targetSrc = fallbackUrl || 'gallery-ring.jpg';
+            if (cardEl && cardEl.querySelector) {
+                const cardImg = cardEl.querySelector('img');
+                if (cardImg && (cardImg.currentSrc || cardImg.src)) {
+                    targetSrc = cardImg.currentSrc || cardImg.src;
+                }
+            }
+
+            img.src = targetSrc;
+            img.onerror = function() {
+                this.src = 'gallery-ring.jpg';
+            };
+
+            if (captionElem) {
+                captionElem.innerText = caption || 'Volcano Martial Arts Academy';
+            }
+
+            lightbox.style.display = 'flex';
+            lightbox.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            const lightbox = document.getElementById('imageLightbox');
+            if (lightbox) {
+                lightbox.style.display = 'none';
+                lightbox.classList.add('hidden');
+                document.body.style.overflow = '';
+            }
+        }
+
+        // Close lightbox with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeLightbox();
+        });
+
+        function escapeHtml(str) {
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+        }
+    </script>
+</body>
+</html>
