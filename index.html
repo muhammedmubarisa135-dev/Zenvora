@@ -3,21 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VOLCANO STUDIOS | Websites · Video · Branding · Ads · Photography</title>
-    <meta name="description" content="Volcano Studios is your all-in-one web & creative powerhouse — building high-performance websites, cinematic videos, bold brand identities, high-converting ads, AI videos, photography, and poster designs.">
+    <title data-brand-meta-title>MUBARIS × RASAL | Creative Studio · Web Development & Digital Media</title>
+    <meta name="description" content="Joint creative studio by Mubaris (Lead Web Architect) and Rasal (Creative Director). We engineer premium high-performance websites, cinematic video production, brand identities, AI video, photography, and high-ROI digital advertising.">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
 
     <!-- FontAwesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-    <!-- Compiled Tailwind CSS (Offline & Instant Load) -->
+    <!-- Pre-compiled Pure Stylesheet (Offline & 100% Zero-Flash Render) -->
     <link rel="stylesheet" href="./style.css">
 
-    <!-- Tailwind CSS (Local Bundle) -->
+    <!-- Standalone Tailwind CSS Engine (Local Fallback) -->
     <script src="./tailwind.js"></script>
     <script>
         tailwind.config = {
@@ -29,35 +29,34 @@
                         display: ['"Space Grotesk"', 'sans-serif']
                     },
                     colors: {
-                        brand: {
-                            50: '#eef2ff',
-                            100: '#e0e7ff',
-                            400: '#818cf8',
-                            500: '#6366f1',
-                            600: '#4f46e5',
-                            accent: '#06b6d4', /* Cyan accent */
-                            emerald: '#10b981'
-                        },
-                        dark: {
-                            950: '#07090e',
-                            900: '#0b0f19',
-                            850: '#111726',
-                            800: '#172033',
-                            700: '#23304a'
+                        neutral: {
+                            950: '#050505',
+                            900: '#0a0a0a',
+                            850: '#121212',
+                            800: '#1a1a1a',
+                            750: '#222222',
+                            700: '#2d2d2d',
+                            600: '#404040',
+                            500: '#525252',
+                            400: '#737373',
+                            300: '#a3a3a3',
+                            200: '#d4d4d4',
+                            100: '#f5f5f5',
+                            50: '#fafafa'
                         }
                     },
                     animation: {
                         'float': 'float 6s ease-in-out infinite',
-                        'pulse-glow': 'pulseGlow 3s ease-in-out infinite',
+                        'pulse-subtle': 'pulseSubtle 4s ease-in-out infinite',
                     },
                     keyframes: {
                         float: {
                             '0%, 100%': { transform: 'translateY(0px)' },
-                            '50%': { transform: 'translateY(-12px)' },
+                            '50%': { transform: 'translateY(-10px)' },
                         },
-                        pulseGlow: {
-                            '0%, 100%': { opacity: '0.4' },
-                            '50%': { opacity: '0.8' },
+                        pulseSubtle: {
+                            '0%, 100%': { opacity: '0.3' },
+                            '50%': { opacity: '0.6' },
                         }
                     }
                 }
@@ -66,90 +65,165 @@
     </script>
 
     <style>
-        /* Custom Glassmorphism & Utilities */
+        /* ========================================================
+           PREMIUM MONOCHROME DESIGN SYSTEM (Black, White & Neutral Grey)
+           ======================================================== */
+        :root {
+            --bg-canvas: #050505;
+            --bg-surface: #0e0e0e;
+            --bg-card: rgba(18, 18, 18, 0.75);
+            --border-hairline: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(255, 255, 255, 0.22);
+            --text-heading: #ffffff;
+            --text-body: #d4d4d4;
+            --text-muted: #737373;
+        }
+
+        body {
+            background-color: var(--bg-canvas);
+            color: var(--text-body);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+            letter-spacing: -0.01em;
+        }
+
+        /* Glassmorphic Surfaces */
         .glass-panel {
-            background: rgba(17, 23, 38, 0.7);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            background: rgba(14, 14, 14, 0.82);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
+
         .glass-card {
-            background: rgba(23, 32, 51, 0.6);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(18, 18, 18, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .glass-card:hover {
-            transform: translateY(-6px);
-            border-color: rgba(99, 102, 241, 0.4);
-            box-shadow: 0 20px 40px -15px rgba(99, 102, 241, 0.15);
+            transform: translateY(-5px);
+            border-color: rgba(255, 255, 255, 0.22);
+            background: rgba(24, 24, 24, 0.85);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.8), 0 0 40px -15px rgba(255, 255, 255, 0.04);
         }
+
+        /* Monochrome Metallic & Silver Text Gradients */
         .gradient-text {
-            background: linear-gradient(135deg, #ffffff 20%, #a5b4fc 60%, #38bdf8 100%);
+            background: linear-gradient(180deg, #ffffff 30%, #a3a3a3 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        .gradient-text-accent {
-            background: linear-gradient(135deg, #818cf8 0%, #38bdf8 100%);
+        .gradient-text-silver {
+            background: linear-gradient(135deg, #ffffff 0%, #d4d4d4 50%, #737373 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        /* Custom Scrollbar */
+
+        /* Primary Monochrome CTA Buttons */
+        .btn-primary {
+            background: #ffffff;
+            color: #050505;
+            font-weight: 700;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 20px rgba(255, 255, 255, 0.12);
+        }
+        .btn-primary:hover {
+            background: #e5e5e5;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(255, 255, 255, 0.22);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.04);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            font-weight: 600;
+            transition: all 0.25s ease;
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            color: #ffffff;
+        }
+
+        /* Minimalist Badges & Pills */
+        .badge-mono {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #d4d4d4;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            letter-spacing: 0.04em;
+        }
+
+        /* Sleek Monochrome Scrollbar */
         ::-webkit-scrollbar {
-            width: 8px;
+            width: 7px;
         }
         ::-webkit-scrollbar-track {
-            background: #07090e;
+            background: #050505;
         }
         ::-webkit-scrollbar-thumb {
-            background: #23304a;
+            background: #262626;
             border-radius: 4px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #4f46e5;
+            background: #525252;
         }
-        /* Hero visual card float */
-        .hero-float { animation: heroFloat 5s ease-in-out infinite; }
-        .hero-float-slow { animation: heroFloat 7s ease-in-out infinite; animation-delay: -2s; }
-        @keyframes heroFloat {
-            0%,100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+
+        /* Ambient Glows in Monochrome */
+        .ambient-glow {
+            position: absolute;
+            border-radius: 9999px;
+            pointer-events: none;
+            filter: blur(140px);
+            opacity: 0.05;
+            background: #ffffff;
         }
-        /* Mini browser chrome */
-        .browser-dot { width:8px;height:8px;border-radius:50%; }
-        /* Service tag gradient border */
-        .service-tag {
-            position: relative;
-            background: rgba(23,32,51,0.7);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 999px;
-            padding: 5px 14px;
-            font-size: 11px;
-            font-weight: 600;
-            color: #cbd5e1;
-            transition: all 0.2s;
+
+        /* Monogram Logo Box */
+        .monogram-badge {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #1f1f1f 0%, #0a0a0a 100%);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 800;
+            font-size: 14px;
+            color: #ffffff;
+            letter-spacing: -0.05em;
+            transition: all 0.3s ease;
         }
-        .service-tag:hover {
-            border-color: rgba(99,102,241,0.5);
-            color: #fff;
-        }
-        /* About card gradient border */
-        .about-stat {
-            background: rgba(23,32,51,0.8);
-            border: 1px solid rgba(255,255,255,0.06);
-            border-radius: 1rem;
-            padding: 1.25rem 1.5rem;
+        .monogram-badge:hover {
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
         }
     </style>
 </head>
-<body class="bg-dark-950 text-slate-200 font-sans antialiased selection:bg-brand-500 selection:text-white relative overflow-x-hidden min-h-screen">
 
-    <!-- Background Ambient Lighting / Mesh Glows -->
+<body class="bg-neutral-950 text-neutral-200 font-sans antialiased selection:bg-white selection:text-black relative overflow-x-hidden min-h-screen">
+
+    <!-- ========================================================================== -->
+    <!-- BRAND CONFIGURATION NOTICE:                                                -->
+    <!-- To rename this studio in the future, simply update the `BRAND_CONFIG`     -->
+    <!-- object inside the <script> block at the bottom of this file.               -->
+    <!-- All elements with `data-brand-*` attributes will automatically synchronize. -->
+    <!-- ========================================================================== -->
+
+    <!-- Ambient Subtle Monochrome Lighting -->
     <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-        <div class="absolute -top-[20%] -left-[10%] w-[600px] h-[600px] rounded-full bg-brand-600/15 blur-[140px] animate-pulse-glow"></div>
-        <div class="absolute top-[40%] -right-[15%] w-[650px] h-[650px] rounded-full bg-brand-accent/10 blur-[160px] animate-pulse-glow" style="animation-delay: 2s;"></div>
-        <div class="absolute -bottom-[10%] left-[20%] w-[500px] h-[500px] rounded-full bg-brand-500/10 blur-[130px] animate-pulse-glow" style="animation-delay: 4s;"></div>
+        <div class="ambient-glow -top-[20%] -left-[10%] w-[650px] h-[650px] animate-pulse-subtle"></div>
+        <div class="ambient-glow top-[40%] -right-[15%] w-[700px] h-[700px] animate-pulse-subtle" style="animation-delay: 2s;"></div>
+        <div class="ambient-glow -bottom-[10%] left-[25%] w-[550px] h-[550px] animate-pulse-subtle" style="animation-delay: 4s;"></div>
     </div>
 
     <!-- ======================================================== -->
@@ -159,56 +233,58 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between">
                 
-                <!-- Brand / Logo -->
-                <a href="#home" class="flex items-center gap-3 group">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-brand-accent flex items-center justify-center text-white font-display font-bold text-xl shadow-lg shadow-brand-500/25 group-hover:scale-105 transition duration-300">
-                        <i class="fa-solid fa-volcano text-sm"></i>
+                <!-- Brand / Logo / Wordmark -->
+                <a href="#home" class="flex items-center gap-3.5 group">
+                    <div class="monogram-badge group-hover:scale-105">
+                        <span>M<span class="text-neutral-400 font-light text-xs">×</span>R</span>
                     </div>
                     <div>
-                        <span class="font-display font-bold text-xl text-white tracking-tight flex items-center gap-1.5">
-                            VOLCANO <span class="text-brand-accent">STUDIOS</span>
+                        <span class="font-display font-extrabold text-lg sm:text-xl text-white tracking-tight flex items-center gap-2">
+                            <span data-brand-name>MUBARIS × RASAL</span>
                         </span>
-                        <span class="text-[10px] tracking-widest uppercase text-slate-400 font-semibold block -mt-1">Web & Creative Studio</span>
+                        <span class="text-[10px] tracking-widest uppercase text-neutral-400 font-semibold block -mt-0.5" data-brand-tagline>
+                            Web Engineering & Creative Media
+                        </span>
                     </div>
                 </a>
 
                 <!-- Desktop Navigation Links -->
                 <div class="hidden md:flex items-center gap-8">
-                    <a href="#services" class="text-sm font-medium text-slate-300 hover:text-white hover:text-brand-accent transition">Services</a>
-                    <a href="#work" class="text-sm font-medium text-slate-300 hover:text-white hover:text-brand-accent transition">Featured Work</a>
-                    <a href="#team" class="text-sm font-medium text-slate-300 hover:text-white hover:text-brand-accent transition">About Us</a>
-                    <a href="#process" class="text-sm font-medium text-slate-300 hover:text-white hover:text-brand-accent transition">Our Process</a>
-                    <a href="#pricing" class="text-sm font-medium text-slate-300 hover:text-white hover:text-brand-accent transition">Packages</a>
+                    <a href="#services" class="text-sm font-medium text-neutral-300 hover:text-white transition">Services</a>
+                    <a href="#work" class="text-sm font-medium text-neutral-300 hover:text-white transition">Featured Work</a>
+                    <a href="#profiles" class="text-sm font-medium text-neutral-300 hover:text-white transition">Mubaris & Rasal</a>
+                    <a href="#process" class="text-sm font-medium text-neutral-300 hover:text-white transition">Process</a>
+                    <a href="#pricing" class="text-sm font-medium text-neutral-300 hover:text-white transition">Packages</a>
                 </div>
 
-                <!-- Header Actions -->
+                <!-- Header Action CTA -->
                 <div class="hidden sm:flex items-center gap-4">
-                    <a href="#contact" class="relative group px-5 py-2.5 rounded-xl font-semibold text-xs tracking-wider uppercase text-white bg-gradient-to-r from-brand-600 to-brand-accent hover:from-brand-500 hover:to-brand-accent shadow-lg shadow-brand-600/30 transition-all duration-300 hover:-translate-y-0.5 flex items-center gap-2">
+                    <a href="#contact" class="btn-primary px-5 py-2.5 rounded-xl text-xs uppercase tracking-wider flex items-center gap-2">
                         <span>Start A Project</span>
-                        <i class="fa-solid fa-arrow-right text-[11px] group-hover:translate-x-1 transition duration-200"></i>
+                        <i class="fa-solid fa-arrow-right text-[11px]"></i>
                     </a>
                 </div>
 
-                <!-- Mobile Hamburger Toggle -->
-                <button id="mobileMenuBtn" class="md:hidden p-2.5 rounded-xl bg-dark-850 border border-white/10 text-slate-300 hover:text-white focus:outline-none" aria-label="Toggle Menu">
+                <!-- Mobile Hamburger Button -->
+                <button id="mobileMenuBtn" class="md:hidden p-2.5 rounded-xl bg-neutral-900 border border-white/10 text-neutral-300 hover:text-white focus:outline-none" aria-label="Toggle Menu">
                     <i class="fa-solid fa-bars text-lg" id="menuIcon"></i>
                 </button>
             </div>
         </div>
 
-        <!-- Mobile Drawer -->
+        <!-- Mobile Drawer Menu -->
         <div id="mobileMenu" class="hidden md:hidden glass-panel border-t border-white/5 px-6 py-6 space-y-4">
-            <a href="#services" onclick="toggleMenu()" class="block text-base font-semibold text-slate-200 hover:text-brand-accent">Services</a>
-            <a href="#work" onclick="toggleMenu()" class="block text-base font-semibold text-slate-200 hover:text-brand-accent">Featured Work</a>
-            <a href="#team" onclick="toggleMenu()" class="block text-base font-semibold text-slate-200 hover:text-brand-accent">About Us</a>
-            <a href="#process" onclick="toggleMenu()" class="block text-base font-semibold text-slate-200 hover:text-brand-accent">Our Process</a>
-            <a href="#pricing" onclick="toggleMenu()" class="block text-base font-semibold text-slate-200 hover:text-brand-accent">Packages</a>
-            <a href="#contact" onclick="toggleMenu()" class="block w-full text-center py-3 rounded-xl font-bold text-sm bg-gradient-to-r from-brand-600 to-brand-accent text-white shadow-lg shadow-brand-600/30">Start A Project</a>
+            <a href="#services" onclick="toggleMenu()" class="block text-base font-semibold text-neutral-200 hover:text-white">Services</a>
+            <a href="#work" onclick="toggleMenu()" class="block text-base font-semibold text-neutral-200 hover:text-white">Featured Work</a>
+            <a href="#profiles" onclick="toggleMenu()" class="block text-base font-semibold text-neutral-200 hover:text-white">Mubaris & Rasal (Profiles)</a>
+            <a href="#process" onclick="toggleMenu()" class="block text-base font-semibold text-neutral-200 hover:text-white">Process</a>
+            <a href="#pricing" onclick="toggleMenu()" class="block text-base font-semibold text-neutral-200 hover:text-white">Packages</a>
+            <a href="#contact" onclick="toggleMenu()" class="block w-full text-center py-3 rounded-xl font-bold text-sm btn-primary">Start A Project</a>
         </div>
     </nav>
 
     <!-- ======================================================== -->
-    <!-- HERO SECTION — Premium Variety Layout (Inspired by Reference) -->
+    <!-- HERO SECTION — Premium Monochrome Centerpiece -->
     <!-- ======================================================== -->
     <header id="home" class="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden z-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -217,32 +293,32 @@
             <div class="text-center max-w-4xl mx-auto space-y-6 mb-14">
                 
                 <!-- Status Badge -->
-                <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full glass-panel border border-brand-500/30 text-xs font-semibold text-slate-200 shadow-xl shadow-brand-500/10">
-                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                    <span>Available for New Client Projects</span>
-                    <span class="text-slate-500">•</span>
-                    <span class="text-brand-400 font-bold">2026 Season</span>
+                <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full glass-panel border border-white/10 text-xs font-semibold text-neutral-200 shadow-xl">
+                    <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
+                    <span>Available for New Projects</span>
+                    <span class="text-neutral-500">•</span>
+                    <span class="text-neutral-400 font-bold">2026 Studio Season</span>
                 </div>
 
                 <!-- Main Punchy Title -->
                 <h1 class="font-display font-extrabold text-4xl sm:text-6xl lg:text-7xl text-white tracking-tight leading-[1.1]">
-                    We turn ideas into <br class="hidden sm:inline">
-                    <span class="gradient-text">digital experiences.</span>
+                    We engineer digital platforms <br class="hidden sm:inline">
+                    <span class="gradient-text">and elevate brand power.</span>
                 </h1>
 
                 <!-- Sub-Headline -->
-                <p class="text-slate-300 text-base sm:text-lg lg:text-xl font-normal leading-relaxed max-w-3xl mx-auto">
-                    Beautiful high-performance websites, powerful brands, cinematic video production, and high-ROI creative campaigns designed to make businesses stand out and scale.
+                <p class="text-neutral-400 text-base sm:text-lg lg:text-xl font-normal leading-relaxed max-w-3xl mx-auto">
+                    A dual creative partnership uniting <strong class="text-white font-semibold">Web Development</strong> with a full-spectrum media suite — cinematic video, bold branding, photography, poster design, and high-ROI digital advertising.
                 </p>
 
                 <!-- Action CTAs -->
                 <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-3">
-                    <a href="#contact" class="w-full sm:w-auto px-8 py-4 rounded-xl font-bold text-sm bg-gradient-to-r from-brand-600 to-brand-accent text-white shadow-xl shadow-brand-600/30 hover:shadow-brand-600/50 hover:-translate-y-1 transition duration-300 flex items-center justify-center gap-2.5 group">
+                    <a href="#contact" class="w-full sm:w-auto px-8 py-4 rounded-xl font-bold text-sm btn-primary flex items-center justify-center gap-2.5 group">
                         <span>Start a Project</span>
                         <i class="fa-solid fa-arrow-up-right-from-square text-xs group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition duration-200"></i>
                     </a>
-                    <a href="#work" class="w-full sm:w-auto px-8 py-4 rounded-xl font-bold text-sm glass-panel border border-white/10 hover:border-brand-500/40 text-slate-200 hover:text-white hover:-translate-y-1 transition duration-300 flex items-center justify-center gap-2.5">
-                        <i class="fa-solid fa-layer-group text-brand-accent text-xs"></i>
+                    <a href="#work" class="w-full sm:w-auto px-8 py-4 rounded-xl font-bold text-sm btn-secondary flex items-center justify-center gap-2.5">
+                        <i class="fa-solid fa-layer-group text-neutral-400 text-xs"></i>
                         <span>Explore Our Work</span>
                     </a>
                 </div>
@@ -251,26 +327,24 @@
 
             <!-- ── CENTERPIECE: Luxury Dual-Device Showcase (Laptop + Mobile) ── -->
             <div class="relative max-w-5xl mx-auto mb-16">
-                <!-- Ambient Glow behind showcase -->
-                <div class="absolute -inset-4 bg-gradient-to-r from-brand-600/20 via-brand-accent/20 to-purple-600/20 rounded-3xl blur-3xl -z-10 pointer-events-none"></div>
-
+                
                 <div class="glass-panel rounded-3xl p-4 sm:p-8 border border-white/10 shadow-2xl relative overflow-hidden">
                     
                     <!-- Showcase Window Header / URL Bar -->
                     <div class="flex items-center justify-between pb-4 mb-6 border-b border-white/10">
                         <div class="flex items-center gap-2">
-                            <span class="w-3 h-3 rounded-full bg-rose-500/80 inline-block"></span>
-                            <span class="w-3 h-3 rounded-full bg-amber-500/80 inline-block"></span>
-                            <span class="w-3 h-3 rounded-full bg-emerald-500/80 inline-block"></span>
-                            <span class="text-xs text-slate-400 font-mono ml-2 hidden sm:inline">volcanostudios.digital</span>
+                            <span class="w-3 h-3 rounded-full bg-neutral-600 inline-block"></span>
+                            <span class="w-3 h-3 rounded-full bg-neutral-700 inline-block"></span>
+                            <span class="w-3 h-3 rounded-full bg-neutral-800 inline-block"></span>
+                            <span class="text-xs text-neutral-400 font-mono ml-2 hidden sm:inline" data-brand-domain>mubarisxrasal.studio</span>
                         </div>
                         <div class="flex items-center gap-2 text-xs">
-                            <span class="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-semibold flex items-center gap-1.5">
-                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                            <span class="px-3 py-1 rounded-full bg-white/5 text-neutral-200 border border-white/10 font-semibold flex items-center gap-1.5">
+                                <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
                                 99+ PageSpeed
                             </span>
-                            <span class="px-3 py-1 rounded-full bg-brand-500/10 text-brand-300 border border-brand-500/30 font-semibold hidden sm:inline">
-                                4K Video & AI Ready
+                            <span class="px-3 py-1 rounded-full bg-white/5 text-neutral-300 border border-white/10 font-semibold hidden sm:inline">
+                                Websites First · 360° Creative Media
                             </span>
                         </div>
                     </div>
@@ -279,88 +353,89 @@
                     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
                         
                         <!-- Laptop Frame / Main Screen Preview (lg:col-span-8) -->
-                        <div class="lg:col-span-8 rounded-2xl bg-dark-900 border border-white/10 overflow-hidden shadow-2xl group">
+                        <div class="lg:col-span-8 rounded-2xl bg-neutral-900 border border-white/10 overflow-hidden shadow-2xl group">
                             <!-- Laptop Screen Top Navigation Mockup -->
-                            <div class="bg-dark-850 px-4 py-3 border-b border-white/5 flex items-center justify-between">
+                            <div class="bg-neutral-850 px-4 py-3 border-b border-white/5 flex items-center justify-between">
                                 <div class="flex items-center gap-2">
-                                    <div class="w-6 h-6 rounded-lg bg-gradient-to-tr from-brand-600 to-brand-accent flex items-center justify-center text-white text-[10px] font-bold">
-                                        <i class="fa-solid fa-bolt"></i>
+                                    <div class="w-6 h-6 rounded-md bg-white text-black flex items-center justify-center text-[10px] font-bold">
+                                        <i class="fa-solid fa-code"></i>
                                     </div>
-                                    <span class="font-display font-bold text-xs text-white">VOLCANO <span class="text-brand-accent">STUDIOS</span></span>
+                                    <span class="font-display font-bold text-xs text-white" data-brand-name>MUBARIS × RASAL</span>
                                 </div>
-                                <div class="hidden sm:flex items-center gap-3 text-[11px] text-slate-400">
+                                <div class="hidden sm:flex items-center gap-3 text-[11px] text-neutral-400">
                                     <span class="text-white font-medium">Web</span>
+                                    <span>UI/UX</span>
                                     <span>Video</span>
                                     <span>Branding</span>
                                     <span>Ads</span>
                                 </div>
-                                <span class="px-2.5 py-1 rounded-md bg-brand-600 text-[10px] font-bold text-white">Let's Talk</span>
+                                <span class="px-2.5 py-1 rounded-md bg-white text-black text-[10px] font-bold">Inquire</span>
                             </div>
                             
                             <!-- Laptop Screen Content Mockup -->
-                            <div class="p-6 sm:p-8 bg-gradient-to-br from-dark-950 via-dark-900 to-dark-850 relative min-h-[260px] flex flex-col justify-between">
+                            <div class="p-6 sm:p-8 bg-gradient-to-br from-neutral-950 via-neutral-900 to-neutral-850 relative min-h-[260px] flex flex-col justify-between">
                                 <div class="space-y-3 max-w-md">
-                                    <span class="text-[10px] uppercase font-bold tracking-widest text-brand-accent px-2.5 py-1 rounded-full bg-brand-accent/10 border border-brand-accent/20 inline-block">
-                                        Live Client Product
+                                    <span class="text-[10px] uppercase font-bold tracking-widest text-neutral-300 px-2.5 py-1 rounded-full bg-white/5 border border-white/10 inline-block">
+                                        Joint Creative Portfolio
                                     </span>
                                     <h4 class="font-display font-bold text-2xl text-white leading-tight">
-                                        Custom Web Engineering & Brand Elevation
+                                        Engineered For Performance & Visual Authority
                                     </h4>
-                                    <p class="text-xs text-slate-400 leading-relaxed">
-                                        Next.js web architecture integrated with live real-time databases, 4K commercial video assets, and conversion-first brand publicity.
+                                    <p class="text-xs text-neutral-400 leading-relaxed">
+                                        Full-stack web architecture, responsive modern interfaces, 4K video assets, and conversion-optimized digital publicity.
                                     </p>
                                 </div>
 
                                 <div class="grid grid-cols-3 gap-3 pt-6 border-t border-white/5 mt-4">
-                                    <div class="p-2.5 rounded-xl bg-dark-800/80 border border-white/5 text-center">
+                                    <div class="p-2.5 rounded-xl bg-neutral-800/60 border border-white/5 text-center">
                                         <span class="font-display font-extrabold text-base text-white block">0.6s</span>
-                                        <span class="text-[9px] text-slate-400 uppercase font-semibold">Load Time</span>
+                                        <span class="text-[9px] text-neutral-400 uppercase font-semibold">Load Time</span>
                                     </div>
-                                    <div class="p-2.5 rounded-xl bg-dark-800/80 border border-white/5 text-center">
-                                        <span class="font-display font-extrabold text-base text-emerald-400 block">+340%</span>
-                                        <span class="text-[9px] text-slate-400 uppercase font-semibold">Ad Leads</span>
+                                    <div class="p-2.5 rounded-xl bg-neutral-800/60 border border-white/5 text-center">
+                                        <span class="font-display font-extrabold text-base text-white block">100%</span>
+                                        <span class="text-[9px] text-neutral-400 uppercase font-semibold">Custom Code</span>
                                     </div>
-                                    <div class="p-2.5 rounded-xl bg-dark-800/80 border border-white/5 text-center">
-                                        <span class="font-display font-extrabold text-base text-brand-accent block">100%</span>
-                                        <span class="text-[9px] text-slate-400 uppercase font-semibold">Custom Code</span>
+                                    <div class="p-2.5 rounded-xl bg-neutral-800/60 border border-white/5 text-center">
+                                        <span class="font-display font-extrabold text-base text-neutral-200 block">360°</span>
+                                        <span class="text-[9px] text-neutral-400 uppercase font-semibold">Brand Suite</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Mobile Device Mockup (lg:col-span-4) -->
-                        <div class="lg:col-span-4 rounded-3xl bg-dark-900 border-2 border-white/15 p-3 shadow-2xl relative max-w-[280px] mx-auto w-full">
+                        <div class="lg:col-span-4 rounded-3xl bg-neutral-900 border-2 border-white/15 p-3 shadow-2xl relative max-w-[280px] mx-auto w-full">
                             <!-- Mobile Notch -->
-                            <div class="w-20 h-4 bg-dark-950 rounded-full mx-auto mb-3 flex items-center justify-center">
-                                <span class="w-2 h-2 rounded-full bg-dark-800"></span>
+                            <div class="w-20 h-4 bg-neutral-950 rounded-full mx-auto mb-3 flex items-center justify-center">
+                                <span class="w-2 h-2 rounded-full bg-neutral-800"></span>
                             </div>
 
                             <!-- Mobile Screen Content -->
-                            <div class="rounded-2xl bg-dark-950 p-4 border border-white/5 space-y-4">
+                            <div class="rounded-2xl bg-neutral-950 p-4 border border-white/5 space-y-4">
                                 <div class="flex items-center justify-between pb-2 border-b border-white/5">
-                                    <span class="text-[11px] font-bold text-white">Mobile Responsive</span>
-                                    <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                                    <span class="text-[11px] font-bold text-white">Mobile Optimized</span>
+                                    <span class="w-2 h-2 rounded-full bg-white"></span>
                                 </div>
 
                                 <div class="space-y-2">
-                                    <div class="h-20 rounded-xl bg-gradient-to-tr from-brand-600/30 to-brand-accent/20 border border-brand-500/20 p-3 flex flex-col justify-end">
-                                        <span class="text-[10px] font-bold text-white block">Reels & AI Video</span>
-                                        <span class="text-[9px] text-slate-400">Vertical-first media</span>
+                                    <div class="h-20 rounded-xl bg-neutral-850 border border-white/10 p-3 flex flex-col justify-end">
+                                        <span class="text-[10px] font-bold text-white block">Video & AI Media</span>
+                                        <span class="text-[9px] text-neutral-400">Vertical reels & post-production</span>
                                     </div>
-                                    <div class="h-14 rounded-xl bg-dark-850 border border-white/5 p-2.5 flex items-center gap-2.5">
-                                        <div class="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center text-xs">
+                                    <div class="h-14 rounded-xl bg-neutral-850 border border-white/5 p-2.5 flex items-center gap-2.5">
+                                        <div class="w-8 h-8 rounded-lg bg-white/10 text-white flex items-center justify-center text-xs">
                                             <i class="fa-solid fa-bullhorn"></i>
                                         </div>
                                         <div>
                                             <span class="text-[10px] font-bold text-white block">Meta & Google Ads</span>
-                                            <span class="text-[8px] text-slate-400">Targeted traffic funnels</span>
+                                            <span class="text-[8px] text-neutral-400">Targeted traffic funnels</span>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="pt-2 border-t border-white/5 flex items-center justify-between text-[10px] text-slate-400">
+                                <div class="pt-2 border-t border-white/5 flex items-center justify-between text-[10px] text-neutral-400">
                                     <span>Brand Publicity</span>
-                                    <span class="text-brand-accent font-semibold">Active ✓</span>
+                                    <span class="text-white font-semibold">Active ✓</span>
                                 </div>
                             </div>
 
@@ -377,80 +452,80 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
                 
                 <!-- Pillar 1: Websites First (Main Expertise) -->
-                <div class="glass-card p-8 rounded-3xl border border-brand-500/20 relative group hover:border-brand-500/40">
+                <div class="glass-card p-8 rounded-3xl relative group">
                     <div class="flex items-center justify-between mb-6">
-                        <div class="w-14 h-14 rounded-2xl bg-brand-500/10 border border-brand-500/20 text-brand-400 flex items-center justify-center text-2xl group-hover:scale-110 group-hover:bg-brand-500 group-hover:text-white transition duration-300">
+                        <div class="w-14 h-14 rounded-2xl bg-white/10 border border-white/15 text-white flex items-center justify-center text-2xl group-hover:scale-105 group-hover:bg-white group-hover:text-black transition duration-300">
                             <i class="fa-solid fa-laptop-code"></i>
                         </div>
-                        <span class="px-3.5 py-1 rounded-full bg-brand-500/10 text-brand-300 border border-brand-500/30 text-xs font-bold uppercase tracking-wider">
-                            Main Expertise
+                        <span class="badge-mono">
+                            Core Focus · Web Engineering
                         </span>
                     </div>
 
                     <h3 class="font-display font-bold text-2xl text-white mb-3">
                         Websites First
                     </h3>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-6">
-                        Your website is the digital storefront and conversion engine of your business. We engineer pixel-perfect, mobile-first websites and full-stack web applications with sub-second speeds, zero bloat, and automated sales funnels.
+                    <p class="text-neutral-400 text-sm leading-relaxed mb-6">
+                        Your website is the foundation of your digital authority. We engineer pixel-perfect, responsive web platforms and web applications with sub-second page loads, clean architecture, and conversion-optimized structure.
                     </p>
 
-                    <div class="space-y-2.5 text-xs text-slate-300 font-medium pt-4 border-t border-white/5">
+                    <div class="space-y-2.5 text-xs text-neutral-300 font-medium pt-4 border-t border-white/5">
                         <div class="flex items-center gap-2.5">
-                            <i class="fa-solid fa-circle-check text-brand-accent"></i>
-                            <span>Custom High-Converting Web Platforms & E-Commerce</span>
+                            <i class="fa-solid fa-check text-neutral-400"></i>
+                            <span>Custom High-Converting Web Platforms & Single-Page Apps</span>
                         </div>
                         <div class="flex items-center gap-2.5">
-                            <i class="fa-solid fa-circle-check text-brand-accent"></i>
-                            <span>React, Next.js, Tailwind CSS & Supabase Backends</span>
+                            <i class="fa-solid fa-check text-neutral-400"></i>
+                            <span>React, Next.js, Modern JavaScript & Tailwind CSS</span>
                         </div>
                         <div class="flex items-center gap-2.5">
-                            <i class="fa-solid fa-circle-check text-brand-accent"></i>
+                            <i class="fa-solid fa-check text-neutral-400"></i>
                             <span>SEO 100/100, Core Web Vitals & Sub-Second Page Speeds</span>
                         </div>
                         <div class="flex items-center gap-2.5">
-                            <i class="fa-solid fa-circle-check text-brand-accent"></i>
-                            <span>Interactive Dashboards, Portals & Payment Gateways</span>
+                            <i class="fa-solid fa-check text-neutral-400"></i>
+                            <span>Database Pipelines, Admin Dashboards & Form Integrations</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Pillar 2: Creative Solutions & 360° Publicity (Extended Services) -->
-                <div class="glass-card p-8 rounded-3xl border border-cyan-500/20 relative group hover:border-brand-accent/40">
+                <div class="glass-card p-8 rounded-3xl relative group">
                     <div class="flex items-center justify-between mb-6">
-                        <div class="w-14 h-14 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 text-brand-accent flex items-center justify-center text-2xl group-hover:scale-110 group-hover:bg-brand-accent group-hover:text-dark-950 transition duration-300">
+                        <div class="w-14 h-14 rounded-2xl bg-white/10 border border-white/15 text-white flex items-center justify-center text-2xl group-hover:scale-105 group-hover:bg-white group-hover:text-black transition duration-300">
                             <i class="fa-solid fa-wand-magic-sparkles"></i>
                         </div>
-                        <span class="px-3.5 py-1 rounded-full bg-cyan-500/10 text-brand-accent border border-cyan-500/30 text-xs font-bold uppercase tracking-wider">
-                            Extended Creative Suite
+                        <span class="badge-mono">
+                            360° Creative Media Suite
                         </span>
                     </div>
 
                     <h3 class="font-display font-bold text-2xl text-white mb-3">
-                        Creative Solutions & Brand Publicity
+                        Creative Media & Publicity
                     </h3>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-6">
-                        A great website needs attention and authority. We produce the complete creative media ecosystem — from cinematic reels and AI video to brand identity, commercial photography, poster design, and high-ROI ad campaigns.
+                    <p class="text-neutral-400 text-sm leading-relaxed mb-6">
+                        A great website needs attention and authority. We craft the complete visual ecosystem — cinematic video editing, AI video creation, brand identity, commercial photography, poster design, and digital advertising campaigns.
                     </p>
 
-                    <div class="space-y-2.5 text-xs text-slate-300 font-medium pt-4 border-t border-white/5">
+                    <div class="space-y-2.5 text-xs text-neutral-300 font-medium pt-4 border-t border-white/5">
                         <div class="flex items-center gap-2.5">
-                            <i class="fa-solid fa-circle-check text-brand-accent"></i>
+                            <i class="fa-solid fa-check text-neutral-400"></i>
                             <span>Cinematic Video Editing, Reels & Short-Form Content</span>
                         </div>
                         <div class="flex items-center gap-2.5">
-                            <i class="fa-solid fa-circle-check text-brand-accent"></i>
-                            <span>AI Video Making & Generative Visual Storytelling</span>
+                            <i class="fa-solid fa-check text-neutral-400"></i>
+                            <span>AI Video Creation & Futuristic Visual Storytelling</span>
                         </div>
                         <div class="flex items-center gap-2.5">
-                            <i class="fa-solid fa-circle-check text-brand-accent"></i>
-                            <span>Brand Identity, Logos, Color Palettes & Brand Guidelines</span>
+                            <i class="fa-solid fa-check text-neutral-400"></i>
+                            <span>Brand Identity, Logo Design & Complete Brand Guidelines</span>
                         </div>
                         <div class="flex items-center gap-2.5">
-                            <i class="fa-solid fa-circle-check text-brand-accent"></i>
-                            <span>High-Converting Meta & Google Ads Campaign Management</span>
+                            <i class="fa-solid fa-check text-neutral-400"></i>
+                            <span>Meta & Google Ads Campaign Management & Optimization</span>
                         </div>
                         <div class="flex items-center gap-2.5">
-                            <i class="fa-solid fa-circle-check text-brand-accent"></i>
+                            <i class="fa-solid fa-check text-neutral-400"></i>
                             <span>Commercial Photography & High-Impact Poster / Graphic Design</span>
                         </div>
                     </div>
@@ -462,175 +537,186 @@
     </header>
 
     <!-- ======================================================== -->
-    <!-- METRICS & VALUE BAR -->
+    <!-- VALUE & PERFORMANCE METRICS BAR -->
     <!-- ======================================================== -->
     <section class="py-12 border-y border-white/5 relative z-10 glass-panel">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-y md:divide-y-0 md:divide-x divide-white/10">
                 <div class="pt-4 md:pt-0">
-                    <span class="font-display font-extrabold text-3xl sm:text-4xl text-white block">98<span class="text-brand-accent">%</span></span>
-                    <span class="text-xs text-slate-400 uppercase tracking-widest font-semibold mt-1 block">Google PageSpeed</span>
+                    <span class="font-display font-extrabold text-3xl sm:text-4xl text-white block">99<span class="text-neutral-400">%</span></span>
+                    <span class="text-xs text-neutral-400 uppercase tracking-widest font-semibold mt-1 block">Google PageSpeed</span>
                 </div>
                 <div class="pt-4 md:pt-0">
-                    <span class="font-display font-extrabold text-3xl sm:text-4xl text-white block">2-3<span class="text-brand-accent">x</span></span>
-                    <span class="text-xs text-slate-400 uppercase tracking-widest font-semibold mt-1 block">Faster Turnaround</span>
+                    <span class="font-display font-extrabold text-3xl sm:text-4xl text-white block">100<span class="text-neutral-400">%</span></span>
+                    <span class="text-xs text-neutral-400 uppercase tracking-widest font-semibold mt-1 block">Custom Clean Code</span>
                 </div>
                 <div class="pt-4 md:pt-0">
-                    <span class="font-display font-extrabold text-3xl sm:text-4xl text-white block">100<span class="text-brand-accent">%</span></span>
-                    <span class="text-xs text-slate-400 uppercase tracking-widest font-semibold mt-1 block">Custom Clean Code</span>
+                    <span class="font-display font-extrabold text-3xl sm:text-4xl text-white block">360<span class="text-neutral-400">°</span></span>
+                    <span class="text-xs text-neutral-400 uppercase tracking-widest font-semibold mt-1 block">Creative Media Suite</span>
                 </div>
                 <div class="pt-4 md:pt-0">
-                    <span class="font-display font-extrabold text-3xl sm:text-4xl text-white block">24/7<span class="text-brand-accent"></span></span>
-                    <span class="text-xs text-slate-400 uppercase tracking-widest font-semibold mt-1 block">Direct Partner Access</span>
+                    <span class="font-display font-extrabold text-3xl sm:text-4xl text-white block">24/7</span>
+                    <span class="text-xs text-neutral-400 uppercase tracking-widest font-semibold mt-1 block">Direct Founder Access</span>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- ======================================================== -->
-    <!-- SERVICES SECTION -->
+    <!-- SERVICES SECTION — Full Creative Suite -->
     <!-- ======================================================== -->
     <section id="services" class="py-24 relative z-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
             <div class="text-center max-w-2xl mx-auto mb-16 space-y-3">
-                <span class="text-xs font-bold tracking-widest uppercase text-brand-accent">Everything Your Brand Needs</span>
+                <span class="text-xs font-bold tracking-widest uppercase text-neutral-400">Everything Your Brand Needs</span>
                 <h2 class="font-display font-extrabold text-3xl sm:text-5xl text-white tracking-tight">
-                    One Studio. Infinite Possibilities.
+                    One Studio. Complete Capabilities.
                 </h2>
-                <p class="text-slate-400 text-sm sm:text-base">
-                    From your first logo to viral campaigns — we handle every creative and digital need your brand demands, all under one roof.
+                <p class="text-neutral-400 text-sm sm:text-base">
+                    From engineering your core web platform to delivering viral reels, commercial photography, and ad management — everything is crafted in-house.
                 </p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 
-                <!-- Service 1: Websites -->
-                <div class="glass-card p-7 rounded-3xl relative overflow-hidden group lg:col-span-2">
-                    <div class="w-14 h-14 rounded-2xl bg-brand-500/10 border border-brand-500/20 text-brand-400 flex items-center justify-center text-2xl mb-5 group-hover:scale-110 group-hover:bg-brand-500 group-hover:text-white transition duration-300">
-                        <i class="fa-solid fa-display"></i>
+                <!-- Service 1: Website Development (Main Focus · Wide Card) -->
+                <div class="glass-card p-8 rounded-3xl relative overflow-hidden group lg:col-span-2 border border-white/15">
+                    <div class="flex items-center justify-between mb-5">
+                        <div class="w-14 h-14 rounded-2xl bg-white/10 border border-white/15 text-white flex items-center justify-center text-2xl group-hover:scale-105 group-hover:bg-white group-hover:text-black transition duration-300">
+                            <i class="fa-solid fa-code"></i>
+                        </div>
+                        <span class="badge-mono bg-white/10 text-white border-white/20">
+                            ★ Primary Focus
+                        </span>
                     </div>
-                    <h3 class="font-display font-bold text-xl text-white mb-2">Premium Website Design</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-5">
-                        Pixel-perfect, blazing-fast websites built from scratch. Responsive, SEO-ready, and conversion-optimized to turn visitors into customers.
+                    <h3 class="font-display font-bold text-2xl text-white mb-2">Website Development</h3>
+                    <p class="text-neutral-300 text-sm leading-relaxed mb-6">
+                        Custom-coded, lightning-fast websites engineered from scratch. Mobile-first, SEO-ready, and conversion-optimized to build trust and drive business inquiries.
                     </p>
-                    <ul class="space-y-1.5 text-xs text-slate-300 font-medium">
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-accent"></i> Custom UI/UX Design</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-accent"></i> Mobile-First & Lightning Fast</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-accent"></i> SEO & Core Web Vitals 95+</li>
+                    <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-neutral-300 font-medium">
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neutral-400"></i> Custom HTML5 / React / Next.js</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neutral-400"></i> Mobile-First & Responsive Layouts</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neutral-400"></i> Sub-Second Page Speeds (95+)</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neutral-400"></i> Supabase / Database Integrations</li>
                     </ul>
                 </div>
 
-                <!-- Service 2: Video Editing -->
+                <!-- Service 2: UI/UX Design -->
                 <div class="glass-card p-7 rounded-3xl relative overflow-hidden group">
-                    <div class="w-14 h-14 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-400 flex items-center justify-center text-2xl mb-5 group-hover:scale-110 group-hover:bg-rose-500 group-hover:text-white transition duration-300">
-                        <i class="fa-solid fa-film"></i>
+                    <div class="w-14 h-14 rounded-2xl bg-white/10 border border-white/15 text-white flex items-center justify-center text-2xl mb-5 group-hover:scale-105 group-hover:bg-white group-hover:text-black transition duration-300">
+                        <i class="fa-solid fa-pen-ruler"></i>
                     </div>
-                    <h3 class="font-display font-bold text-xl text-white mb-2">Video Editing</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-5">
-                        Cinematic edits, reels, brand films, and short-form content that stop the scroll and grow your audience.
+                    <h3 class="font-display font-bold text-xl text-white mb-2">UI/UX Design</h3>
+                    <p class="text-neutral-400 text-sm leading-relaxed mb-5">
+                        Intuitive user journeys, wireframes, and interactive Figma prototypes crafted for clarity and effortless conversion.
                     </p>
-                    <ul class="space-y-1.5 text-xs text-slate-300 font-medium">
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-rose-400"></i> Reels & Short-Form Content</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-rose-400"></i> Brand Films & Promos</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-rose-400"></i> Color Grading & Sound Mix</li>
+                    <ul class="space-y-1.5 text-xs text-neutral-300 font-medium">
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neutral-400"></i> User Research & Wireframes</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neutral-400"></i> Interactive Figma Prototypes</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neutral-400"></i> Modern Design Systems</li>
                     </ul>
                 </div>
 
-                <!-- Service 3: Branding -->
+                <!-- Service 3: Branding & Logo Design -->
                 <div class="glass-card p-7 rounded-3xl relative overflow-hidden group">
-                    <div class="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center text-2xl mb-5 group-hover:scale-110 group-hover:bg-amber-500 group-hover:text-white transition duration-300">
+                    <div class="w-14 h-14 rounded-2xl bg-white/10 border border-white/15 text-white flex items-center justify-center text-2xl mb-5 group-hover:scale-105 group-hover:bg-white group-hover:text-black transition duration-300">
                         <i class="fa-solid fa-crown"></i>
                     </div>
-                    <h3 class="font-display font-bold text-xl text-white mb-2">Brand Identity</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-5">
-                        Logos, color palettes, typography, brand voice — everything that makes your business instantly recognizable and unforgettable.
+                    <h3 class="font-display font-bold text-xl text-white mb-2">Branding & Logo Design</h3>
+                    <p class="text-neutral-400 text-sm leading-relaxed mb-5">
+                        Distinctive logos, typography, color palettes, and comprehensive brand guidelines that establish market presence.
                     </p>
-                    <ul class="space-y-1.5 text-xs text-slate-300 font-medium">
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-400"></i> Logo & Visual Identity</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-400"></i> Brand Guidelines</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-400"></i> Brand Storytelling</li>
+                    <ul class="space-y-1.5 text-xs text-neutral-300 font-medium">
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neutral-400"></i> Logo & Wordmark Design</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neutral-400"></i> Brand Guidelines & Typography</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neutral-400"></i> Visual Identity Systems</li>
                     </ul>
                 </div>
 
-                <!-- Service 4: Photography -->
+                <!-- Service 4: Poster & Graphic Design -->
                 <div class="glass-card p-7 rounded-3xl relative overflow-hidden group">
-                    <div class="w-14 h-14 rounded-2xl bg-purple-500/10 border border-purple-500/20 text-purple-400 flex items-center justify-center text-2xl mb-5 group-hover:scale-110 group-hover:bg-purple-500 group-hover:text-white transition duration-300">
-                        <i class="fa-solid fa-camera"></i>
-                    </div>
-                    <h3 class="font-display font-bold text-xl text-white mb-2">Photography</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-5">
-                        Professional photography for products, events, portraits, and brand content that speaks volumes before a single word is read.
-                    </p>
-                    <ul class="space-y-1.5 text-xs text-slate-300 font-medium">
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-purple-400"></i> Product & Commercial</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-purple-400"></i> Event & Lifestyle Shoots</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-purple-400"></i> Expert Post-Processing</li>
-                    </ul>
-                </div>
-
-                <!-- Service 5: Ads -->
-                <div class="glass-card p-7 rounded-3xl relative overflow-hidden group">
-                    <div class="w-14 h-14 rounded-2xl bg-sky-500/10 border border-sky-500/20 text-sky-400 flex items-center justify-center text-2xl mb-5 group-hover:scale-110 group-hover:bg-sky-500 group-hover:text-white transition duration-300">
-                        <i class="fa-solid fa-bullhorn"></i>
-                    </div>
-                    <h3 class="font-display font-bold text-xl text-white mb-2">Ads & Campaigns</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-5">
-                        Data-driven ad campaigns on Meta, Google, Instagram & TikTok. We craft, run, and optimize every rupee for maximum ROI.
-                    </p>
-                    <ul class="space-y-1.5 text-xs text-slate-300 font-medium">
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-sky-400"></i> Meta & Google Ads</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-sky-400"></i> Audience Targeting & A/B</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-sky-400"></i> Performance Analytics</li>
-                    </ul>
-                </div>
-
-                <!-- Service 6: AI Video -->
-                <div class="glass-card p-7 rounded-3xl relative overflow-hidden group">
-                    <div class="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center text-2xl mb-5 group-hover:scale-110 group-hover:bg-emerald-500 group-hover:text-white transition duration-300">
-                        <i class="fa-solid fa-robot"></i>
-                    </div>
-                    <h3 class="font-display font-bold text-xl text-white mb-2">AI Video Making</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-5">
-                        Cutting-edge AI-generated videos, avatars, and dynamic visual content — the future of brand storytelling, available today.
-                    </p>
-                    <ul class="space-y-1.5 text-xs text-slate-300 font-medium">
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> AI Avatar Videos</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> Text-to-Video Content</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> AI Voiceover & Dubbing</li>
-                    </ul>
-                </div>
-
-                <!-- Service 7: Poster Design -->
-                <div class="glass-card p-7 rounded-3xl relative overflow-hidden group">
-                    <div class="w-14 h-14 rounded-2xl bg-pink-500/10 border border-pink-500/20 text-pink-400 flex items-center justify-center text-2xl mb-5 group-hover:scale-110 group-hover:bg-pink-500 group-hover:text-white transition duration-300">
-                        <i class="fa-solid fa-pen-nib"></i>
+                    <div class="w-14 h-14 rounded-2xl bg-white/10 border border-white/15 text-white flex items-center justify-center text-2xl mb-5 group-hover:scale-105 group-hover:bg-white group-hover:text-black transition duration-300">
+                        <i class="fa-solid fa-palette"></i>
                     </div>
                     <h3 class="font-display font-bold text-xl text-white mb-2">Poster & Graphic Design</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-5">
-                        Bold posters, social media graphics, banners, flyers, and digital creatives that make your brand impossible to ignore.
+                    <p class="text-neutral-400 text-sm leading-relaxed mb-5">
+                        High-impact promotional posters, social media banners, event flyers, and visual marketing assets that demand attention.
                     </p>
-                    <ul class="space-y-1.5 text-xs text-slate-300 font-medium">
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-pink-400"></i> Social Media Creatives</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-pink-400"></i> Event & Promo Posters</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-pink-400"></i> Print & Digital Formats</li>
+                    <ul class="space-y-1.5 text-xs text-neutral-300 font-medium">
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neutral-400"></i> Event & Commercial Posters</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neutral-400"></i> Social Media Visual Graphics</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neutral-400"></i> Print & Digital Ready Collateral</li>
                     </ul>
                 </div>
 
-                <!-- Service 8: Full-Stack Apps (wide) -->
-                <div class="glass-card p-7 rounded-3xl relative overflow-hidden group lg:col-span-2">
-                    <div class="w-14 h-14 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 text-brand-accent flex items-center justify-center text-2xl mb-5 group-hover:scale-110 group-hover:bg-brand-accent group-hover:text-dark-950 transition duration-300">
-                        <i class="fa-solid fa-server"></i>
+                <!-- Service 5: Video Editing -->
+                <div class="glass-card p-7 rounded-3xl relative overflow-hidden group">
+                    <div class="w-14 h-14 rounded-2xl bg-white/10 border border-white/15 text-white flex items-center justify-center text-2xl mb-5 group-hover:scale-105 group-hover:bg-white group-hover:text-black transition duration-300">
+                        <i class="fa-solid fa-film"></i>
                     </div>
-                    <h3 class="font-display font-bold text-xl text-white mb-2">Full-Stack Web Applications</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-5">
-                        Custom web apps with user auth, real-time databases, admin dashboards, payment systems, and API integrations. Built to scale with your business.
+                    <h3 class="font-display font-bold text-xl text-white mb-2">Video Editing & Motion</h3>
+                    <p class="text-neutral-400 text-sm leading-relaxed mb-5">
+                        Cinematic cuts, vertical reels, promotional commercials, and sound design that capture attention within the first 3 seconds.
                     </p>
-                    <ul class="grid grid-cols-2 gap-x-6 gap-y-1.5 text-xs text-slate-300 font-medium">
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-accent"></i> Supabase / Firebase / PostgreSQL</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-accent"></i> Secure Auth & Role Dashboards</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-accent"></i> Payment Gateway Integration</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-accent"></i> REST APIs & Webhooks</li>
+                    <ul class="space-y-1.5 text-xs text-neutral-300 font-medium">
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neutral-400"></i> Reels & Short-Form Content</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neutral-400"></i> Commercial Brand Films</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neutral-400"></i> Color Grading & Audio Mix</li>
+                    </ul>
+                </div>
+
+                <!-- Service 6: AI Video Creation -->
+                <div class="glass-card p-7 rounded-3xl relative overflow-hidden group">
+                    <div class="w-14 h-14 rounded-2xl bg-white/10 border border-white/15 text-white flex items-center justify-center text-2xl mb-5 group-hover:scale-105 group-hover:bg-white group-hover:text-black transition duration-300">
+                        <i class="fa-solid fa-wand-magic"></i>
+                    </div>
+                    <h3 class="font-display font-bold text-xl text-white mb-2">AI Video Creation</h3>
+                    <p class="text-neutral-400 text-sm leading-relaxed mb-5">
+                        Cutting-edge AI-generated videos, avatars, and generative visual storytelling that position your brand at the technology forefront.
+                    </p>
+                    <ul class="space-y-1.5 text-xs text-neutral-300 font-medium">
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neutral-400"></i> AI Visual Storytelling</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neutral-400"></i> Text-to-Video Production</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neutral-400"></i> Dynamic Content Generation</li>
+                    </ul>
+                </div>
+
+                <!-- Service 7: Photography -->
+                <div class="glass-card p-7 rounded-3xl relative overflow-hidden group">
+                    <div class="w-14 h-14 rounded-2xl bg-white/10 border border-white/15 text-white flex items-center justify-center text-2xl mb-5 group-hover:scale-105 group-hover:bg-white group-hover:text-black transition duration-300">
+                        <i class="fa-solid fa-camera"></i>
+                    </div>
+                    <h3 class="font-display font-bold text-xl text-white mb-2">Commercial Photography</h3>
+                    <p class="text-neutral-400 text-sm leading-relaxed mb-5">
+                        High-resolution product, lifestyle, event, and portrait photography with professional lighting and magazine-grade retouching.
+                    </p>
+                    <ul class="space-y-1.5 text-xs text-neutral-300 font-medium">
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neutral-400"></i> Product & Commercial Shoots</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neutral-400"></i> Editorial & Portrait Photography</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neutral-400"></i> Professional Retouching</li>
+                    </ul>
+                </div>
+
+                <!-- Service 8: Digital Advertising & Promotion (Wide Card) -->
+                <div class="glass-card p-8 rounded-3xl relative overflow-hidden group lg:col-span-2">
+                    <div class="flex items-center justify-between mb-5">
+                        <div class="w-14 h-14 rounded-2xl bg-white/10 border border-white/15 text-white flex items-center justify-center text-2xl group-hover:scale-105 group-hover:bg-white group-hover:text-black transition duration-300">
+                            <i class="fa-solid fa-bullhorn"></i>
+                        </div>
+                        <span class="badge-mono">
+                            Traffic & Conversion
+                        </span>
+                    </div>
+                    <h3 class="font-display font-bold text-2xl text-white mb-2">Digital Advertising & Business Promotion</h3>
+                    <p class="text-neutral-300 text-sm leading-relaxed mb-6">
+                        Data-driven paid advertising on Meta (Instagram/Facebook) and Google. We pair creative ad production with precise audience targeting and lead capture funnels.
+                    </p>
+                    <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-neutral-300 font-medium">
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neutral-400"></i> Meta Ads (Instagram / Facebook)</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neutral-400"></i> Google Search & Display Ads</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neutral-400"></i> Funnel Optimization & A/B Testing</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neutral-400"></i> High-ROI Lead Generation</li>
                     </ul>
                 </div>
 
@@ -642,139 +728,139 @@
     <!-- ======================================================== -->
     <!-- FEATURED WORK / PORTFOLIO -->
     <!-- ======================================================== -->
-    <section id="work" class="py-24 bg-dark-900/60 border-y border-white/5 relative z-10">
+    <section id="work" class="py-24 bg-neutral-900/60 border-y border-white/5 relative z-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
             <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
                 <div>
-                    <span class="text-xs font-bold tracking-widest uppercase text-brand-accent">Proven Track Record</span>
+                    <span class="text-xs font-bold tracking-widest uppercase text-neutral-400">Verified Work</span>
                     <h2 class="font-display font-extrabold text-3xl sm:text-5xl text-white tracking-tight mt-1">
                         Featured Projects
                     </h2>
                 </div>
-                <p class="text-slate-400 text-sm max-w-md">
-                    Take a look at recent digital solutions we designed, engineered, and shipped for real businesses.
+                <p class="text-neutral-400 text-sm max-w-md">
+                    Explore digital solutions we have designed, engineered, and delivered with proven results.
                 </p>
             </div>
 
             <!-- Project Cards Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 
-                <!-- Project 1: Volcano Academy (Your Live Project!) -->
+                <!-- Project 1: Volcano Martial Arts Academy (Real Live Project) -->
                 <div class="glass-card rounded-3xl overflow-hidden group">
-                    <div class="h-64 sm:h-72 bg-gradient-to-tr from-dark-850 via-dark-800 to-brand-900/40 relative overflow-hidden flex items-center justify-center p-6 border-b border-white/5">
-                        <div class="absolute inset-0 bg-cover bg-center opacity-30 group-hover:scale-105 group-hover:opacity-40 transition duration-500" style="background-image: url('hero-bg.jpg');"></div>
+                    <div class="h-64 sm:h-72 bg-gradient-to-tr from-neutral-900 via-neutral-850 to-neutral-800 relative overflow-hidden flex items-center justify-center p-6 border-b border-white/5">
+                        <div class="absolute inset-0 bg-cover bg-center opacity-25 group-hover:scale-105 group-hover:opacity-35 transition duration-500" style="background-image: url('hero-bg.jpg');"></div>
                         <div class="relative z-10 text-center space-y-3">
-                            <span class="px-3.5 py-1 rounded-full bg-brand-600/30 text-brand-300 text-xs font-bold border border-brand-500/40">Full-Stack Live Application</span>
+                            <span class="badge-mono bg-white/10 text-white border-white/20">Full-Stack Live System</span>
                             <h3 class="font-display font-extrabold text-2xl sm:text-3xl text-white">Volcano Martial Arts Academy</h3>
-                            <p class="text-xs text-slate-300 max-w-sm mx-auto">Complete institutional platform with online admissions, student portal, and multi-tier admin dashboard.</p>
+                            <p class="text-xs text-neutral-300 max-w-sm mx-auto">Complete institutional platform with online admission pipelines, student portal, and multi-tier admin dashboard.</p>
                         </div>
                     </div>
                     <div class="p-8">
                         <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="px-3 py-1 rounded-lg bg-dark-800 text-[11px] font-semibold text-slate-300 border border-white/5">JavaScript ES6+</span>
-                            <span class="px-3 py-1 rounded-lg bg-dark-800 text-[11px] font-semibold text-slate-300 border border-white/5">Supabase Backend</span>
-                            <span class="px-3 py-1 rounded-lg bg-dark-800 text-[11px] font-semibold text-slate-300 border border-white/5">Tailwind CSS</span>
-                            <span class="px-3 py-1 rounded-lg bg-dark-800 text-[11px] font-semibold text-slate-300 border border-white/5">Vercel CI/CD</span>
+                            <span class="px-3 py-1 rounded-lg bg-neutral-800 text-[11px] font-semibold text-neutral-300 border border-white/5">JavaScript ES6+</span>
+                            <span class="px-3 py-1 rounded-lg bg-neutral-800 text-[11px] font-semibold text-neutral-300 border border-white/5">Supabase Backend</span>
+                            <span class="px-3 py-1 rounded-lg bg-neutral-800 text-[11px] font-semibold text-neutral-300 border border-white/5">Tailwind CSS</span>
+                            <span class="px-3 py-1 rounded-lg bg-neutral-800 text-[11px] font-semibold text-neutral-300 border border-white/5">Vercel Deploy</span>
                         </div>
-                        <p class="text-slate-400 text-sm leading-relaxed mb-6">
-                            Engineered a comprehensive martial arts academy portal featuring online admission lead generation, synchronized Supabase data pipelines, fee tracking, interactive image gallery, and protected admin control panels.
+                        <p class="text-neutral-400 text-sm leading-relaxed mb-6">
+                            Engineered a comprehensive martial arts academy platform featuring online admission intake, synchronized Supabase data pipelines, fee tracking, interactive galleries, and protected administrative control panels.
                         </p>
                         <div class="flex items-center justify-between pt-4 border-t border-white/5">
-                            <a href="index.html" target="_blank" class="text-sm font-bold text-brand-accent hover:text-white flex items-center gap-2 group-hover:gap-3 transition-all duration-200">
-                                <span>View Live System</span>
+                            <a href="../volcano.html" target="_blank" class="text-sm font-bold text-white hover:text-neutral-300 flex items-center gap-2 group-hover:gap-3 transition-all duration-200">
+                                <span>View System Details</span>
                                 <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
                             </a>
-                            <span class="text-xs text-emerald-400 font-semibold flex items-center gap-1.5">
-                                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> Live in Production
+                            <span class="text-xs text-neutral-300 font-semibold flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span> Production Ready
                             </span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Project 2: SaaS Platform Concept -->
+                <!-- Project 2: SaaS Platform Architecture Concept -->
                 <div class="glass-card rounded-3xl overflow-hidden group">
-                    <div class="h-64 sm:h-72 bg-gradient-to-tr from-dark-850 via-dark-800 to-cyan-900/30 relative overflow-hidden flex items-center justify-center p-6 border-b border-white/5">
+                    <div class="h-64 sm:h-72 bg-gradient-to-tr from-neutral-900 via-neutral-850 to-neutral-800 relative overflow-hidden flex items-center justify-center p-6 border-b border-white/5">
                         <div class="relative z-10 text-center space-y-3">
-                            <span class="px-3.5 py-1 rounded-full bg-cyan-500/20 text-cyan-300 text-xs font-bold border border-cyan-500/30">B2B SaaS Architecture</span>
+                            <span class="badge-mono">B2B SaaS Architecture</span>
                             <h3 class="font-display font-extrabold text-2xl sm:text-3xl text-white">FlowMetrics Cloud Dashboard</h3>
-                            <p class="text-xs text-slate-300 max-w-sm mx-auto">Real-time revenue monitoring and customer churn analytics tool for subscription businesses.</p>
+                            <p class="text-xs text-neutral-300 max-w-sm mx-auto">Real-time revenue monitoring and churn analytics interface designed for modern subscription software.</p>
                         </div>
                     </div>
                     <div class="p-8">
                         <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="px-3 py-1 rounded-lg bg-dark-800 text-[11px] font-semibold text-slate-300 border border-white/5">React</span>
-                            <span class="px-3 py-1 rounded-lg bg-dark-800 text-[11px] font-semibold text-slate-300 border border-white/5">Next.js</span>
-                            <span class="px-3 py-1 rounded-lg bg-dark-800 text-[11px] font-semibold text-slate-300 border border-white/5">Node.js</span>
-                            <span class="px-3 py-1 rounded-lg bg-dark-800 text-[11px] font-semibold text-slate-300 border border-white/5">Chart.js</span>
+                            <span class="px-3 py-1 rounded-lg bg-neutral-800 text-[11px] font-semibold text-neutral-300 border border-white/5">Next.js</span>
+                            <span class="px-3 py-1 rounded-lg bg-neutral-800 text-[11px] font-semibold text-neutral-300 border border-white/5">React UI</span>
+                            <span class="px-3 py-1 rounded-lg bg-neutral-800 text-[11px] font-semibold text-neutral-300 border border-white/5">Data Visualization</span>
+                            <span class="px-3 py-1 rounded-lg bg-neutral-800 text-[11px] font-semibold text-neutral-300 border border-white/5">Clean Code</span>
                         </div>
-                        <p class="text-slate-400 text-sm leading-relaxed mb-6">
-                            Architected an interactive business intelligence dashboard with real-time websocket data feeds, automated reporting schedules, and multi-tenant user authentication.
+                        <p class="text-neutral-400 text-sm leading-relaxed mb-6">
+                            Architected an interactive business intelligence dashboard prototype featuring live metrics rendering, automated summary exports, and responsive multi-screen layouts.
                         </p>
                         <div class="flex items-center justify-between pt-4 border-t border-white/5">
-                            <a href="#contact" class="text-sm font-bold text-brand-accent hover:text-white flex items-center gap-2 group-hover:gap-3 transition-all duration-200">
-                                <span>Request Case Study</span>
+                            <a href="#contact" class="text-sm font-bold text-white hover:text-neutral-300 flex items-center gap-2 group-hover:gap-3 transition-all duration-200">
+                                <span>Request Architecture Overview</span>
                                 <i class="fa-solid fa-arrow-right text-xs"></i>
                             </a>
-                            <span class="text-xs text-slate-400 font-semibold">Web Application</span>
+                            <span class="text-xs text-neutral-400 font-semibold">Web Application</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Project 3: Modern E-Commerce Concept -->
+                <!-- Project 3: Modern Minimalist E-Commerce Storefront -->
                 <div class="glass-card rounded-3xl overflow-hidden group">
-                    <div class="h-64 sm:h-72 bg-gradient-to-tr from-dark-850 via-dark-800 to-purple-900/30 relative overflow-hidden flex items-center justify-center p-6 border-b border-white/5">
+                    <div class="h-64 sm:h-72 bg-gradient-to-tr from-neutral-900 via-neutral-850 to-neutral-800 relative overflow-hidden flex items-center justify-center p-6 border-b border-white/5">
                         <div class="relative z-10 text-center space-y-3">
-                            <span class="px-3.5 py-1 rounded-full bg-purple-500/20 text-purple-300 text-xs font-bold border border-purple-500/30">Headless Storefront</span>
+                            <span class="badge-mono">Headless Commerce</span>
                             <h3 class="font-display font-extrabold text-2xl sm:text-3xl text-white">Lumina Lifestyle Goods</h3>
-                            <p class="text-xs text-slate-300 max-w-sm mx-auto">Lightning-fast minimalist e-commerce store with dynamic inventory and 1-click checkout.</p>
+                            <p class="text-xs text-neutral-300 max-w-sm mx-auto">Lightning-fast minimalist e-commerce concept with dynamic product browsing and streamlined checkout.</p>
                         </div>
                     </div>
                     <div class="p-8">
                         <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="px-3 py-1 rounded-lg bg-dark-800 text-[11px] font-semibold text-slate-300 border border-white/5">Next.js 14</span>
-                            <span class="px-3 py-1 rounded-lg bg-dark-800 text-[11px] font-semibold text-slate-300 border border-white/5">Stripe API</span>
-                            <span class="px-3 py-1 rounded-lg bg-dark-800 text-[11px] font-semibold text-slate-300 border border-white/5">Tailwind CSS</span>
-                            <span class="px-3 py-1 rounded-lg bg-dark-800 text-[11px] font-semibold text-slate-300 border border-white/5">Edge CDN</span>
+                            <span class="px-3 py-1 rounded-lg bg-neutral-800 text-[11px] font-semibold text-neutral-300 border border-white/5">Next.js 14</span>
+                            <span class="px-3 py-1 rounded-lg bg-neutral-800 text-[11px] font-semibold text-neutral-300 border border-white/5">Tailwind CSS</span>
+                            <span class="px-3 py-1 rounded-lg bg-neutral-800 text-[11px] font-semibold text-neutral-300 border border-white/5">Cart Mechanics</span>
+                            <span class="px-3 py-1 rounded-lg bg-neutral-800 text-[11px] font-semibold text-neutral-300 border border-white/5">Edge Cache</span>
                         </div>
-                        <p class="text-slate-400 text-sm leading-relaxed mb-6">
-                            Delivered sub-800ms page transitions, custom cart drawer, instant search filtering, and secure payment processing with 35% higher checkout completion rates.
+                        <p class="text-neutral-400 text-sm leading-relaxed mb-6">
+                            Delivers sub-800ms page transitions, custom cart drawer mechanics, instant search filtering, and high-converting visual hierarchy for premium brands.
                         </p>
                         <div class="flex items-center justify-between pt-4 border-t border-white/5">
-                            <a href="#contact" class="text-sm font-bold text-brand-accent hover:text-white flex items-center gap-2 group-hover:gap-3 transition-all duration-200">
-                                <span>Request Demo</span>
+                            <a href="#contact" class="text-sm font-bold text-white hover:text-neutral-300 flex items-center gap-2 group-hover:gap-3 transition-all duration-200">
+                                <span>Request Demo Walkthrough</span>
                                 <i class="fa-solid fa-arrow-right text-xs"></i>
                             </a>
-                            <span class="text-xs text-slate-400 font-semibold">E-Commerce</span>
+                            <span class="text-xs text-neutral-400 font-semibold">Storefront</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Project 4: High-Impact Corporate Landing Page -->
+                <!-- Project 4: High-Conversion Corporate Portal -->
                 <div class="glass-card rounded-3xl overflow-hidden group">
-                    <div class="h-64 sm:h-72 bg-gradient-to-tr from-dark-850 via-dark-800 to-emerald-900/30 relative overflow-hidden flex items-center justify-center p-6 border-b border-white/5">
+                    <div class="h-64 sm:h-72 bg-gradient-to-tr from-neutral-900 via-neutral-850 to-neutral-800 relative overflow-hidden flex items-center justify-center p-6 border-b border-white/5">
                         <div class="relative z-10 text-center space-y-3">
-                            <span class="px-3.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold border border-emerald-500/30">Conversion Landing Page</span>
+                            <span class="badge-mono">High-Impact Landing Page</span>
                             <h3 class="font-display font-extrabold text-2xl sm:text-3xl text-white">Apex Capital Group</h3>
-                            <p class="text-xs text-slate-300 max-w-sm mx-auto">High-authority venture capital corporate portal with bespoke interactive data visualizations.</p>
+                            <p class="text-xs text-neutral-300 max-w-sm mx-auto">Venture capital and corporate portfolio platform with bespoke interactive metrics display.</p>
                         </div>
                     </div>
                     <div class="p-8">
                         <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="px-3 py-1 rounded-lg bg-dark-800 text-[11px] font-semibold text-slate-300 border border-white/5">Modern HTML5</span>
-                            <span class="px-3 py-1 rounded-lg bg-dark-800 text-[11px] font-semibold text-slate-300 border border-white/5">Custom CSS / JS</span>
-                            <span class="px-3 py-1 rounded-lg bg-dark-800 text-[11px] font-semibold text-slate-300 border border-white/5">Figma UI</span>
-                            <span class="px-3 py-1 rounded-lg bg-dark-800 text-[11px] font-semibold text-slate-300 border border-white/5">SEO 100/100</span>
+                            <span class="px-3 py-1 rounded-lg bg-neutral-800 text-[11px] font-semibold text-neutral-300 border border-white/5">Modern HTML5</span>
+                            <span class="px-3 py-1 rounded-lg bg-neutral-800 text-[11px] font-semibold text-neutral-300 border border-white/5">Custom Styling</span>
+                            <span class="px-3 py-1 rounded-lg bg-neutral-800 text-[11px] font-semibold text-neutral-300 border border-white/5">Figma UI</span>
+                            <span class="px-3 py-1 rounded-lg bg-neutral-800 text-[11px] font-semibold text-neutral-300 border border-white/5">SEO 100/100</span>
                         </div>
-                        <p class="text-slate-400 text-sm leading-relaxed mb-6">
-                            Elevated brand credibility through immersive dark-mode typography, interactive investment calculators, and frictionless inquiry qualification flows.
+                        <p class="text-neutral-400 text-sm leading-relaxed mb-6">
+                            Elevates brand credibility through minimal dark-mode typography, interactive inquiry forms, and frictionless stakeholder communication flows.
                         </p>
                         <div class="flex items-center justify-between pt-4 border-t border-white/5">
-                            <a href="#contact" class="text-sm font-bold text-brand-accent hover:text-white flex items-center gap-2 group-hover:gap-3 transition-all duration-200">
-                                <span>Request Demo</span>
+                            <a href="#contact" class="text-sm font-bold text-white hover:text-neutral-300 flex items-center gap-2 group-hover:gap-3 transition-all duration-200">
+                                <span>Request Case Details</span>
                                 <i class="fa-solid fa-arrow-right text-xs"></i>
                             </a>
-                            <span class="text-xs text-slate-400 font-semibold">Corporate Portal</span>
+                            <span class="text-xs text-neutral-400 font-semibold">Corporate</span>
                         </div>
                     </div>
                 </div>
@@ -785,78 +871,197 @@
     </section>
 
     <!-- ======================================================== -->
-    <!-- ABOUT US / THE DUO -->
+    <!-- ABOUT US / SEPARATE PROFILES: MUBARIS & RASAL            -->
     <!-- ======================================================== -->
-    <section id="team" class="py-24 relative z-10">
+    <section id="profiles" class="py-24 relative z-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
             <div class="text-center max-w-3xl mx-auto mb-16 space-y-3">
-                <span class="text-xs font-bold tracking-widest uppercase text-brand-accent">About Us · The Duo Advantage</span>
+                <span class="text-xs font-bold tracking-widest uppercase text-neutral-400">The Joint Creative Force</span>
                 <h2 class="font-display font-extrabold text-3xl sm:text-5xl text-white tracking-tight">
-                    Engineering Precision Meets 360° Creative Media
+                    Engineering Precision Meets Visual Direction
                 </h2>
-                <p class="text-slate-400 text-sm sm:text-base">
-                    Most brands struggle coordinating 5 different freelancers — a web coder who doesn't understand branding, a video editor who doesn't know conversions, and an ad runner with no assets. We unite elite software engineering and full-spectrum creative media into one seamless partnership.
+                <p class="text-neutral-400 text-sm sm:text-base">
+                    Instead of hiring disconnected freelancers, our dual partnership provides you with dedicated leadership across both software engineering and creative media production.
                 </p>
             </div>
 
-            <!-- Founders Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-12">
+            <!-- Profiles Grid: Mubaris & Rasal -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto mb-12">
                 
-                <!-- Founder 1: Web Development & Architecture -->
-                <div class="glass-card p-8 sm:p-10 rounded-3xl relative text-center group border border-brand-500/20 hover:border-brand-500/40">
-                    <div class="w-24 h-24 rounded-2xl bg-gradient-to-tr from-brand-600 to-brand-accent flex items-center justify-center text-white text-3xl font-display font-bold mx-auto mb-6 shadow-xl shadow-brand-500/20 group-hover:scale-105 transition duration-300">
-                        <i class="fa-solid fa-laptop-code"></i>
+                <!-- ======================================================== -->
+                <!-- PROFILE 1: MUBARIS (Web Architect & Systems Lead)        -->
+                <!-- ======================================================== -->
+                <div class="glass-card p-8 sm:p-10 rounded-3xl relative flex flex-col justify-between group border border-white/10 hover:border-white/25">
+                    <div>
+                        <!-- Avatar / Monogram Header -->
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="w-16 h-16 rounded-2xl bg-neutral-900 border border-white/15 flex items-center justify-center text-white text-2xl font-display font-extrabold shadow-lg">
+                                <span>M</span>
+                            </div>
+                            <span class="badge-mono bg-white/10 text-white border-white/20">
+                                Web Architecture & Systems
+                            </span>
+                        </div>
+
+                        <!-- Name & Role Title -->
+                        <h3 class="font-display font-extrabold text-3xl text-white mb-1">Mubaris</h3>
+                        <p class="text-xs font-bold uppercase tracking-wider text-neutral-400 mb-4">
+                            Co-Founder · Lead Web Architect & Full-Stack Developer
+                        </p>
+
+                        <!-- Specialisation Pill Tags -->
+                        <div class="flex flex-wrap gap-1.5 mb-6">
+                            <span class="badge-mono">Websites First</span>
+                            <span class="badge-mono">UI/UX</span>
+                            <span class="badge-mono">Full-Stack Architecture</span>
+                            <span class="badge-mono">Performance 99+</span>
+                        </div>
+
+                        <!-- ======================================================== -->
+                        <!-- EDIT MUBARIS BIO: You can customize your background here -->
+                        <!-- ======================================================== -->
+                        <div class="mb-6">
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-neutral-400 mb-2">Biography</h4>
+                            <p class="text-neutral-300 text-sm leading-relaxed" data-bio-mubaris>
+                                Dedicated web architect and software developer with a primary focus on engineering high-performance websites and modern full-stack web applications. Committed to clean code, sub-second response times, intuitive user experiences, and rock-solid database integrations that convert visitors into clients.
+                            </p>
+                        </div>
+
+                        <!-- Technical Skills & Stack -->
+                        <div class="mb-6">
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-neutral-400 mb-2.5">Core Technical Skills</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-2.5 py-1 rounded-lg bg-neutral-850 text-neutral-300 text-[11px] font-semibold border border-white/5">React / Next.js</span>
+                                <span class="px-2.5 py-1 rounded-lg bg-neutral-850 text-neutral-300 text-[11px] font-semibold border border-white/5">JavaScript ES6+</span>
+                                <span class="px-2.5 py-1 rounded-lg bg-neutral-850 text-neutral-300 text-[11px] font-semibold border border-white/5">Tailwind CSS</span>
+                                <span class="px-2.5 py-1 rounded-lg bg-neutral-850 text-neutral-300 text-[11px] font-semibold border border-white/5">Supabase / SQL</span>
+                                <span class="px-2.5 py-1 rounded-lg bg-neutral-850 text-neutral-300 text-[11px] font-semibold border border-white/5">UI/UX Prototyping</span>
+                                <span class="px-2.5 py-1 rounded-lg bg-neutral-850 text-neutral-300 text-[11px] font-semibold border border-white/5">Core Web Vitals</span>
+                            </div>
+                        </div>
+
+                        <!-- Real Project Contributions -->
+                        <div class="mb-6">
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-neutral-400 mb-2">Key Project Contributions</h4>
+                            <ul class="space-y-1.5 text-xs text-neutral-300">
+                                <li class="flex items-start gap-2">
+                                    <i class="fa-solid fa-check text-neutral-400 mt-0.5"></i>
+                                    <span><strong>Volcano Academy:</strong> Engineered full-stack web architecture, admission pipelines, student portal, and admin control panels.</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fa-solid fa-check text-neutral-400 mt-0.5"></i>
+                                    <span><strong>Modern Web Platforms:</strong> Developed high-speed responsive user interfaces and robust data pipelines.</span>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-                    <span class="text-xs font-bold uppercase tracking-wider text-brand-accent block mb-1">Co-Founder & Web Architect</span>
-                    <h3 class="font-display font-bold text-2xl text-white mb-2">Web & Systems Lead</h3>
-                    <p class="text-xs text-brand-400 font-semibold mb-4">Websites First · UI/UX · Backend Architecture · Performance</p>
-                    <p class="text-slate-300 text-sm leading-relaxed mb-6">
-                        Architect of high-converting landing pages, lightning-fast web applications, and rock-solid database integrations. Ensures every site has sub-second page speed, 100/100 SEO health, and frictionless conversion funnels.
-                    </p>
-                    <div class="flex flex-wrap items-center justify-center gap-2">
-                        <span class="px-3 py-1 rounded-full bg-dark-800 text-[11px] font-semibold text-slate-300 border border-white/5">React / Next.js</span>
-                        <span class="px-3 py-1 rounded-full bg-dark-800 text-[11px] font-semibold text-slate-300 border border-white/5">Tailwind CSS</span>
-                        <span class="px-3 py-1 rounded-full bg-dark-800 text-[11px] font-semibold text-slate-300 border border-white/5">Supabase / SQL</span>
-                        <span class="px-3 py-1 rounded-full bg-dark-800 text-[11px] font-semibold text-slate-300 border border-white/5">E-Commerce & Stripe</span>
+
+                    <!-- Connect Bar -->
+                    <div class="pt-4 border-t border-white/5 flex items-center justify-between">
+                        <span class="text-xs text-neutral-400 font-semibold">Connect with Mubaris</span>
+                        <div class="flex items-center gap-3 text-neutral-400 text-sm">
+                            <a href="#contact" class="hover:text-white transition" title="Inquire with Mubaris"><i class="fa-solid fa-envelope"></i></a>
+                            <a href="https://github.com/muhammedmubarisa135-dev" target="_blank" class="hover:text-white transition" title="GitHub"><i class="fa-brands fa-github"></i></a>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Founder 2: Creative Director & Brand Growth -->
-                <div class="glass-card p-8 sm:p-10 rounded-3xl relative text-center group border border-cyan-500/20 hover:border-brand-accent/40">
-                    <div class="w-24 h-24 rounded-2xl bg-gradient-to-tr from-cyan-600 to-emerald-500 flex items-center justify-center text-white text-3xl font-display font-bold mx-auto mb-6 shadow-xl shadow-cyan-500/20 group-hover:scale-105 transition duration-300">
-                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                <!-- ======================================================== -->
+                <!-- PROFILE 2: RASAL (Creative Director & Media Lead)        -->
+                <!-- ======================================================== -->
+                <div class="glass-card p-8 sm:p-10 rounded-3xl relative flex flex-col justify-between group border border-white/10 hover:border-white/25">
+                    <div>
+                        <!-- Avatar / Monogram Header -->
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="w-16 h-16 rounded-2xl bg-neutral-900 border border-white/15 flex items-center justify-center text-white text-2xl font-display font-extrabold shadow-lg">
+                                <span>R</span>
+                            </div>
+                            <span class="badge-mono bg-white/10 text-white border-white/20">
+                                Creative Direction & Media
+                            </span>
+                        </div>
+
+                        <!-- Name & Role Title -->
+                        <h3 class="font-display font-extrabold text-3xl text-white mb-1">Rasal</h3>
+                        <p class="text-xs font-bold uppercase tracking-wider text-neutral-400 mb-4">
+                            Co-Founder · Creative Director & Digital Media Lead
+                        </p>
+
+                        <!-- Specialisation Pill Tags -->
+                        <div class="flex flex-wrap gap-1.5 mb-6">
+                            <span class="badge-mono">Video Editing</span>
+                            <span class="badge-mono">AI Video</span>
+                            <span class="badge-mono">Branding</span>
+                            <span class="badge-mono">Poster Design</span>
+                            <span class="badge-mono">Meta & Google Ads</span>
+                        </div>
+
+                        <!-- ======================================================== -->
+                        <!-- EDIT RASAL BIO: You can customize your background here   -->
+                        <!-- ======================================================== -->
+                        <div class="mb-6">
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-neutral-400 mb-2">Biography</h4>
+                            <p class="text-neutral-300 text-sm leading-relaxed" data-bio-rasal>
+                                Creative director and visual media producer specializing in cinematic video editing, AI video creation, brand identity systems, photography, and high-impact digital advertising. Passionate about shaping memorable brand aesthetics and executing data-driven campaigns that build genuine business authority.
+                            </p>
+                        </div>
+
+                        <!-- Creative Skills & Tools -->
+                        <div class="mb-6">
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-neutral-400 mb-2.5">Core Creative Skills</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-2.5 py-1 rounded-lg bg-neutral-850 text-neutral-300 text-[11px] font-semibold border border-white/5">Cinematic Video Editing</span>
+                                <span class="px-2.5 py-1 rounded-lg bg-neutral-850 text-neutral-300 text-[11px] font-semibold border border-white/5">AI Video Creation</span>
+                                <span class="px-2.5 py-1 rounded-lg bg-neutral-850 text-neutral-300 text-[11px] font-semibold border border-white/5">Brand Identity & Logos</span>
+                                <span class="px-2.5 py-1 rounded-lg bg-neutral-850 text-neutral-300 text-[11px] font-semibold border border-white/5">Poster & Graphic Design</span>
+                                <span class="px-2.5 py-1 rounded-lg bg-neutral-850 text-neutral-300 text-[11px] font-semibold border border-white/5">Commercial Photography</span>
+                                <span class="px-2.5 py-1 rounded-lg bg-neutral-850 text-neutral-300 text-[11px] font-semibold border border-white/5">Meta & Google Ads</span>
+                            </div>
+                        </div>
+
+                        <!-- Real Project Contributions -->
+                        <div class="mb-6">
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-neutral-400 mb-2">Key Project Contributions</h4>
+                            <ul class="space-y-1.5 text-xs text-neutral-300">
+                                <li class="flex items-start gap-2">
+                                    <i class="fa-solid fa-check text-neutral-400 mt-0.5"></i>
+                                    <span><strong>Volcano Academy:</strong> Directed promotional media assets, visual content styling, and overall brand presence.</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fa-solid fa-check text-neutral-400 mt-0.5"></i>
+                                    <span><strong>Creative Media Suites:</strong> Produced cinematic video reels, promotional posters, and ad campaign creative direction.</span>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-                    <span class="text-xs font-bold uppercase tracking-wider text-emerald-400 block mb-1">Co-Founder & Creative Director</span>
-                    <h3 class="font-display font-bold text-2xl text-white mb-2">Media & Growth Lead</h3>
-                    <p class="text-xs text-emerald-400 font-semibold mb-4">Video Editing · AI Visuals · Ads Running · Brand Publicity</p>
-                    <p class="text-slate-300 text-sm leading-relaxed mb-6">
-                        Drives the visual identity and market presence: cinematic video editing, AI video generation, commercial photography, poster design, and high-ROI Meta & Google ad campaigns that assure your brand commands authority.
-                    </p>
-                    <div class="flex flex-wrap items-center justify-center gap-2">
-                        <span class="px-3 py-1 rounded-full bg-dark-800 text-[11px] font-semibold text-slate-300 border border-white/5">Cinematic Video</span>
-                        <span class="px-3 py-1 rounded-full bg-dark-800 text-[11px] font-semibold text-slate-300 border border-white/5">AI Video Making</span>
-                        <span class="px-3 py-1 rounded-full bg-dark-800 text-[11px] font-semibold text-slate-300 border border-white/5">Meta & Google Ads</span>
-                        <span class="px-3 py-1 rounded-full bg-dark-800 text-[11px] font-semibold text-slate-300 border border-white/5">Photography & Posters</span>
+
+                    <!-- Connect Bar -->
+                    <div class="pt-4 border-t border-white/5 flex items-center justify-between">
+                        <span class="text-xs text-neutral-400 font-semibold">Connect with Rasal</span>
+                        <div class="flex items-center gap-3 text-neutral-400 text-sm">
+                            <a href="#contact" class="hover:text-white transition" title="Inquire with Rasal"><i class="fa-solid fa-envelope"></i></a>
+                            <a href="#contact" class="hover:text-white transition" title="Media Portfolio"><i class="fa-solid fa-camera"></i></a>
+                        </div>
                     </div>
                 </div>
 
             </div>
 
-            <!-- Complete Brand Publicity Assurance Banner -->
-            <div class="glass-card p-8 sm:p-10 rounded-3xl border border-white/10 max-w-4xl mx-auto">
+            <!-- Joint Partnership Assurance Banner -->
+            <div class="glass-card p-8 sm:p-10 rounded-3xl border border-white/10 max-w-5xl mx-auto">
                 <div class="flex flex-col md:flex-row items-center justify-between gap-6">
                     <div class="space-y-2 text-center md:text-left">
-                        <span class="text-xs font-bold uppercase tracking-widest text-brand-accent">Complete Brand Ecosystem</span>
+                        <span class="text-xs font-bold uppercase tracking-widest text-neutral-400">Complete Brand Synergy</span>
                         <h4 class="font-display font-bold text-xl sm:text-2xl text-white">
-                            What Your Brand Gets With Us
+                            Two Minds. One Shared Creative Standard.
                         </h4>
-                        <p class="text-xs sm:text-sm text-slate-400 max-w-xl">
-                            From your domain launch and custom codebase to 4K product shoots, viral social reels, paid ad scaling, and billboard posters — everything aligns with one unified, high-status standard.
+                        <p class="text-xs sm:text-sm text-neutral-400 max-w-xl">
+                            By combining technical web development with cinematic media and marketing, we ensure every aspect of your brand communicates precision, luxury, and measurable results.
                         </p>
                     </div>
-                    <a href="#contact" class="px-6 py-3 rounded-xl font-bold text-xs uppercase tracking-wider text-white bg-gradient-to-r from-brand-600 to-brand-accent hover:from-brand-500 hover:to-brand-accent shadow-lg shadow-brand-500/25 transition duration-200 shrink-0">
-                        Work With The Duo
+                    <a href="#contact" class="btn-primary px-6 py-3.5 rounded-xl text-xs uppercase tracking-wider shrink-0">
+                        Work With Mubaris & Rasal
                     </a>
                 </div>
             </div>
@@ -865,52 +1070,52 @@
     </section>
 
     <!-- ======================================================== -->
-    <!-- OUR 4-STEP PROCESS -->
+    <!-- 4-STEP COLLABORATION PROCESS -->
     <!-- ======================================================== -->
-    <section id="process" class="py-24 bg-dark-900/60 border-y border-white/5 relative z-10">
+    <section id="process" class="py-24 bg-neutral-900/60 border-y border-white/5 relative z-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
             <div class="text-center max-w-2xl mx-auto mb-16 space-y-3">
-                <span class="text-xs font-bold tracking-widest uppercase text-brand-accent">How We Collaborate</span>
+                <span class="text-xs font-bold tracking-widest uppercase text-neutral-400">Our Workflow</span>
                 <h2 class="font-display font-extrabold text-3xl sm:text-5xl text-white tracking-tight">
-                    From Idea To Launch in 4 Steps
+                    From Concept to Shipped in 4 Steps
                 </h2>
-                <p class="text-slate-400 text-sm sm:text-base">
-                    Our streamlined agile workflow guarantees zero guesswork, crystal-clear communication, and on-time delivery.
+                <p class="text-neutral-400 text-sm sm:text-base">
+                    Our direct agile process eliminates agency bloat, ensuring direct founder collaboration and on-time delivery.
                 </p>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 
                 <div class="glass-card p-6 rounded-2xl relative">
-                    <span class="font-display font-extrabold text-4xl text-brand-500/20 block mb-4">01</span>
+                    <span class="font-display font-extrabold text-4xl text-neutral-700 block mb-4">01</span>
                     <h3 class="font-display font-bold text-lg text-white mb-2">Discovery & Strategy</h3>
-                    <p class="text-slate-400 text-xs leading-relaxed">
-                        We unpack your goals, target audience, competitors, and requirements to map out an exact architectural roadmap.
+                    <p class="text-neutral-400 text-xs leading-relaxed">
+                        We define your project objectives, target audience, brand aesthetic, and architectural requirements to chart an exact roadmap.
                     </p>
                 </div>
 
                 <div class="glass-card p-6 rounded-2xl relative">
-                    <span class="font-display font-extrabold text-4xl text-brand-accent/20 block mb-4">02</span>
-                    <h3 class="font-display font-bold text-lg text-white mb-2">Design & Wireframing</h3>
-                    <p class="text-slate-400 text-xs leading-relaxed">
-                        We design high-fidelity interactive mockups for your approval, ensuring the aesthetics and UX align with your vision.
+                    <span class="font-display font-extrabold text-4xl text-neutral-700 block mb-4">02</span>
+                    <h3 class="font-display font-bold text-lg text-white mb-2">UI/UX & Creative Assets</h3>
+                    <p class="text-neutral-400 text-xs leading-relaxed">
+                        We design high-fidelity interactive wireframes and produce video/photo creative directions for your review and approval.
                     </p>
                 </div>
 
                 <div class="glass-card p-6 rounded-2xl relative">
-                    <span class="font-display font-extrabold text-4xl text-emerald-500/20 block mb-4">03</span>
-                    <h3 class="font-display font-bold text-lg text-white mb-2">Full-Stack Build</h3>
-                    <p class="text-slate-400 text-xs leading-relaxed">
-                        We write clean, modular, scalable code with automated testing, speed optimization, and responsive testing on 10+ devices.
+                    <span class="font-display font-extrabold text-4xl text-neutral-700 block mb-4">03</span>
+                    <h3 class="font-display font-bold text-lg text-white mb-2">Engineering & Build</h3>
+                    <p class="text-neutral-400 text-xs leading-relaxed">
+                        We write modular, clean code with speed optimization, database setup, mobile testing, and post-production asset mastering.
                     </p>
                 </div>
 
                 <div class="glass-card p-6 rounded-2xl relative">
-                    <span class="font-display font-extrabold text-4xl text-purple-500/20 block mb-4">04</span>
-                    <h3 class="font-display font-bold text-lg text-white mb-2">Launch & Support</h3>
-                    <p class="text-slate-400 text-xs leading-relaxed">
-                        We deploy to global CDN edge servers, configure custom domains & SSL, and provide post-launch warranty and training.
+                    <span class="font-display font-extrabold text-4xl text-neutral-700 block mb-4">04</span>
+                    <h3 class="font-display font-bold text-lg text-white mb-2">Launch & Growth</h3>
+                    <p class="text-neutral-400 text-xs leading-relaxed">
+                        We deploy to global edge CDNs, configure custom domains & SSL, and launch ad campaigns with full performance tracking.
                     </p>
                 </div>
 
@@ -920,103 +1125,103 @@
     </section>
 
     <!-- ======================================================== -->
-    <!-- PRICING PACKAGES -->
+    <!-- PACKAGES & INVESTMENT -->
     <!-- ======================================================== -->
     <section id="pricing" class="py-24 relative z-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
             <div class="text-center max-w-2xl mx-auto mb-16 space-y-3">
-                <span class="text-xs font-bold tracking-widest uppercase text-brand-accent">Simple, Transparent Pricing</span>
+                <span class="text-xs font-bold tracking-widest uppercase text-neutral-400">Transparent Offerings</span>
                 <h2 class="font-display font-extrabold text-3xl sm:text-5xl text-white tracking-tight">
-                    Packages Tailored To Your Needs
+                    Packages Tailored To Your Vision
                 </h2>
-                <p class="text-slate-400 text-sm sm:text-base">
-                    No hidden fees. Every project includes responsive design, SEO optimization, and direct founder support.
+                <p class="text-neutral-400 text-sm sm:text-base">
+                    Every package includes responsive mobile optimization, speed engineering, and direct founder communication.
                 </p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
                 
-                <!-- Tier 1 -->
+                <!-- Tier 1: Starter -->
                 <div class="glass-card p-8 rounded-3xl flex flex-col justify-between">
                     <div>
-                        <span class="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-2">Starter Package</span>
+                        <span class="text-xs font-bold uppercase tracking-wider text-neutral-400 block mb-2">Starter Package</span>
                         <h3 class="font-display font-extrabold text-2xl text-white mb-2">High-Impact Landing Page</h3>
-                        <p class="text-slate-400 text-xs mb-6 leading-relaxed">Perfect for new launches, personal brands, and single-service businesses needing fast results.</p>
+                        <p class="text-neutral-400 text-xs mb-6 leading-relaxed">Perfect for new product launches, personal brands, and high-converting single offers.</p>
                         
                         <div class="mb-6 pb-6 border-b border-white/5">
                             <span class="font-display font-extrabold text-3xl sm:text-4xl text-white">$499</span>
-                            <span class="text-xs text-slate-400">/ one-time</span>
+                            <span class="text-xs text-neutral-400">/ one-time</span>
                         </div>
 
-                        <ul class="space-y-3 text-xs text-slate-300 font-medium mb-8">
-                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-brand-accent"></i> Custom 1-Page Responsive Layout</li>
-                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-brand-accent"></i> Fast Turnaround (3–5 Days)</li>
-                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-brand-accent"></i> Lead Generation Contact Form</li>
-                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-brand-accent"></i> SEO & Speed Optimization (95+)</li>
-                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-brand-accent"></i> 14 Days Post-Launch Support</li>
+                        <ul class="space-y-3 text-xs text-neutral-300 font-medium mb-8">
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-neutral-400"></i> Bespoke 1-Page Responsive Layout</li>
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-neutral-400"></i> Fast Turnaround (3–5 Days)</li>
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-neutral-400"></i> Lead Generation Contact Form</li>
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-neutral-400"></i> Speed & SEO Optimization (95+)</li>
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-neutral-400"></i> 14 Days Post-Launch Support</li>
                         </ul>
                     </div>
 
-                    <a href="#contact" class="w-full py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider text-center text-slate-200 glass-panel border border-white/10 hover:border-brand-500 hover:text-white transition duration-200">
+                    <a href="#contact" class="btn-secondary w-full py-3.5 rounded-xl text-xs uppercase tracking-wider text-center block">
                         Choose Starter
                     </a>
                 </div>
 
-                <!-- Tier 2 (Featured) -->
-                <div class="glass-card p-8 rounded-3xl flex flex-col justify-between border-2 border-brand-500/50 shadow-2xl shadow-brand-500/10 relative">
-                    <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-brand-600 to-brand-accent text-white text-[10px] font-extrabold tracking-wider uppercase shadow-lg shadow-brand-500/30">
+                <!-- Tier 2: Complete Studio Package (Featured) -->
+                <div class="glass-card p-8 rounded-3xl flex flex-col justify-between border-2 border-white/25 shadow-2xl relative">
+                    <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-white text-black text-[10px] font-extrabold tracking-wider uppercase shadow-lg">
                         Most Popular
                     </div>
 
                     <div>
-                        <span class="text-xs font-bold uppercase tracking-wider text-brand-400 block mb-2">Growth Package</span>
-                        <h3 class="font-display font-extrabold text-2xl text-white mb-2">Complete Business Website</h3>
-                        <p class="text-slate-400 text-xs mb-6 leading-relaxed">For established companies needing a powerful multi-page brand presence that commands authority.</p>
+                        <span class="text-xs font-bold uppercase tracking-wider text-white block mb-2">Growth Package</span>
+                        <h3 class="font-display font-extrabold text-2xl text-white mb-2">Complete Business Website & Brand</h3>
+                        <p class="text-neutral-400 text-xs mb-6 leading-relaxed">For businesses requiring an authoritative multi-page web platform and cohesive visual media.</p>
                         
                         <div class="mb-6 pb-6 border-b border-white/5">
                             <span class="font-display font-extrabold text-3xl sm:text-4xl text-white">$1,199</span>
-                            <span class="text-xs text-slate-400">/ one-time</span>
+                            <span class="text-xs text-neutral-400">/ one-time</span>
                         </div>
 
-                        <ul class="space-y-3 text-xs text-slate-300 font-medium mb-8">
-                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-brand-accent"></i> Up to 6 Custom Pages</li>
-                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-brand-accent"></i> Interactive Showcase / Gallery</li>
-                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-brand-accent"></i> Dynamic Contact / Inquiry Pipelines</li>
-                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-brand-accent"></i> Comprehensive SEO & Social Tags</li>
-                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-brand-accent"></i> CMS / Supabase Database Sync</li>
-                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-brand-accent"></i> 30 Days Founder Warranty</li>
+                        <ul class="space-y-3 text-xs text-neutral-300 font-medium mb-8">
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-white"></i> Up to 6 Custom Engineered Pages</li>
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-white"></i> Brand Identity & Logo Guidelines</li>
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-white"></i> Interactive Media Showcase / Gallery</li>
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-white"></i> Dynamic Inquiry & Lead Funnel</li>
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-white"></i> Database / CMS Sync (Supabase)</li>
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-white"></i> 30 Days Direct Founder Warranty</li>
                         </ul>
                     </div>
 
-                    <a href="#contact" class="w-full py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider text-center text-white bg-gradient-to-r from-brand-600 to-brand-accent hover:from-brand-500 hover:to-brand-accent shadow-lg shadow-brand-500/25 transition duration-200">
+                    <a href="#contact" class="btn-primary w-full py-3.5 rounded-xl text-xs uppercase tracking-wider text-center block">
                         Choose Growth
                     </a>
                 </div>
 
-                <!-- Tier 3 -->
+                <!-- Tier 3: Custom & Retainer -->
                 <div class="glass-card p-8 rounded-3xl flex flex-col justify-between">
                     <div>
-                        <span class="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-2">Custom Package</span>
-                        <h3 class="font-display font-extrabold text-2xl text-white mb-2">Full-Stack Web App</h3>
-                        <p class="text-slate-400 text-xs mb-6 leading-relaxed">Bespoke software platforms, client portals, SaaS MVPs, and complex web tools.</p>
+                        <span class="text-xs font-bold uppercase tracking-wider text-neutral-400 block mb-2">Full-Service Suite</span>
+                        <h3 class="font-display font-extrabold text-2xl text-white mb-2">Full-Stack App & 360° Media</h3>
+                        <p class="text-neutral-400 text-xs mb-6 leading-relaxed">Custom software platforms, SaaS MVPs, video campaigns, photography, and ad management.</p>
                         
                         <div class="mb-6 pb-6 border-b border-white/5">
                             <span class="font-display font-extrabold text-3xl sm:text-4xl text-white">$2,499+</span>
-                            <span class="text-xs text-slate-400">/ custom quote</span>
+                            <span class="text-xs text-neutral-400">/ custom quote</span>
                         </div>
 
-                        <ul class="space-y-3 text-xs text-slate-300 font-medium mb-8">
-                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-brand-accent"></i> Custom Architecture & Schemas</li>
-                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-brand-accent"></i> Authentication & Role Dashboards</li>
-                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-brand-accent"></i> Stripe / Payment Engine</li>
-                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-brand-accent"></i> Webhook & Third-Party APIs</li>
-                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-brand-accent"></i> Priority Retainer Available</li>
+                        <ul class="space-y-3 text-xs text-neutral-300 font-medium mb-8">
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-neutral-400"></i> Full-Stack Web App Architecture</li>
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-neutral-400"></i> User Authentication & Role Dashboards</li>
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-neutral-400"></i> Cinematic Reels & AI Video Assets</li>
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-neutral-400"></i> Meta & Google Ads Campaign Setup</li>
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-neutral-400"></i> Priority Retainer & Support</li>
                         </ul>
                     </div>
 
-                    <a href="#contact" class="w-full py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider text-center text-slate-200 glass-panel border border-white/10 hover:border-brand-500 hover:text-white transition duration-200">
-                        Let's Talk Scope
+                    <a href="#contact" class="btn-secondary w-full py-3.5 rounded-xl text-xs uppercase tracking-wider text-center block">
+                        Discuss Custom Scope
                     </a>
                 </div>
 
@@ -1028,49 +1233,49 @@
     <!-- ======================================================== -->
     <!-- CONTACT / GET IN TOUCH -->
     <!-- ======================================================== -->
-    <section id="contact" class="py-24 bg-dark-900/60 border-t border-white/5 relative z-10">
+    <section id="contact" class="py-24 bg-neutral-900/60 border-t border-white/5 relative z-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
                 
                 <!-- Left Details -->
                 <div class="lg:col-span-5 space-y-6">
-                    <span class="text-xs font-bold tracking-widest uppercase text-brand-accent">Start A Conversation</span>
+                    <span class="text-xs font-bold tracking-widest uppercase text-neutral-400">Get In Touch</span>
                     <h2 class="font-display font-extrabold text-3xl sm:text-5xl text-white tracking-tight">
-                        Ready to elevate your digital presence?
+                        Let's build something remarkable together.
                     </h2>
-                    <p class="text-slate-400 text-sm sm:text-base leading-relaxed">
-                        Whether you have a fully-fledged specification or just an idea on a napkin, tell us about your project. We typically respond within 12 hours with actionable ideas and estimates.
+                    <p class="text-neutral-400 text-sm sm:text-base leading-relaxed">
+                        Whether you need a new high-speed website, cinematic video content, a complete brand redesign, or ad campaigns that generate customers — reach out to discuss your project.
                     </p>
 
                     <div class="space-y-4 pt-4">
                         <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-xl bg-brand-500/10 border border-brand-500/20 text-brand-400 flex items-center justify-center text-lg">
+                            <div class="w-12 h-12 rounded-xl bg-neutral-900 border border-white/10 text-white flex items-center justify-center text-lg">
                                 <i class="fa-regular fa-envelope"></i>
                             </div>
                             <div>
-                                <span class="text-xs text-slate-400 font-semibold block">Email Directly</span>
-                                <a href="mailto:hello@aurastudios.dev" class="text-sm font-bold text-white hover:text-brand-accent transition">hello@aurastudios.dev</a>
+                                <span class="text-xs text-neutral-400 font-semibold block">Email Directly</span>
+                                <a href="mailto:hello@mubarisxrasal.dev" data-brand-email class="text-sm font-bold text-white hover:text-neutral-300 transition">hello@mubarisxrasal.dev</a>
                             </div>
                         </div>
 
                         <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center text-lg">
+                            <div class="w-12 h-12 rounded-xl bg-neutral-900 border border-white/10 text-white flex items-center justify-center text-lg">
                                 <i class="fa-brands fa-whatsapp"></i>
                             </div>
                             <div>
-                                <span class="text-xs text-slate-400 font-semibold block">WhatsApp Direct Chat</span>
-                                <a href="https://wa.me/" target="_blank" class="text-sm font-bold text-white hover:text-emerald-400 transition">+1 (000) 000-0000</a>
+                                <span class="text-xs text-neutral-400 font-semibold block">WhatsApp Direct Chat</span>
+                                <a href="https://wa.me/910000000000" data-brand-whatsapp target="_blank" class="text-sm font-bold text-white hover:text-neutral-300 transition">+91 00000 00000</a>
                             </div>
                         </div>
 
                         <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-brand-accent flex items-center justify-center text-lg">
+                            <div class="w-12 h-12 rounded-xl bg-neutral-900 border border-white/10 text-white flex items-center justify-center text-lg">
                                 <i class="fa-solid fa-location-dot"></i>
                             </div>
                             <div>
-                                <span class="text-xs text-slate-400 font-semibold block">Location</span>
-                                <span class="text-sm font-bold text-white">Remote Worldwide • Flexible Timezones</span>
+                                <span class="text-xs text-neutral-400 font-semibold block">Location</span>
+                                <span class="text-sm font-bold text-white" data-brand-location>Worldwide Remote · Seamless Communication</span>
                             </div>
                         </div>
                     </div>
@@ -1083,29 +1288,33 @@
                             
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                 <div>
-                                    <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Your Name *</label>
-                                    <input type="text" required placeholder="Alex Morgan" class="w-full px-4 py-3 rounded-xl bg-dark-850 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-brand-accent transition">
+                                    <label class="block text-xs font-semibold text-neutral-300 uppercase tracking-wider mb-2">Your Name *</label>
+                                    <input type="text" required placeholder="Alex Morgan" class="w-full px-4 py-3 rounded-xl bg-neutral-900 border border-white/10 text-white placeholder-neutral-500 text-sm focus:outline-none focus:border-white transition">
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Email Address *</label>
-                                    <input type="email" required placeholder="alex@company.com" class="w-full px-4 py-3 rounded-xl bg-dark-850 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-brand-accent transition">
+                                    <label class="block text-xs font-semibold text-neutral-300 uppercase tracking-wider mb-2">Email Address *</label>
+                                    <input type="email" required placeholder="alex@company.com" class="w-full px-4 py-3 rounded-xl bg-neutral-900 border border-white/10 text-white placeholder-neutral-500 text-sm focus:outline-none focus:border-white transition">
                                 </div>
                             </div>
 
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                 <div>
-                                    <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Project Type</label>
-                                    <select class="w-full px-4 py-3 rounded-xl bg-dark-850 border border-white/10 text-white text-sm focus:outline-none focus:border-brand-accent transition">
-                                        <option value="Custom Website">Custom Website / Landing Page</option>
-                                        <option value="Full-Stack Web App">Full-Stack Web Application</option>
-                                        <option value="E-Commerce Store">E-Commerce Storefront</option>
-                                        <option value="Website Redesign">Website Redesign & Speed Boost</option>
-                                        <option value="Other">Other / Custom Scope</option>
+                                    <label class="block text-xs font-semibold text-neutral-300 uppercase tracking-wider mb-2">Primary Service Required</label>
+                                    <select class="w-full px-4 py-3 rounded-xl bg-neutral-900 border border-white/10 text-white text-sm focus:outline-none focus:border-white transition">
+                                        <option value="Website Development">Website Development (Main Focus)</option>
+                                        <option value="UI/UX Design">UI/UX Design & Prototyping</option>
+                                        <option value="Video Editing & Reels">Video Editing & Cinematic Reels</option>
+                                        <option value="AI Video Creation">AI Video Creation</option>
+                                        <option value="Branding & Logo">Branding & Logo Design</option>
+                                        <option value="Poster Design">Poster & Graphic Design</option>
+                                        <option value="Commercial Photography">Commercial Photography</option>
+                                        <option value="Digital Ads (Meta/Google)">Digital Ads & Business Promotion</option>
+                                        <option value="Complete 360 Suite">Full 360° Studio Package</option>
                                     </select>
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Estimated Budget</label>
-                                    <select class="w-full px-4 py-3 rounded-xl bg-dark-850 border border-white/10 text-white text-sm focus:outline-none focus:border-brand-accent transition">
+                                    <label class="block text-xs font-semibold text-neutral-300 uppercase tracking-wider mb-2">Estimated Budget</label>
+                                    <select class="w-full px-4 py-3 rounded-xl bg-neutral-900 border border-white/10 text-white text-sm focus:outline-none focus:border-white transition">
                                         <option value="$500 - $1,000">$500 – $1,000</option>
                                         <option value="$1,000 - $2,500">$1,000 – $2,500</option>
                                         <option value="$2,500 - $5,000">$2,500 – $5,000</option>
@@ -1115,17 +1324,17 @@
                             </div>
 
                             <div>
-                                <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Project Brief & Goals *</label>
-                                <textarea rows="4" required placeholder="Tell us about what you want to build, target timeline, any reference sites you love..." class="w-full px-4 py-3 rounded-xl bg-dark-850 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-brand-accent transition resize-none"></textarea>
+                                <label class="block text-xs font-semibold text-neutral-300 uppercase tracking-wider mb-2">Project Brief & Details *</label>
+                                <textarea rows="4" required placeholder="Tell Mubaris & Rasal about your project goals, references, and timeline..." class="w-full px-4 py-3 rounded-xl bg-neutral-900 border border-white/10 text-white placeholder-neutral-500 text-sm focus:outline-none focus:border-white transition resize-none"></textarea>
                             </div>
 
-                            <button type="submit" id="submitBtn" class="w-full py-4 rounded-xl font-bold text-sm tracking-wide bg-gradient-to-r from-brand-600 to-brand-accent hover:from-brand-500 hover:to-brand-accent text-white shadow-xl shadow-brand-500/25 transition duration-300 flex items-center justify-center gap-2">
+                            <button type="submit" id="submitBtn" class="btn-primary w-full py-4 rounded-xl text-sm tracking-wide flex items-center justify-center gap-2">
                                 <span>Send Project Inquiry</span>
                                 <i class="fa-solid fa-paper-plane text-xs"></i>
                             </button>
 
-                            <div id="formSuccess" class="hidden p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-semibold text-center">
-                                🎉 Thank you! Your inquiry has been received. We will get back to you within 12 hours.
+                            <div id="formSuccess" class="hidden p-4 rounded-xl bg-white/10 border border-white/20 text-white text-xs font-semibold text-center">
+                                ✦ Thank you! Your inquiry has been received. Mubaris & Rasal will respond within 12 hours.
                             </div>
 
                         </form>
@@ -1140,32 +1349,85 @@
     <!-- ======================================================== -->
     <!-- FOOTER -->
     <!-- ======================================================== -->
-    <footer class="py-12 bg-dark-950 border-t border-white/5 relative z-10 text-slate-400 text-xs">
+    <footer class="py-12 bg-neutral-950 border-t border-white/5 relative z-10 text-neutral-400 text-xs">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
                 
                 <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-brand-600 to-brand-accent flex items-center justify-center text-white font-bold text-sm">
-                        <i class="fa-solid fa-volcano text-xs"></i>
+                    <div class="monogram-badge !w-8 !h-8 !text-xs">
+                        <span>M×R</span>
                     </div>
-                    <span class="font-display font-bold text-white text-base">VOLCANO <span class="text-brand-accent">STUDIOS</span></span>
+                    <span class="font-display font-bold text-white text-base" data-brand-name>MUBARIS × RASAL</span>
                 </div>
 
                 <div class="flex items-center gap-6">
                     <a href="#services" class="hover:text-white transition">Services</a>
                     <a href="#work" class="hover:text-white transition">Work</a>
-                    <a href="#team" class="hover:text-white transition">About Us</a>
-                    <a href="#pricing" class="hover:text-white transition">Pricing</a>
+                    <a href="#profiles" class="hover:text-white transition">Mubaris & Rasal</a>
+                    <a href="#pricing" class="hover:text-white transition">Packages</a>
                     <a href="#contact" class="hover:text-white transition">Contact</a>
                 </div>
 
-                <p>© 2026 Volcano Studios. Built with precision & creative power.</p>
+                <p>© <span data-brand-year>2026</span> <span data-brand-name>MUBARIS × RASAL</span>. Premium Web & Creative Studio.</p>
             </div>
         </div>
     </footer>
 
-    <!-- Interactive Scripts -->
+    <!-- ========================================================================== -->
+    <!-- SCRIPTS & CENTRALISED BRAND SETTINGS                                        -->
+    <!-- ========================================================================== -->
     <script>
+        /**
+         * --------------------------------------------------------------------------
+         * BRAND CONFIGURATION OBJECT
+         * To update the brand name or contact information across the whole site,
+         * simply edit the fields below:
+         * --------------------------------------------------------------------------
+         */
+        const BRAND_CONFIG = {
+            brandName: "MUBARIS × RASAL",
+            brandTagline: "Web Engineering & Creative Media",
+            brandDomain: "mubarisxrasal.studio",
+            email: "hello@mubarisxrasal.dev",
+            whatsapp: "+91 00000 00000",
+            whatsappUrl: "https://wa.me/910000000000",
+            location: "Worldwide Remote · Direct Access",
+            year: "2026",
+            metaTitle: "MUBARIS × RASAL | Creative Studio · Web Development & Digital Media"
+        };
+
+        // Automatically bind brand settings to all matching data attributes
+        function applyBrandSettings() {
+            document.querySelectorAll('[data-brand-name]').forEach(el => {
+                el.textContent = BRAND_CONFIG.brandName;
+            });
+            document.querySelectorAll('[data-brand-tagline]').forEach(el => {
+                el.textContent = BRAND_CONFIG.brandTagline;
+            });
+            document.querySelectorAll('[data-brand-domain]').forEach(el => {
+                el.textContent = BRAND_CONFIG.brandDomain;
+            });
+            document.querySelectorAll('[data-brand-email]').forEach(el => {
+                el.textContent = BRAND_CONFIG.email;
+                if (el.tagName === 'A') el.href = `mailto:${BRAND_CONFIG.email}`;
+            });
+            document.querySelectorAll('[data-brand-whatsapp]').forEach(el => {
+                el.textContent = BRAND_CONFIG.whatsapp;
+                if (el.tagName === 'A') el.href = BRAND_CONFIG.whatsappUrl;
+            });
+            document.querySelectorAll('[data-brand-location]').forEach(el => {
+                el.textContent = BRAND_CONFIG.location;
+            });
+            document.querySelectorAll('[data-brand-year]').forEach(el => {
+                el.textContent = BRAND_CONFIG.year;
+            });
+            const metaTitle = document.querySelector('[data-brand-meta-title]');
+            if (metaTitle) metaTitle.textContent = BRAND_CONFIG.metaTitle;
+        }
+
+        // Initialize brand settings
+        applyBrandSettings();
+
         // Mobile Drawer Toggle
         function toggleMenu() {
             const menu = document.getElementById('mobileMenu');
@@ -1193,20 +1455,20 @@
 
             setTimeout(() => {
                 btn.innerHTML = `<span>Inquiry Sent!</span> <i class="fa-solid fa-check"></i>`;
-                btn.classList.remove('from-brand-600', 'to-brand-accent');
-                btn.classList.add('bg-emerald-600');
+                btn.style.backgroundColor = '#ffffff';
+                btn.style.color = '#000000';
                 success.classList.remove('hidden');
                 document.getElementById('contactForm').reset();
-            }, 1000);
+            }, 800);
         }
 
-        // Navbar blur intensity on scroll
+        // Navbar blur and shadow on scroll
         window.addEventListener('scroll', () => {
             const nav = document.getElementById('mainNav');
-            if (window.scrollY > 50) {
-                nav.classList.add('shadow-xl', 'bg-dark-950/90');
+            if (window.scrollY > 40) {
+                nav.classList.add('shadow-2xl', 'bg-neutral-950/95');
             } else {
-                nav.classList.remove('shadow-xl', 'bg-dark-950/90');
+                nav.classList.remove('shadow-2xl', 'bg-neutral-950/95');
             }
         });
     </script>
