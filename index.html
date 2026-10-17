@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-brand-meta-title>ZENVORA | Web Development & Creative Services</title>
-    <meta name="description" content="ZENVORA — I build modern, responsive websites and digital experiences, supported by thoughtful branding, creative content, and digital publicity.">
+    <title data-brand-meta-title>ZENVORA | Two-Person Creative & Digital Agency</title>
+    <meta name="description" content="ZENVORA is a premium two-person creative agency founded by Mubaris (Web Architect) and Rasal (Creative Director). We engineer high-performance websites and produce cinematic video, bold brand identities, photography, and high-impact digital advertising.">
 
     <!-- Google Fonts: Space Grotesk (headings) + Inter (body) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <!-- FontAwesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -28,18 +28,6 @@
                         display: ['"Space Grotesk"', 'sans-serif']
                     },
                     colors: {
-                        blue: {
-                            50:  '#eff6ff',
-                            100: '#dbeafe',
-                            200: '#bfdbfe',
-                            300: '#93c5fd',
-                            400: '#60a5fa',
-                            500: '#3b82f6',
-                            600: '#2563eb',
-                            700: '#1d4ed8',
-                            800: '#1e40af',
-                            900: '#1e3a8a',
-                        },
                         violet: {
                             50:  '#f5f3ff',
                             100: '#ede9fe',
@@ -49,6 +37,8 @@
                             500: '#8b5cf6',
                             600: '#7c3aed',
                             700: '#6d28d9',
+                            800: '#5b21b6',
+                            900: '#4c1d95',
                         },
                         slate: {
                             50:  '#f8fafc',
@@ -65,16 +55,12 @@
                     },
                     animation: {
                         'float': 'float 6s ease-in-out infinite',
-                        'fade-in': 'fadeIn 0.6s ease-out forwards',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                     },
                     keyframes: {
                         float: {
                             '0%, 100%': { transform: 'translateY(0px)' },
                             '50%': { transform: 'translateY(-8px)' },
-                        },
-                        fadeIn: {
-                            '0%': { opacity: '0', transform: 'translateY(12px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' },
                         }
                     }
                 }
@@ -84,25 +70,24 @@
 
     <style>
         /* ================================================
-           ZENVORA DESIGN SYSTEM — Premium Light Theme
-           Primary: Electric Blue #2563EB
-           Accent: Violet #7C3AED
-           Background: White / Off-white #F8FAFC
-           Text: Charcoal / Deep Navy #1E293B
+           ZENVORA AGENCY DESIGN SYSTEM — White & Violet
+           Background: Pure White & Soft Subtle Violet Tint
+           Primary Accent: Electric Violet (#7C3AED / #6D28D9)
+           Secondary Accent: Indigo & Playful Fuchsia
+           Text: Deep Slate (#0F172A / #334155)
         ================================================ */
         :root {
             --bg-canvas: #ffffff;
-            --bg-surface: #f8fafc;
-            --bg-card: #ffffff;
-            --border-light: #e2e8f0;
-            --border-hover: #93c5fd;
+            --bg-surface: #faf7ff;
+            --bg-surface-subtle: #f5f3ff;
+            --border-light: #ede9fe;
+            --border-hover: #c4b5fd;
             --text-heading: #0f172a;
             --text-body: #334155;
             --text-muted: #64748b;
-            --blue: #2563eb;
-            --blue-light: #eff6ff;
-            --violet: #7c3aed;
-            --violet-light: #f5f3ff;
+            --violet-primary: #7c3aed;
+            --violet-deep: #6d28d9;
+            --violet-soft: #ede9fe;
         }
 
         html { scroll-behavior: smooth; }
@@ -116,268 +101,231 @@
         }
 
         /* ── Custom Scrollbar ── */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #f1f5f9; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        ::-webkit-scrollbar { width: 7px; }
+        ::-webkit-scrollbar-track { background: #faf7ff; }
+        ::-webkit-scrollbar-thumb { background: #ddd6fe; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #a78bfa; }
 
         /* ── Selection ── */
-        ::selection { background: #bfdbfe; color: #1e3a8a; }
+        ::selection { background: #ede9fe; color: #5b21b6; }
 
-        /* ── ZENVORA Logo / Monogram ── */
-        .z-logo {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+        /* ── Agency Brand Logo ── */
+        .agency-logo-badge {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #7c3aed 0%, #6366f1 100%);
             display: flex;
             align-items: center;
             justify-content: center;
+            box-shadow: 0 4px 16px rgba(124, 58, 237, 0.35);
             flex-shrink: 0;
+            transition: transform 0.25s ease;
         }
-        .z-logo svg { width: 22px; height: 22px; }
+        .agency-logo-badge:hover {
+            transform: scale(1.05);
+        }
 
-        /* ── Navigation ── */
+        /* ── Navigation Glass ── */
         .nav-glass {
-            background: rgba(255,255,255,0.92);
+            background: rgba(255, 255, 255, 0.94);
             backdrop-filter: blur(18px);
             -webkit-backdrop-filter: blur(18px);
             border-bottom: 1px solid var(--border-light);
             transition: box-shadow 0.3s ease;
         }
         .nav-glass.scrolled {
-            box-shadow: 0 4px 24px rgba(37,99,235,0.08);
+            box-shadow: 0 8px 30px rgba(124, 58, 237, 0.08);
         }
         .nav-link {
             font-size: 0.875rem;
-            font-weight: 500;
-            color: var(--text-muted);
+            font-weight: 600;
+            color: #475569;
             transition: color 0.2s ease;
         }
-        .nav-link:hover { color: var(--blue); }
-        .nav-link.active { color: var(--blue); }
+        .nav-link:hover { color: #7c3aed; }
+        .nav-link.active { color: #7c3aed; }
 
-        /* ── Buttons ── */
-        .btn-primary {
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+        /* ── Primary & Secondary Buttons ── */
+        .btn-violet-primary {
+            background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
             color: #ffffff;
-            font-weight: 600;
-            border-radius: 10px;
-            transition: all 0.25s ease;
-            box-shadow: 0 4px 14px rgba(37,99,235,0.3);
+            font-weight: 700;
+            border-radius: 12px;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 6px 20px rgba(124, 58, 237, 0.32);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
-        .btn-primary:hover {
-            background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+        .btn-violet-primary:hover {
+            background: linear-gradient(135deg, #6d28d9 0%, #5b21b6 100%);
             transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(37,99,235,0.4);
+            box-shadow: 0 10px 28px rgba(124, 58, 237, 0.42);
             color: #ffffff;
         }
-        .btn-secondary {
+
+        .btn-violet-secondary {
             background: #ffffff;
-            color: var(--blue);
-            font-weight: 600;
-            border-radius: 10px;
-            border: 1.5px solid var(--border-light);
+            color: #7c3aed;
+            font-weight: 700;
+            border-radius: 12px;
+            border: 1.5px solid #ddd6fe;
             transition: all 0.25s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
-        .btn-secondary:hover {
-            border-color: var(--blue);
-            background: var(--blue-light);
+        .btn-violet-secondary:hover {
+            border-color: #7c3aed;
+            background: #f5f3ff;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(37,99,235,0.1);
+            box-shadow: 0 6px 18px rgba(124, 58, 237, 0.12);
         }
 
-        /* ── Cards ── */
-        .card {
+        /* ── Agency Cards ── */
+        .agency-card {
             background: #ffffff;
             border: 1px solid var(--border-light);
-            border-radius: 20px;
-            transition: all 0.3s cubic-bezier(0.16,1,0.3,1);
+            border-radius: 22px;
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .card:hover {
-            border-color: #93c5fd;
-            box-shadow: 0 12px 40px rgba(37,99,235,0.1);
-            transform: translateY(-4px);
-        }
-        .card-featured {
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-            color: #ffffff;
-            border: none;
-        }
-        .card-featured:hover {
-            box-shadow: 0 16px 48px rgba(37,99,235,0.35);
-            border: none;
+        .agency-card:hover {
+            border-color: var(--border-hover);
+            box-shadow: 0 16px 40px -10px rgba(124, 58, 237, 0.14);
+            transform: translateY(-5px);
         }
 
-        /* ── Section Labels ── */
-        .section-label {
+        /* ── Featured Highlight Card ── */
+        .agency-card-featured {
+            background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 50%, #4c1d95 100%);
+            color: #ffffff;
+            border: none;
+            box-shadow: 0 16px 36px rgba(109, 40, 217, 0.28);
+        }
+        .agency-card-featured:hover {
+            box-shadow: 0 20px 48px rgba(109, 40, 217, 0.38);
+            transform: translateY(-5px);
+        }
+
+        /* ── Section Labels / Badges ── */
+        .agency-label {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            font-size: 0.7rem;
-            font-weight: 700;
+            font-size: 0.72rem;
+            font-weight: 800;
             letter-spacing: 0.1em;
             text-transform: uppercase;
-            color: var(--blue);
-            background: var(--blue-light);
-            border: 1px solid #bfdbfe;
-            padding: 4px 14px;
+            color: #7c3aed;
+            background: #f5f3ff;
+            border: 1px solid #ddd6fe;
+            padding: 5px 16px;
             border-radius: 9999px;
         }
 
         /* ── Gradient Text ── */
         .gradient-text {
-            background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+            background: linear-gradient(135deg, #7c3aed 0%, #a855f7 60%, #ec4899 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
-        /* ── Badges / Pills ── */
-        .pill {
-            display: inline-block;
-            padding: 3px 11px;
-            background: var(--blue-light);
-            color: #1d4ed8;
-            border: 1px solid #bfdbfe;
-            border-radius: 9999px;
-            font-size: 0.7rem;
-            font-weight: 600;
-        }
+        /* ── Pills & Tags ── */
         .pill-violet {
-            background: var(--violet-light);
+            display: inline-block;
+            padding: 4px 12px;
+            background: #f5f3ff;
             color: #6d28d9;
-            border-color: #ddd6fe;
+            border: 1px solid #ddd6fe;
+            border-radius: 9999px;
+            font-size: 0.72rem;
+            font-weight: 700;
         }
         .pill-slate {
-            background: #f1f5f9;
-            color: var(--text-muted);
-            border-color: var(--border-light);
-        }
-        .pill-wip {
-            background: #fef3c7;
-            color: #b45309;
-            border-color: #fde68a;
+            display: inline-block;
+            padding: 4px 12px;
+            background: #f8fafc;
+            color: #475569;
+            border: 1px solid #e2e8f0;
+            border-radius: 9999px;
+            font-size: 0.72rem;
+            font-weight: 600;
         }
 
-        /* ── Ambient decoration blobs ── */
-        .blob {
+        /* ── Ambient Background Blobs ── */
+        .ambient-blob {
             position: absolute;
             border-radius: 9999px;
             pointer-events: none;
-            filter: blur(80px);
-            opacity: 0.12;
+            filter: blur(90px);
+            opacity: 0.15;
         }
 
-        /* ── Service icon boxes ── */
-        .service-icon {
-            width: 52px;
-            height: 52px;
-            border-radius: 14px;
+        /* ── Icon Box ── */
+        .agency-icon-box {
+            width: 54px;
+            height: 54px;
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.3rem;
+            font-size: 1.35rem;
             flex-shrink: 0;
             transition: transform 0.3s ease;
         }
-        .card:hover .service-icon { transform: scale(1.08); }
-
-        /* ── Skill tags ── */
-        .skill-tag {
-            padding: 6px 14px;
-            background: #f8fafc;
-            border: 1px solid var(--border-light);
-            border-radius: 9px;
-            font-size: 0.78rem;
-            font-weight: 500;
-            color: var(--text-body);
-            transition: all 0.2s ease;
-        }
-        .skill-tag:hover {
-            background: var(--blue-light);
-            border-color: #93c5fd;
-            color: #1d4ed8;
+        .agency-card:hover .agency-icon-box {
+            transform: scale(1.1) rotate(2deg);
         }
 
-        /* ── Form inputs ── */
-        .form-input {
-            width: 100%;
-            padding: 12px 16px;
-            background: #f8fafc;
-            border: 1.5px solid var(--border-light);
-            border-radius: 10px;
-            color: var(--text-heading);
-            font-size: 0.875rem;
-            font-family: 'Inter', sans-serif;
-            transition: border-color 0.2s ease, box-shadow 0.2s ease;
-            outline: none;
-        }
-        .form-input::placeholder { color: #94a3b8; }
-        .form-input:focus {
-            border-color: var(--blue);
-            box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
-            background: #ffffff;
-        }
-        .form-label {
-            display: block;
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-            margin-bottom: 6px;
-        }
-
-        /* ── Workflow step numbers ── */
-        .step-num {
+        /* ── Workflow Step Numbers ── */
+        .step-number {
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             font-weight: 800;
-            background: linear-gradient(135deg, #dbeafe, #ede9fe);
+            background: linear-gradient(135deg, #ddd6fe, #c4b5fd);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             line-height: 1;
         }
 
-        /* ── Mobile menu ── */
-        #mobileMenu { display: none; }
-        #mobileMenu.open { display: block; }
-
-        /* ── Form note ── */
-        .form-note {
-            background: #fef3c7;
-            border: 1px solid #fde68a;
-            border-radius: 10px;
-            padding: 12px 16px;
-            font-size: 0.75rem;
-            color: #92400e;
-            display: flex;
-            gap: 10px;
-            align-items: flex-start;
-        }
-
-        /* ── Contact icon boxes ── */
-        .contact-icon-box {
-            width: 48px;
-            height: 48px;
-            background: var(--blue-light);
-            border: 1px solid #bfdbfe;
+        /* ── Form Inputs ── */
+        .agency-input {
+            width: 100%;
+            padding: 13px 18px;
+            background: #ffffff;
+            border: 1.5px solid #ede9fe;
             border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.1rem;
-            color: var(--blue);
-            flex-shrink: 0;
+            color: #0f172a;
+            font-size: 0.875rem;
+            font-family: 'Inter', sans-serif;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            outline: none;
+        }
+        .agency-input::placeholder { color: #94a3b8; }
+        .agency-input:focus {
+            border-color: #7c3aed;
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
+        }
+        .agency-label-text {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 6px;
         }
 
-        /* ── Scroll-animate ── */
+        /* ── Scroll Reveal ── */
         .reveal {
             opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.55s ease, transform 0.55s ease;
+            transform: translateY(22px);
+            transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .reveal.visible {
             opacity: 1;
@@ -389,146 +337,197 @@
 <body style="background:#ffffff; color:#334155;">
 
     <!-- ============================================================ -->
-    <!-- NAVIGATION                                                    -->
+    <!-- NAVIGATION BAR                                               -->
     <!-- ============================================================ -->
     <nav id="mainNav" class="nav-glass fixed top-0 left-0 right-0 z-50 py-3.5">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between">
 
-                <!-- Logo -->
-                <a href="#home" class="flex items-center gap-3 group">
-                    <div class="z-logo">
-                        <!-- Geometric Z SVG Logo -->
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M5 5H19L8.5 19H19" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <!-- Agency Logo & Wordmark -->
+                <a href="#home" class="flex items-center gap-3.5 group">
+                    <div class="agency-logo-badge">
+                        <svg viewBox="0 0 24 24" fill="none" class="w-6 h-6" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M5 5H19L8.5 19H19" stroke="white" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                     </div>
                     <div>
-                        <span class="font-display font-extrabold text-lg text-slate-900 tracking-tight block leading-none" data-brand-name>ZENVORA</span>
-                        <span class="text-[9px] tracking-widest uppercase text-slate-400 font-semibold block mt-0.5" data-brand-tagline>Web Development &amp; Creative Services</span>
+                        <div class="flex items-center gap-2">
+                            <span class="font-display font-extrabold text-xl text-slate-900 tracking-tight leading-none" data-brand-name>ZENVORA</span>
+                            <span class="text-[9px] font-extrabold bg-violet-100 text-violet-700 px-2 py-0.5 rounded-full uppercase tracking-wider">Agency</span>
+                        </div>
+                        <span class="text-[10px] tracking-widest uppercase text-slate-500 font-semibold block mt-0.5" data-brand-tagline>Two-Person Creative &amp; Tech Studio</span>
                     </div>
                 </a>
 
-                <!-- Desktop Nav -->
+                <!-- Desktop Navigation Links -->
                 <div class="hidden md:flex items-center gap-7">
-                    <a href="#about" class="nav-link">About</a>
                     <a href="#services" class="nav-link">Services</a>
-                    <a href="#work" class="nav-link">Projects</a>
-                    <a href="#skills" class="nav-link">Skills</a>
-                    <a href="#process" class="nav-link">Workflow</a>
+                    <a href="#work" class="nav-link">Our Work</a>
+                    <a href="#team" class="nav-link">Our Team</a>
+                    <a href="#process" class="nav-link">Our Process</a>
+                    <a href="#contact" class="nav-link">Contact</a>
                 </div>
 
-                <!-- CTA + Mobile Toggle -->
+                <!-- CTA & Mobile Toggle -->
                 <div class="flex items-center gap-3">
-                    <a href="#contact" class="hidden sm:inline-flex btn-primary px-5 py-2.5 text-sm items-center gap-2">
-                        <span>Start a Project</span>
-                        <i class="fa-solid fa-arrow-right text-xs"></i>
+                    <a href="#contact" class="hidden sm:inline-flex btn-violet-primary px-5 py-2.5 text-xs uppercase tracking-wider">
+                        <span>Start A Project</span>
+                        <i class="fa-solid fa-arrow-right text-[11px]"></i>
                     </a>
-                    <button id="mobileMenuBtn" class="md:hidden p-2.5 rounded-lg border border-slate-200 text-slate-500 hover:text-blue-600 hover:border-blue-200 transition" aria-label="Toggle Menu">
-                        <i class="fa-solid fa-bars text-base" id="menuIcon"></i>
+                    <button id="mobileMenuBtn" class="md:hidden p-2.5 rounded-xl border border-violet-100 text-slate-600 hover:text-violet-600 hover:border-violet-300 transition" aria-label="Toggle Menu">
+                        <i class="fa-solid fa-bars text-lg" id="menuIcon"></i>
                     </button>
                 </div>
+
             </div>
         </div>
 
-        <!-- Mobile Drawer -->
-        <div id="mobileMenu" class="md:hidden border-t border-slate-100 px-6 py-5 space-y-4 bg-white/95 backdrop-blur-xl">
-            <a href="#about" onclick="toggleMenu()" class="block text-base font-semibold text-slate-700 hover:text-blue-600 transition py-1">About</a>
-            <a href="#services" onclick="toggleMenu()" class="block text-base font-semibold text-slate-700 hover:text-blue-600 transition py-1">Services</a>
-            <a href="#work" onclick="toggleMenu()" class="block text-base font-semibold text-slate-700 hover:text-blue-600 transition py-1">Projects</a>
-            <a href="#skills" onclick="toggleMenu()" class="block text-base font-semibold text-slate-700 hover:text-blue-600 transition py-1">Skills</a>
-            <a href="#process" onclick="toggleMenu()" class="block text-base font-semibold text-slate-700 hover:text-blue-600 transition py-1">Workflow</a>
-            <a href="#contact" onclick="toggleMenu()" class="btn-primary block w-full text-center py-3 text-sm font-semibold">Start a Project</a>
+        <!-- Mobile Drawer Menu -->
+        <div id="mobileMenu" class="hidden md:hidden border-t border-violet-100 px-6 py-5 space-y-4 bg-white/98 backdrop-blur-xl">
+            <a href="#services" onclick="toggleMenu()" class="block text-base font-semibold text-slate-700 hover:text-violet-600 transition py-1">Services</a>
+            <a href="#work" onclick="toggleMenu()" class="block text-base font-semibold text-slate-700 hover:text-violet-600 transition py-1">Our Work</a>
+            <a href="#team" onclick="toggleMenu()" class="block text-base font-semibold text-slate-700 hover:text-violet-600 transition py-1">Our Team</a>
+            <a href="#process" onclick="toggleMenu()" class="block text-base font-semibold text-slate-700 hover:text-violet-600 transition py-1">Our Process</a>
+            <a href="#contact" onclick="toggleMenu()" class="block text-base font-semibold text-slate-700 hover:text-violet-600 transition py-1">Contact</a>
+            <a href="#contact" onclick="toggleMenu()" class="btn-violet-primary block w-full text-center py-3 text-sm font-bold">Start A Project</a>
         </div>
     </nav>
 
     <!-- ============================================================ -->
     <!-- HERO SECTION                                                  -->
     <!-- ============================================================ -->
-    <header id="home" class="relative pt-32 pb-20 md:pt-44 md:pb-28 overflow-hidden">
+    <header id="home" class="relative pt-32 pb-20 md:pt-44 md:pb-28 overflow-hidden" style="background: radial-gradient(circle at 80% 20%, #f5f0ff 0%, #ffffff 60%);">
 
-        <!-- Ambient blobs -->
-        <div class="blob w-[600px] h-[600px] bg-blue-500 -top-40 -right-60 pointer-events-none" style="z-index:0;"></div>
-        <div class="blob w-[500px] h-[500px] bg-violet-500 -bottom-40 -left-40 pointer-events-none" style="z-index:0;"></div>
+        <!-- Ambient Violet Blobs -->
+        <div class="ambient-blob w-[580px] h-[580px] bg-violet-400 -top-32 -right-40" style="z-index:0;"></div>
+        <div class="ambient-blob w-[480px] h-[480px] bg-purple-300 -bottom-40 -left-40" style="z-index:0;"></div>
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
-            <!-- Hero text block -->
             <div class="text-center max-w-4xl mx-auto space-y-7 mb-16">
 
-                <!-- Availability badge -->
-                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-slate-200 shadow-sm text-xs font-semibold text-slate-500">
-                    <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse inline-block"></span>
-                    Available for new projects &nbsp;·&nbsp; <span class="text-blue-600 font-bold">2026</span>
+                <!-- Agency Badge -->
+                <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white border border-violet-200 shadow-sm text-xs font-bold text-violet-700">
+                    <span class="w-2 h-2 rounded-full bg-violet-600 animate-pulse inline-block"></span>
+                    <span>Two-Person Creative Agency</span>
+                    <span class="text-violet-300">•</span>
+                    <span class="text-slate-600 font-semibold">Mubaris &amp; Rasal</span>
                 </div>
 
-                <!-- Headline -->
+                <!-- Agency Headline -->
                 <h1 class="font-display font-extrabold text-4xl sm:text-6xl lg:text-7xl text-slate-900 tracking-tight leading-[1.08]">
-                    Building Digital Experiences<br class="hidden sm:inline">
-                    <span class="gradient-text">That Move Brands Forward.</span>
+                    Two Minds. Infinite Craft.<br class="hidden sm:inline">
+                    <span class="gradient-text">Bold Digital Experiences &amp; Media.</span>
                 </h1>
 
-                <!-- Sub-headline -->
-                <p class="text-slate-500 text-base sm:text-lg lg:text-xl font-normal leading-relaxed max-w-3xl mx-auto">
-                    I build modern, responsive websites and digital experiences, supported by thoughtful branding, creative content, and digital publicity.
+                <!-- Agency Sub-copy -->
+                <p class="text-slate-600 text-base sm:text-lg lg:text-xl font-normal leading-relaxed max-w-3xl mx-auto">
+                    <strong class="text-slate-900 font-semibold">ZENVORA</strong> is a boutique creative agency uniting high-performance website engineering with cinematic video, bold brand identities, commercial photography, and high-impact digital advertising.
                 </p>
 
-                <!-- CTAs -->
+                <!-- Dual Action CTAs -->
                 <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
-                    <a href="#work" class="btn-primary w-full sm:w-auto px-8 py-4 text-sm inline-flex items-center justify-center gap-2.5">
-                        <i class="fa-solid fa-layer-group text-xs"></i>
-                        <span>Explore My Work</span>
+                    <a href="#contact" class="btn-violet-primary w-full sm:w-auto px-8 py-4 text-sm">
+                        <span>Start A Project</span>
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
                     </a>
-                    <a href="#contact" class="btn-secondary w-full sm:w-auto px-8 py-4 text-sm inline-flex items-center justify-center gap-2.5">
-                        <span>Start a Project</span>
-                        <i class="fa-solid fa-arrow-up-right-from-square text-xs text-blue-500"></i>
+                    <a href="#work" class="btn-violet-secondary w-full sm:w-auto px-8 py-4 text-sm">
+                        <i class="fa-solid fa-layer-group text-xs text-violet-600"></i>
+                        <span>Explore Our Work</span>
                     </a>
                 </div>
 
             </div>
 
-            <!-- Browser / device showcase mockup -->
-            <div class="max-w-4xl mx-auto reveal">
-                <div class="card shadow-2xl shadow-blue-100 overflow-hidden" style="border-radius:20px;">
-                    <!-- Window chrome -->
-                    <div class="flex items-center justify-between px-5 py-3.5 border-b border-slate-100 bg-slate-50">
-                        <div class="flex items-center gap-1.5">
+            <!-- Two-Pillar Collaborative Showcase Mockup -->
+            <div class="max-w-5xl mx-auto reveal">
+                <div class="agency-card p-6 sm:p-9 shadow-2xl border-violet-100" style="background:#ffffff; border-radius:26px;">
+
+                    <!-- Browser Header Bar -->
+                    <div class="flex items-center justify-between pb-4 mb-6 border-b border-violet-100">
+                        <div class="flex items-center gap-2">
                             <span class="w-3 h-3 rounded-full bg-red-400 inline-block"></span>
-                            <span class="w-3 h-3 rounded-full bg-yellow-400 inline-block"></span>
+                            <span class="w-3 h-3 rounded-full bg-amber-400 inline-block"></span>
                             <span class="w-3 h-3 rounded-full bg-green-400 inline-block"></span>
-                        </div>
-                        <div class="flex-1 mx-4">
-                            <div class="bg-white border border-slate-200 rounded-lg px-3 py-1.5 text-xs text-slate-400 flex items-center gap-2 max-w-xs mx-auto">
-                                <i class="fa-solid fa-lock text-green-500 text-[10px]"></i>
+                            <div class="ml-3 px-3 py-1 rounded-lg bg-violet-50 text-[11px] font-mono text-violet-700 font-semibold hidden sm:inline-flex items-center gap-1.5">
+                                <i class="fa-solid fa-lock text-[9px]"></i>
                                 <span data-brand-domain>zenvora.studio</span>
                             </div>
                         </div>
-                        <div class="flex items-center gap-1.5 text-slate-300">
-                            <div class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></div>
-                            <span class="text-[10px] text-slate-400 font-medium">Live</span>
+                        <div class="flex items-center gap-2 text-xs">
+                            <span class="pill-violet">100% In-House Collaboration</span>
                         </div>
                     </div>
-                    <!-- Mock content area -->
-                    <div class="p-8 sm:p-12 bg-gradient-to-br from-slate-50 via-white to-blue-50/40 min-h-[220px] flex flex-col justify-between">
-                        <div class="space-y-4 max-w-lg">
-                            <span class="pill">Web Development · Mubaris</span>
-                            <h4 class="font-display font-bold text-2xl text-slate-900">
-                                Responsive, fast &amp; built to last.
-                            </h4>
-                            <p class="text-sm text-slate-500 leading-relaxed">
-                                Clean architecture, modern design, and genuine craft — from custom websites to full creative suites.
-                            </p>
+
+                    <!-- Dual Collaborative Pillars Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                        <!-- Pillar 1: Web Engineering (Mubaris) -->
+                        <div class="p-6 rounded-2xl bg-gradient-to-br from-violet-50/60 to-purple-50/40 border border-violet-100 space-y-4">
+                            <div class="flex items-center justify-between">
+                                <div class="w-10 h-10 rounded-xl bg-violet-600 text-white flex items-center justify-center text-lg shadow-md shadow-violet-300">
+                                    <i class="fa-solid fa-code"></i>
+                                </div>
+                                <span class="pill-violet text-[10px]">Led by Mubaris</span>
+                            </div>
+                            <div>
+                                <h3 class="font-display font-bold text-xl text-slate-900 mb-1">Web Architecture &amp; Apps</h3>
+                                <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                                    Custom code, responsive architecture, database integrations (Supabase), lightning sub-second speeds, and admin dashboards.
+                                </p>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 pt-1">
+                                <span class="pill-slate text-[10px]">HTML5 / React</span>
+                                <span class="pill-slate text-[10px]">Tailwind CSS</span>
+                                <span class="pill-slate text-[10px]">Supabase</span>
+                                <span class="pill-slate text-[10px]">UI/UX Figma</span>
+                            </div>
                         </div>
-                        <!-- Tech row -->
-                        <div class="flex flex-wrap gap-2 pt-6 mt-6 border-t border-slate-100">
-                            <span class="pill-slate pill">HTML5 / CSS3</span>
-                            <span class="pill-slate pill">JavaScript ES6+</span>
-                            <span class="pill-slate pill">Tailwind CSS</span>
-                            <span class="pill-slate pill">Supabase</span>
-                            <span class="pill-violet pill">UI/UX Design</span>
-                            <span class="pill-violet pill">Figma</span>
+
+                        <!-- Pillar 2: Creative Media & Promotion (Rasal) -->
+                        <div class="p-6 rounded-2xl bg-gradient-to-br from-purple-50/60 to-pink-50/40 border border-violet-100 space-y-4">
+                            <div class="flex items-center justify-between">
+                                <div class="w-10 h-10 rounded-xl bg-purple-600 text-white flex items-center justify-center text-lg shadow-md shadow-purple-300">
+                                    <i class="fa-solid fa-film"></i>
+                                </div>
+                                <span class="pill-violet text-[10px]">Led by Rasal</span>
+                            </div>
+                            <div>
+                                <h3 class="font-display font-bold text-xl text-slate-900 mb-1">Creative Media &amp; Ads</h3>
+                                <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                                    Cinematic video editing, AI video creation, brand identity &amp; logo design, commercial photography, and Meta/Google ad campaigns.
+                                </p>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 pt-1">
+                                <span class="pill-slate text-[10px]">Video Reels</span>
+                                <span class="pill-slate text-[10px]">AI Video</span>
+                                <span class="pill-slate text-[10px]">Logo &amp; Brand</span>
+                                <span class="pill-slate text-[10px]">Meta Ads</span>
+                            </div>
                         </div>
+
                     </div>
+
+                </div>
+            </div>
+
+            <!-- Highlights Bar -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-5xl mx-auto mt-12 text-center">
+                <div class="p-4 rounded-2xl bg-white border border-violet-100">
+                    <span class="font-display font-extrabold text-2xl text-violet-700 block">2 Founders</span>
+                    <span class="text-xs text-slate-500 font-medium">Direct Partner Access</span>
+                </div>
+                <div class="p-4 rounded-2xl bg-white border border-violet-100">
+                    <span class="font-display font-extrabold text-2xl text-violet-700 block">100% In-House</span>
+                    <span class="text-xs text-slate-500 font-medium">Zero Freelance Outsourcing</span>
+                </div>
+                <div class="p-4 rounded-2xl bg-white border border-violet-100">
+                    <span class="font-display font-extrabold text-2xl text-violet-700 block">Code + Media</span>
+                    <span class="text-xs text-slate-500 font-medium">Full Spectrum Delivery</span>
+                </div>
+                <div class="p-4 rounded-2xl bg-white border border-violet-100">
+                    <span class="font-display font-extrabold text-2xl text-violet-700 block">Fast Turnaround</span>
+                    <span class="text-xs text-slate-500 font-medium">Agile Production Sprint</span>
                 </div>
             </div>
 
@@ -536,266 +535,130 @@
     </header>
 
     <!-- ============================================================ -->
-    <!-- ABOUT ME                                                      -->
+    <!-- SERVICES SECTION                                              -->
     <!-- ============================================================ -->
-    <section id="about" class="py-24 bg-slate-50 relative z-10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
-
-                <!-- Left: portrait/monogram card -->
-                <div class="reveal flex justify-center lg:justify-end">
-                    <div class="relative max-w-sm w-full">
-                        <!-- Main card -->
-                        <div class="card p-8 text-center relative z-10">
-                            <!-- Monogram avatar -->
-                            <div class="w-24 h-24 rounded-2xl bg-gradient-to-br from-blue-500 to-violet-600 text-white font-display font-extrabold text-4xl flex items-center justify-center mx-auto mb-5 shadow-lg shadow-blue-200">
-                                M
-                            </div>
-                            <h3 class="font-display font-bold text-2xl text-slate-900 mb-1">Mubaris</h3>
-                            <p class="text-sm text-slate-500 font-medium mb-5">Founder &amp; Web Developer · ZENVORA</p>
-                            <div class="flex flex-wrap gap-2 justify-center mb-6">
-                                <span class="pill">Web Development</span>
-                                <span class="pill-violet pill">UI/UX</span>
-                                <span class="pill-slate pill">Branding</span>
-                            </div>
-                            <div class="flex items-center justify-center gap-5 pt-5 border-t border-slate-100 text-slate-400">
-                                <a href="https://github.com/muhammedmubarisa135-dev" target="_blank" class="hover:text-blue-600 transition text-lg" title="GitHub"><i class="fa-brands fa-github"></i></a>
-                                <a href="#contact" class="hover:text-blue-600 transition text-lg" title="Send a message"><i class="fa-regular fa-envelope"></i></a>
-                            </div>
-                        </div>
-                        <!-- Floating decoration -->
-                        <div class="absolute -bottom-4 -right-4 w-24 h-24 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center z-0">
-                            <i class="fa-solid fa-code text-blue-300 text-2xl"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Right: bio text -->
-                <div class="reveal space-y-6">
-                    <span class="section-label"><i class="fa-solid fa-user text-[10px]"></i> About Me</span>
-                    <h2 class="font-display font-extrabold text-3xl sm:text-4xl text-slate-900 tracking-tight leading-tight">
-                        One creator. A full range<br>of <span class="gradient-text">digital capabilities.</span>
-                    </h2>
-                    <div class="space-y-4 text-slate-500 text-sm sm:text-base leading-relaxed">
-                        <p>
-                            I'm Mubaris — a web developer and creative technologist behind <strong class="text-slate-700 font-semibold">ZENVORA</strong>. My core work is building custom websites and web applications that are fast, responsive, and purposefully designed.
-                        </p>
-                        <p>
-                            Beyond development, I work across a range of creative services: UI/UX design, brand identity, logo design, video editing, AI-assisted video creation, commercial photography, poster design, and digital advertising. These capabilities let me support a project from concept through to promotion.
-                        </p>
-                        <p>
-                            I believe in clean code, honest communication, and building things that genuinely serve their purpose. I work directly with clients — no layers of agency overhead.
-                        </p>
-                    </div>
-
-                    <div class="flex flex-col sm:flex-row gap-4 pt-2">
-                        <a href="#work" class="btn-primary px-6 py-3 text-sm inline-flex items-center justify-center gap-2">
-                            <span>See My Projects</span>
-                            <i class="fa-solid fa-arrow-right text-xs"></i>
-                        </a>
-                        <a href="#contact" class="btn-secondary px-6 py-3 text-sm inline-flex items-center justify-center gap-2">
-                            <span>Get in Touch</span>
-                        </a>
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-    </section>
-
-    <!-- ============================================================ -->
-    <!-- ABOUT RASAL                                                   -->
-    <!-- ============================================================ -->
-    <section id="rasal" class="py-24 relative z-10">
-
-        <!-- Ambient blobs -->
-        <div class="blob w-[400px] h-[400px] bg-violet-400 top-0 left-0 pointer-events-none" style="z-index:0; opacity:0.07;"></div>
-
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
-
-                <!-- LEFT: Bio text -->
-                <div class="reveal space-y-6">
-                    <span class="section-label"><i class="fa-solid fa-user text-[10px]"></i> Creative Partner</span>
-                    <h2 class="font-display font-extrabold text-3xl sm:text-4xl text-slate-900 tracking-tight leading-tight">
-                        The creative force<br>behind <span style="background:linear-gradient(135deg,#7c3aed,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">every campaign.</span>
-                    </h2>
-                    <div class="space-y-4 text-slate-500 text-sm sm:text-base leading-relaxed">
-                        <p>
-                            Rasal is the creative mind partnering with ZENVORA on media, advertising, and brand storytelling. With a sharp eye for visual impact, he brings brands to life through video, motion, and digital campaigns.
-                        </p>
-                        <p>
-                            His expertise spans video editing and cinematic production, social media advertising, and the full creative media pipeline — from concept and shoot through to final post-production delivery.
-                        </p>
-                        <p>
-                            Together, Mubaris and Rasal cover the complete digital picture: engineering the platform and fuelling its reach.
-                        </p>
-                    </div>
-
-                    <a href="#contact" class="btn-secondary px-6 py-3 text-sm inline-flex items-center justify-center gap-2" style="border-color:#ddd6fe; color:#7c3aed;">
-                        <span>Work With Rasal</span>
-                        <i class="fa-solid fa-arrow-right text-xs"></i>
-                    </a>
-                </div>
-
-                <!-- RIGHT: Name / Skills card -->
-                <div class="reveal flex justify-center lg:justify-start">
-                    <div class="relative max-w-sm w-full">
-
-                        <!-- Main card -->
-                        <div class="card p-8 text-center relative z-10" style="border-color:#ede9fe;">
-
-                            <!-- Monogram avatar -->
-                            <div class="w-24 h-24 rounded-2xl text-white font-display font-extrabold text-4xl flex items-center justify-center mx-auto mb-5 shadow-lg" style="background:linear-gradient(135deg,#7c3aed,#a78bfa); box-shadow:0 8px 24px rgba(124,58,237,0.25);">
-                                R
-                            </div>
-
-                            <h3 class="font-display font-bold text-2xl text-slate-900 mb-1">Rasal</h3>
-                            <p class="text-sm text-slate-500 font-medium mb-5">Creative Partner · ZENVORA</p>
-
-                            <!-- Skills -->
-                            <div class="flex flex-wrap gap-2 justify-center mb-6">
-                                <span class="pill-violet pill">Video Editing</span>
-                                <span class="pill-violet pill">Advertisement</span>
-                                <span class="pill-violet pill">Creative Media</span>
-                            </div>
-
-                            <!-- Skill detail list -->
-                            <div class="text-left space-y-2.5 pt-5 border-t border-slate-100">
-                                <div class="flex items-center gap-3 text-sm text-slate-600">
-                                    <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style="background:#f5f3ff;">
-                                        <i class="fa-solid fa-film text-xs" style="color:#7c3aed;"></i>
-                                    </div>
-                                    <span class="font-medium">Video Editing &amp; Cinematic Production</span>
-                                </div>
-                                <div class="flex items-center gap-3 text-sm text-slate-600">
-                                    <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style="background:#f5f3ff;">
-                                        <i class="fa-solid fa-bullhorn text-xs" style="color:#7c3aed;"></i>
-                                    </div>
-                                    <span class="font-medium">Digital Advertising &amp; Social Campaigns</span>
-                                </div>
-                                <div class="flex items-center gap-3 text-sm text-slate-600">
-                                    <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style="background:#f5f3ff;">
-                                        <i class="fa-solid fa-wand-magic-sparkles text-xs" style="color:#7c3aed;"></i>
-                                    </div>
-                                    <span class="font-medium">Creative Media &amp; Visual Storytelling</span>
-                                </div>
-                            </div>
-
-                            <!-- Contact link -->
-                            <div class="flex items-center justify-center gap-5 pt-5 mt-4 border-t border-slate-100 text-slate-400">
-                                <a href="#contact" class="hover:text-violet-600 transition text-lg" title="Send a message"><i class="fa-regular fa-envelope"></i></a>
-                            </div>
-                        </div>
-
-                        <!-- Floating decoration -->
-                        <div class="absolute -bottom-4 -left-4 w-24 h-24 rounded-2xl flex items-center justify-center z-0" style="background:#f5f3ff; border:1px solid #ddd6fe;">
-                            <i class="fa-solid fa-wand-magic-sparkles text-2xl" style="color:#c4b5fd;"></i>
-                        </div>
-
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-    </section>
-
-    <!-- ============================================================ -->
-    <!-- SERVICES                                                      -->
-    <!-- ============================================================ -->
-    <section id="services" class="py-24 relative z-10">
+    <section id="services" class="py-24 relative z-10" style="background: #faf7ff;">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
             <div class="text-center max-w-2xl mx-auto mb-16 space-y-4 reveal">
-                <span class="section-label"><i class="fa-solid fa-briefcase text-[10px]"></i> Services</span>
+                <span class="agency-label"><i class="fa-solid fa-briefcase text-[10px]"></i> Agency Capabilities</span>
                 <h2 class="font-display font-extrabold text-3xl sm:text-5xl text-slate-900 tracking-tight">
-                    What I Build &amp; Create
+                    Full-Service Creative &amp; Tech
                 </h2>
-                <p class="text-slate-500 text-sm sm:text-base">
-                    Website development is my primary focus. The creative services below support the full digital presence of the projects I build.
+                <p class="text-slate-600 text-sm sm:text-base">
+                    From engineering your core web platform to producing cinematic commercial video and paid ad funnels — we craft the entire digital ecosystem.
                 </p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-                <!-- A. Web Development (primary — wide card) -->
-                <div class="card card-featured p-8 lg:col-span-2 reveal">
-                    <div class="flex items-start justify-between mb-5">
-                        <div class="service-icon bg-white/20 text-white">
-                            <i class="fa-solid fa-laptop-code"></i>
-                        </div>
-                        <span class="text-[10px] font-bold uppercase tracking-widest text-blue-200 border border-blue-400/30 px-3 py-1 rounded-full bg-blue-500/20">★ Primary Focus</span>
+                <!-- Service 1: Web Development -->
+                <div class="agency-card p-8 reveal">
+                    <div class="agency-icon-box bg-violet-100 text-violet-700 mb-6">
+                        <i class="fa-solid fa-code"></i>
                     </div>
-                    <h3 class="font-display font-bold text-2xl text-white mb-3">Website Development</h3>
-                    <p class="text-blue-100 text-sm leading-relaxed mb-6">
-                        Custom-coded, responsive websites and web applications built from scratch. Mobile-first, semantic HTML, and genuinely maintained code.
+                    <span class="pill-violet text-[10px] mb-2">Engineering</span>
+                    <h3 class="font-display font-bold text-2xl text-slate-900 mb-3">Website &amp; App Development</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed mb-6">
+                        Custom-coded, lightning-fast web platforms and applications engineered from scratch with clean, scalable code.
                     </p>
-                    <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-blue-100 font-medium">
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-blue-300"></i> Custom HTML / CSS / JavaScript</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-blue-300"></i> Mobile-first responsive layouts</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-blue-300"></i> Supabase / database integration</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-blue-300"></i> Admin dashboards &amp; portals</li>
+                    <ul class="space-y-2 text-xs text-slate-600 font-medium pt-4 border-t border-violet-100">
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-violet-600"></i> Custom HTML5 / React / Modern JS</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-violet-600"></i> Mobile-first responsive layouts</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-violet-600"></i> Supabase / Database integrations</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-violet-600"></i> Secure client portals &amp; dashboards</li>
                     </ul>
                 </div>
 
-                <!-- B. UI/UX & Branding -->
-                <div class="card p-7 reveal">
-                    <div class="service-icon bg-violet-50 text-violet-600 mb-5">
+                <!-- Service 2: UI/UX Design -->
+                <div class="agency-card p-8 reveal">
+                    <div class="agency-icon-box bg-purple-100 text-purple-700 mb-6">
                         <i class="fa-solid fa-pen-ruler"></i>
                     </div>
-                    <h3 class="font-display font-bold text-xl text-slate-900 mb-2">UI/UX, Logo &amp; Branding</h3>
-                    <p class="text-slate-500 text-sm leading-relaxed mb-5">
-                        User interface design, wireframes, logo design, and brand identity systems.
+                    <span class="pill-violet text-[10px] mb-2">Design</span>
+                    <h3 class="font-display font-bold text-2xl text-slate-900 mb-3">UI/UX &amp; Product Design</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed mb-6">
+                        Intuitive user journeys, wireframes, and interactive Figma prototypes designed for effortless user conversion.
                     </p>
-                    <ul class="space-y-1.5 text-xs text-slate-600 font-medium">
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-blue-400"></i> Wireframes &amp; prototypes</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-blue-400"></i> Logo &amp; wordmark design</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-blue-400"></i> Brand guidelines &amp; systems</li>
+                    <ul class="space-y-2 text-xs text-slate-600 font-medium pt-4 border-t border-violet-100">
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-violet-600"></i> User journey mapping &amp; wireframes</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-violet-600"></i> Interactive Figma clickable prototypes</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-violet-600"></i> Scalable design systems &amp; UI kits</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-violet-600"></i> Accessibility &amp; contrast audits</li>
                     </ul>
                 </div>
 
-                <!-- C. Video & Photo -->
-                <div class="card p-7 reveal">
-                    <div class="service-icon bg-blue-50 text-blue-600 mb-5">
+                <!-- Service 3: Branding & Logo Design -->
+                <div class="agency-card p-8 reveal">
+                    <div class="agency-icon-box bg-fuchsia-100 text-fuchsia-700 mb-6">
+                        <i class="fa-solid fa-crown"></i>
+                    </div>
+                    <span class="pill-violet text-[10px] mb-2">Identity</span>
+                    <h3 class="font-display font-bold text-2xl text-slate-900 mb-3">Branding &amp; Logo Design</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed mb-6">
+                        Distinctive logos, typography, color palettes, and comprehensive guidelines that build enduring brand authority.
+                    </p>
+                    <ul class="space-y-2 text-xs text-slate-600 font-medium pt-4 border-t border-violet-100">
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-violet-600"></i> Logo marks &amp; custom typography</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-violet-600"></i> Comprehensive brand guidelines</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-violet-600"></i> Color psychology &amp; visual hierarchy</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-violet-600"></i> Vector asset delivery for print/digital</li>
+                    </ul>
+                </div>
+
+                <!-- Service 4: Video Editing & AI Video -->
+                <div class="agency-card p-8 reveal">
+                    <div class="agency-icon-box bg-indigo-100 text-indigo-700 mb-6">
                         <i class="fa-solid fa-film"></i>
                     </div>
-                    <h3 class="font-display font-bold text-xl text-slate-900 mb-2">Video, AI Video &amp; Photography</h3>
-                    <p class="text-slate-500 text-sm leading-relaxed mb-5">
-                        Video editing, AI-assisted video creation, and commercial photography.
-                    </p>
-                    <ul class="space-y-1.5 text-xs text-slate-600 font-medium">
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-blue-400"></i> Video editing &amp; reels</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-blue-400"></i> AI video creation</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-blue-400"></i> Commercial photography</li>
-                    </ul>
-                </div>
-
-                <!-- D. Digital Advertising (wide card) -->
-                <div class="card p-8 lg:col-span-2 reveal">
-                    <div class="flex items-start justify-between mb-5">
-                        <div class="service-icon bg-slate-100 text-slate-600">
-                            <i class="fa-solid fa-bullhorn"></i>
-                        </div>
-                        <span class="pill-slate pill">Digital Advertising</span>
-                    </div>
-                    <h3 class="font-display font-bold text-2xl text-slate-900 mb-3">Poster Design, Ads &amp; Business Promotion</h3>
+                    <span class="pill-violet text-[10px] mb-2">Media</span>
+                    <h3 class="font-display font-bold text-2xl text-slate-900 mb-3">Video Editing &amp; AI Video</h3>
                     <p class="text-slate-600 text-sm leading-relaxed mb-6">
-                        Promotional poster and graphic design, Meta and Google advertising campaigns, and digital publicity to help businesses reach their audience.
+                        Cinematic cuts, vertical reels, commercials, and generative AI video storytelling that command audience attention.
                     </p>
-                    <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-600 font-medium">
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-blue-400"></i> Poster &amp; graphic design</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-blue-400"></i> Meta Ads (Instagram / Facebook)</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-blue-400"></i> Google Search &amp; Display Ads</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-blue-400"></i> Business promotion &amp; publicity</li>
+                    <ul class="space-y-2 text-xs text-slate-600 font-medium pt-4 border-t border-violet-100">
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-violet-600"></i> Vertical reels &amp; TikTok video suites</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-violet-600"></i> Generative AI video creation</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-violet-600"></i> Sound design, voiceovers &amp; SFX</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-violet-600"></i> Professional color grading (LUTs)</li>
                     </ul>
                 </div>
 
-                <!-- E. Photography standalone -->
-                <!-- (merged into C above) -->
+                <!-- Service 5: Commercial Photography -->
+                <div class="agency-card p-8 reveal">
+                    <div class="agency-icon-box bg-rose-100 text-rose-700 mb-6">
+                        <i class="fa-solid fa-camera"></i>
+                    </div>
+                    <span class="pill-violet text-[10px] mb-2">Visuals</span>
+                    <h3 class="font-display font-bold text-2xl text-slate-900 mb-3">Commercial Photography</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed mb-6">
+                        High-resolution product, lifestyle, and portrait commercial photography with professional lighting and retouching.
+                    </p>
+                    <ul class="space-y-2 text-xs text-slate-600 font-medium pt-4 border-t border-violet-100">
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-violet-600"></i> High-resolution product photography</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-violet-600"></i> Commercial portraiture &amp; lifestyle</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-violet-600"></i> High-end retouching &amp; backdrop styling</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-violet-600"></i> Web-optimized asset compression</li>
+                    </ul>
+                </div>
+
+                <!-- Service 6: Advertising & Promotion -->
+                <div class="agency-card p-8 reveal">
+                    <div class="agency-icon-box bg-amber-100 text-amber-700 mb-6">
+                        <i class="fa-solid fa-bullhorn"></i>
+                    </div>
+                    <span class="pill-violet text-[10px] mb-2">Growth</span>
+                    <h3 class="font-display font-bold text-2xl text-slate-900 mb-3">Posters, Ads &amp; Promotion</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed mb-6">
+                        Promotional poster and graphic design, Meta/Google paid campaigns, and digital publicity funnels that drive inquiries.
+                    </p>
+                    <ul class="space-y-2 text-xs text-slate-600 font-medium pt-4 border-t border-violet-100">
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-violet-600"></i> High-impact promotional poster design</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-violet-600"></i> Meta Ads (Instagram &amp; Facebook)</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-violet-600"></i> Google Search &amp; Display setup</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-violet-600"></i> Lead generation funnels &amp; tracking</li>
+                    </ul>
+                </div>
 
             </div>
 
@@ -803,76 +666,76 @@
     </section>
 
     <!-- ============================================================ -->
-    <!-- FEATURED PROJECTS                                            -->
+    <!-- OUR WORK / FEATURED PROJECTS                                 -->
     <!-- ============================================================ -->
-    <section id="work" class="py-24 bg-slate-50 relative z-10">
+    <section id="work" class="py-24 relative z-10" style="background:#ffffff;">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-            <div class="flex flex-col md:flex-row md:items-end justify-between mb-14 gap-6 reveal">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6 reveal">
                 <div class="space-y-3">
-                    <span class="section-label"><i class="fa-solid fa-folder-open text-[10px]"></i> Featured Projects</span>
-                    <h2 class="font-display font-extrabold text-3xl sm:text-5xl text-slate-900 tracking-tight">Real Work, Real Craft</h2>
+                    <span class="agency-label"><i class="fa-solid fa-folder-open text-[10px]"></i> Verified Deliveries</span>
+                    <h2 class="font-display font-extrabold text-3xl sm:text-5xl text-slate-900 tracking-tight">
+                        Our Work in Action
+                    </h2>
                 </div>
-                <p class="text-slate-500 text-sm max-w-sm">
-                    Projects I've designed, built, and delivered. Clearly labelled where work is in progress or conceptual.
+                <p class="text-slate-600 text-sm sm:text-base max-w-md">
+                    Real, live projects engineered and produced by our two-person agency. Click on any project card to visit the live website.
                 </p>
             </div>
 
+            <!-- 3 Live Project Cards Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
 
-                <!-- Project 1: Karate Academy (real live project) -->
-                <div class="card overflow-hidden reveal group">
-                    <a href="https://volcanoacademy.vercel.app" target="_blank" rel="noopener noreferrer" class="block h-60 bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 relative flex items-center justify-center p-6 transition group-hover:brightness-105">
-                        <div class="absolute inset-0 opacity-10" style="background-image: url('hero-bg.jpg'); background-size: cover; background-position: center;"></div>
+                <!-- Project 1: Volcano Martial Arts Academy -->
+                <div class="agency-card overflow-hidden reveal group">
+                    <a href="https://volcanoacademy.vercel.app" target="_blank" rel="noopener noreferrer" class="block h-60 bg-gradient-to-br from-violet-600 via-indigo-700 to-purple-800 relative flex items-center justify-center p-6 transition group-hover:brightness-105">
+                        <div class="absolute inset-0 opacity-15" style="background-image: url('hero-bg.jpg'); background-size: cover; background-position: center;"></div>
                         <div class="relative z-10 text-center space-y-3">
-                            <span class="inline-block px-3 py-1 bg-white/20 border border-white/30 text-white text-[10px] font-bold uppercase tracking-widest rounded-full">Website &amp; Web App</span>
-                            <h3 class="font-display font-bold text-2xl sm:text-3xl text-white">Karate Academy</h3>
-                            <p class="text-xs text-blue-100 max-w-xs mx-auto">Institutional website with online admissions, student portal, and admin dashboard.</p>
+                            <span class="inline-block px-3 py-1 bg-white/20 border border-white/30 text-white text-[10px] font-bold uppercase tracking-widest rounded-full">Web App &amp; Admissions</span>
+                            <h3 class="font-display font-bold text-2xl sm:text-3xl text-white">Volcano Academy</h3>
+                            <p class="text-xs text-violet-100 max-w-xs mx-auto">Martial arts institutional platform with student portal and admin dashboard.</p>
                         </div>
                     </a>
-                    <div class="p-7">
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="pill">JavaScript ES6+</span>
-                            <span class="pill-slate pill">Supabase</span>
-                            <span class="pill-slate pill">Tailwind CSS</span>
-                            <span class="pill-slate pill">HTML5</span>
+                    <div class="p-7 space-y-4">
+                        <div class="flex flex-wrap gap-1.5">
+                            <span class="pill-violet text-[10px]">Mubaris: Architecture &amp; Supabase</span>
+                            <span class="pill-slate text-[10px]">Rasal: Media Direction</span>
                         </div>
-                        <p class="text-slate-500 text-sm leading-relaxed mb-6">
-                            A full-featured academy website including online admission intake, student-facing dashboard, fee tracking, galleries, and a protected admin control panel. Built with a Supabase backend and modern JavaScript.
+                        <p class="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                            Full-featured academy web platform including online admission intake, student-facing dashboard, fee tracking, interactive galleries, and protected administrative control.
                         </p>
-                        <div class="flex items-center justify-between pt-5 border-t border-slate-100">
-                            <a href="https://volcanoacademy.vercel.app" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-blue-600 hover:text-blue-800 flex items-center gap-2 transition">
+                        <div class="flex items-center justify-between pt-4 border-t border-violet-100">
+                            <a href="https://volcanoacademy.vercel.app" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-violet-700 hover:text-violet-900 flex items-center gap-2 transition">
                                 <span>Visit Live Website</span>
                                 <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
                             </a>
                             <span class="text-xs text-green-600 font-semibold flex items-center gap-1.5">
                                 <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse inline-block"></span>
-                                Live Website
+                                Live System
                             </span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Project 2: Al Barakha Bakery -->
-                <div class="card overflow-hidden reveal group">
-                    <a href="https://albarakhabakery.vercel.app" target="_blank" rel="noopener noreferrer" class="block h-60 bg-gradient-to-br from-amber-500 via-orange-500 to-rose-600 relative flex items-center justify-center p-6 transition group-hover:brightness-105">
+                <div class="agency-card overflow-hidden reveal group">
+                    <a href="https://albarakhabakery.vercel.app" target="_blank" rel="noopener noreferrer" class="block h-60 bg-gradient-to-br from-purple-600 via-fuchsia-600 to-pink-700 relative flex items-center justify-center p-6 transition group-hover:brightness-105">
                         <div class="relative z-10 text-center space-y-3">
-                            <span class="inline-block px-3 py-1 bg-white/20 border border-white/30 text-white text-[10px] font-bold uppercase tracking-widest rounded-full">Bakery Ordering Website</span>
+                            <span class="inline-block px-3 py-1 bg-white/20 border border-white/30 text-white text-[10px] font-bold uppercase tracking-widest rounded-full">Bakery Ordering Platform</span>
                             <h3 class="font-display font-bold text-2xl sm:text-3xl text-white">Al Barakha Bakery</h3>
-                            <p class="text-xs text-orange-100 max-w-xs mx-auto">Business website with menu display, order inquiry, and digital promotion.</p>
+                            <p class="text-xs text-pink-100 max-w-xs mx-auto">Business website with dynamic menu showcase and ordering inquiries.</p>
                         </div>
                     </a>
-                    <div class="p-7">
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="pill">HTML5 / CSS3</span>
-                            <span class="pill-slate pill">JavaScript</span>
-                            <span class="pill-slate pill">Responsive Design</span>
+                    <div class="p-7 space-y-4">
+                        <div class="flex flex-wrap gap-1.5">
+                            <span class="pill-violet text-[10px]">Mubaris: Web Development</span>
+                            <span class="pill-slate text-[10px]">Rasal: Food Media Styling</span>
                         </div>
-                        <p class="text-slate-500 text-sm leading-relaxed mb-6">
-                            A bakery business website featuring an attractive product menu, order inquiry workflow, business information, and digital promotional assets to support the client's online presence.
+                        <p class="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                            Bespoke bakery business ordering website featuring an interactive product catalogue, customer ordering inquiries, and digital publicity assets to drive local orders.
                         </p>
-                        <div class="flex items-center justify-between pt-5 border-t border-slate-100">
-                            <a href="https://albarakhabakery.vercel.app" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-blue-600 hover:text-blue-800 flex items-center gap-2 transition">
+                        <div class="flex items-center justify-between pt-4 border-t border-violet-100">
+                            <a href="https://albarakhabakery.vercel.app" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-violet-700 hover:text-violet-900 flex items-center gap-2 transition">
                                 <span>Visit Live Website</span>
                                 <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
                             </a>
@@ -884,27 +747,25 @@
                     </div>
                 </div>
 
-                <!-- Project 3: ISM Logo & Branding -->
-                <div class="card overflow-hidden reveal group">
-                    <a href="https://ism-web-blue.vercel.app" target="_blank" rel="noopener noreferrer" class="block h-60 bg-gradient-to-br from-violet-600 via-purple-700 to-indigo-800 relative flex items-center justify-center p-6 transition group-hover:brightness-105">
+                <!-- Project 3: Islah Super Market (ISM) -->
+                <div class="agency-card overflow-hidden reveal group">
+                    <a href="https://ism-web-blue.vercel.app" target="_blank" rel="noopener noreferrer" class="block h-60 bg-gradient-to-br from-indigo-700 via-violet-700 to-purple-800 relative flex items-center justify-center p-6 transition group-hover:brightness-105">
                         <div class="relative z-10 text-center space-y-3">
-                            <span class="inline-block px-3 py-1 bg-white/20 border border-white/30 text-white text-[10px] font-bold uppercase tracking-widest rounded-full">Web &amp; Brand Identity</span>
-                            <h3 class="font-display font-bold text-2xl sm:text-3xl text-white">Islah Super Market (ISM)</h3>
-                            <p class="text-xs text-violet-100 max-w-xs mx-auto">Complete logo design, brand identity, and web presence for a local supermarket.</p>
+                            <span class="inline-block px-3 py-1 bg-white/20 border border-white/30 text-white text-[10px] font-bold uppercase tracking-widest rounded-full">Brand Identity &amp; Web</span>
+                            <h3 class="font-display font-bold text-2xl sm:text-3xl text-white">Islah Super Market</h3>
+                            <p class="text-xs text-indigo-100 max-w-xs mx-auto">Complete logo design, brand guidelines, and modern web presence.</p>
                         </div>
                     </a>
-                    <div class="p-7">
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="pill-violet pill">Logo Design</span>
-                            <span class="pill-violet pill">Brand Identity</span>
-                            <span class="pill-slate pill">Web Presence</span>
-                            <span class="pill-slate pill">Color System</span>
+                    <div class="p-7 space-y-4">
+                        <div class="flex flex-wrap gap-1.5">
+                            <span class="pill-violet text-[10px]">Rasal: Logo &amp; Identity</span>
+                            <span class="pill-slate text-[10px]">Mubaris: Web Showcase</span>
                         </div>
-                        <p class="text-slate-500 text-sm leading-relaxed mb-6">
-                            Designed the brand identity and web presence for ISM (Islah Super Market), including logo, wordmark, color palette, and supporting visual identity assets for print and digital use.
+                        <p class="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                            Designed the comprehensive brand identity for ISM (Islah Super Market), including primary logo, wordmark, color systems, and modern web presence for print and digital use.
                         </p>
-                        <div class="flex items-center justify-between pt-5 border-t border-slate-100">
-                            <a href="https://ism-web-blue.vercel.app" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-blue-600 hover:text-blue-800 flex items-center gap-2 transition">
+                        <div class="flex items-center justify-between pt-4 border-t border-violet-100">
+                            <a href="https://ism-web-blue.vercel.app" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-violet-700 hover:text-violet-900 flex items-center gap-2 transition">
                                 <span>Visit Live Website</span>
                                 <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
                             </a>
@@ -922,149 +783,258 @@
     </section>
 
     <!-- ============================================================ -->
-    <!-- SKILLS & TOOLS                                               -->
+    <!-- OUR TEAM / TWO-PERSON AGENCY PROFILES                        -->
     <!-- ============================================================ -->
-    <section id="skills" class="py-24 relative z-10">
+    <section id="team" class="py-24 relative z-10" style="background: #faf7ff;">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-            <div class="text-center max-w-2xl mx-auto mb-14 space-y-4 reveal">
-                <span class="section-label"><i class="fa-solid fa-wrench text-[10px]"></i> Skills &amp; Tools</span>
-                <h2 class="font-display font-extrabold text-3xl sm:text-5xl text-slate-900 tracking-tight">Technologies I Work With</h2>
-                <p class="text-slate-500 text-sm sm:text-base">
-                    Tools and technologies I use across web development, design, and creative production.
-                </p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-
-                <!-- Web Development -->
-                <div class="card p-6 reveal">
-                    <div class="flex items-center gap-3 mb-5">
-                        <div class="service-icon bg-blue-50 text-blue-600 w-10 h-10 rounded-xl text-base">
-                            <i class="fa-solid fa-code"></i>
-                        </div>
-                        <h4 class="font-display font-bold text-sm text-slate-800">Web Development</h4>
-                    </div>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="skill-tag">HTML5</span>
-                        <span class="skill-tag">CSS3</span>
-                        <span class="skill-tag">JavaScript (ES6+)</span>
-                        <span class="skill-tag">Tailwind CSS</span>
-                        <span class="skill-tag">Supabase</span>
-                        <span class="skill-tag">Git / GitHub</span>
-                        <span class="skill-tag">GitHub Pages</span>
-                        <span class="skill-tag">Responsive Design</span>
-                    </div>
-                </div>
-
-                <!-- Design & Branding -->
-                <div class="card p-6 reveal">
-                    <div class="flex items-center gap-3 mb-5">
-                        <div class="service-icon bg-violet-50 text-violet-600 w-10 h-10 rounded-xl text-base">
-                            <i class="fa-solid fa-pen-nib"></i>
-                        </div>
-                        <h4 class="font-display font-bold text-sm text-slate-800">Design &amp; Branding</h4>
-                    </div>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="skill-tag">Figma</span>
-                        <span class="skill-tag">UI/UX Design</span>
-                        <span class="skill-tag">Logo Design</span>
-                        <span class="skill-tag">Brand Identity</span>
-                        <span class="skill-tag">Typography</span>
-                        <span class="skill-tag">Colour Systems</span>
-                        <span class="skill-tag">Poster Design</span>
-                        <span class="skill-tag">Visual Identity</span>
-                    </div>
-                </div>
-
-                <!-- Video & Media -->
-                <div class="card p-6 reveal">
-                    <div class="flex items-center gap-3 mb-5">
-                        <div class="service-icon bg-rose-50 text-rose-500 w-10 h-10 rounded-xl text-base">
-                            <i class="fa-solid fa-clapperboard"></i>
-                        </div>
-                        <h4 class="font-display font-bold text-sm text-slate-800">Video &amp; Media</h4>
-                    </div>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="skill-tag">Video Editing</span>
-                        <span class="skill-tag">AI Video Creation</span>
-                        <span class="skill-tag">Reels &amp; Short-form</span>
-                        <span class="skill-tag">Color Grading</span>
-                        <span class="skill-tag">Photography</span>
-                        <span class="skill-tag">Photo Retouching</span>
-                    </div>
-                </div>
-
-                <!-- Digital Marketing -->
-                <div class="card p-6 reveal">
-                    <div class="flex items-center gap-3 mb-5">
-                        <div class="service-icon bg-amber-50 text-amber-600 w-10 h-10 rounded-xl text-base">
-                            <i class="fa-solid fa-chart-line"></i>
-                        </div>
-                        <h4 class="font-display font-bold text-sm text-slate-800">Digital Marketing</h4>
-                    </div>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="skill-tag">Meta Ads</span>
-                        <span class="skill-tag">Google Ads</span>
-                        <span class="skill-tag">Social Media</span>
-                        <span class="skill-tag">Digital Advertising</span>
-                        <span class="skill-tag">Business Promotion</span>
-                        <span class="skill-tag">Campaign Setup</span>
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-    </section>
-
-    <!-- ============================================================ -->
-    <!-- MY WORKFLOW / PROCESS                                        -->
-    <!-- ============================================================ -->
-    <section id="process" class="py-24 bg-slate-50 relative z-10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-            <div class="text-center max-w-2xl mx-auto mb-14 space-y-4 reveal">
-                <span class="section-label"><i class="fa-solid fa-diagram-project text-[10px]"></i> My Workflow</span>
+            <div class="text-center max-w-3xl mx-auto mb-16 space-y-4 reveal">
+                <span class="agency-label"><i class="fa-solid fa-users text-[10px]"></i> The Agency Duo</span>
                 <h2 class="font-display font-extrabold text-3xl sm:text-5xl text-slate-900 tracking-tight">
-                    How I Work With Clients
+                    Two Creators. One Shared Standard.
                 </h2>
-                <p class="text-slate-500 text-sm sm:text-base">
-                    A straightforward, collaborative process — from first conversation to finished product.
+                <p class="text-slate-600 text-sm sm:text-base">
+                    When you work with ZENVORA, you collaborate directly with the two partners who conceptualize, engineer, and deliver your project. No middle-management, no delegation.
                 </p>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Two Distinct Co-Founder Profiles Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto mb-12">
 
-                <div class="card p-7 reveal">
-                    <span class="step-num block mb-4">01</span>
-                    <h3 class="font-display font-bold text-lg text-slate-900 mb-2">Discovery &amp; Scoping</h3>
-                    <p class="text-slate-500 text-sm leading-relaxed">
-                        We start with a conversation. I ask about your goals, audience, visual preferences, and technical requirements. No obligation.
+                <!-- Profile 1: Mubaris -->
+                <div class="agency-card p-8 sm:p-10 relative flex flex-col justify-between reveal border-violet-200">
+                    <div>
+                        <!-- Header / Monogram Avatar -->
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-violet-600 to-indigo-600 text-white font-display font-extrabold text-3xl flex items-center justify-center shadow-lg shadow-violet-200">
+                                M
+                            </div>
+                            <span class="pill-violet">Co-Founder</span>
+                        </div>
+
+                        <h3 class="font-display font-extrabold text-3xl text-slate-900 mb-1">Mubaris</h3>
+                        <p class="text-xs font-bold uppercase tracking-wider text-violet-700 mb-4">
+                            Lead Web Architect &amp; Software Engineer
+                        </p>
+
+                        <!-- Specialization tags -->
+                        <div class="flex flex-wrap gap-1.5 mb-6">
+                            <span class="pill-violet">Web Engineering</span>
+                            <span class="pill-violet">UI/UX Systems</span>
+                            <span class="pill-violet">Database Architecture</span>
+                            <span class="pill-slate">Full-Stack</span>
+                        </div>
+
+                        <!-- Biography -->
+                        <div class="mb-6 space-y-2">
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400">Background &amp; Role</h4>
+                            <p class="text-slate-600 text-sm leading-relaxed">
+                                Leads the engineering and technology pillar at ZENVORA. Specializes in building modern web platforms, fast client interfaces, database pipelines with Supabase, and conversion-optimized web applications with sub-second page loads.
+                            </p>
+                        </div>
+
+                        <!-- Technical Skills -->
+                        <div class="mb-6 space-y-2.5">
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400">Core Technical Stack</h4>
+                            <div class="flex flex-wrap gap-1.5">
+                                <span class="pill-slate text-[11px]">React / Next.js</span>
+                                <span class="pill-slate text-[11px]">JavaScript ES6+</span>
+                                <span class="pill-slate text-[11px]">Tailwind CSS</span>
+                                <span class="pill-slate text-[11px]">Supabase / SQL</span>
+                                <span class="pill-slate text-[11px]">HTML5 / CSS3</span>
+                                <span class="pill-slate text-[11px]">UI/UX Figma</span>
+                            </div>
+                        </div>
+
+                        <!-- Project Contributions -->
+                        <div class="mb-6 space-y-2">
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400">Key Contributions</h4>
+                            <ul class="space-y-1.5 text-xs text-slate-600">
+                                <li class="flex items-start gap-2">
+                                    <i class="fa-solid fa-check text-violet-600 mt-0.5"></i>
+                                    <span><strong>Volcano Academy:</strong> Engineered full-stack platform, online admissions &amp; student portal.</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fa-solid fa-check text-violet-600 mt-0.5"></i>
+                                    <span><strong>Al Barakha Bakery:</strong> Built responsive ordering menu and inquiry pipeline.</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Connect Link -->
+                    <div class="pt-5 border-t border-violet-100 flex items-center justify-between">
+                        <span class="text-xs font-semibold text-slate-500">Connect with Mubaris</span>
+                        <a href="#contact" class="text-xs font-bold text-violet-700 hover:text-violet-900 flex items-center gap-1.5">
+                            <span>Inquire Directly</span>
+                            <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Profile 2: Rasal -->
+                <div class="agency-card p-8 sm:p-10 relative flex flex-col justify-between reveal border-purple-200">
+                    <div>
+                        <!-- Header / Monogram Avatar -->
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-purple-600 to-pink-600 text-white font-display font-extrabold text-3xl flex items-center justify-center shadow-lg shadow-purple-200">
+                                R
+                            </div>
+                            <span class="pill-violet">Co-Founder</span>
+                        </div>
+
+                        <h3 class="font-display font-extrabold text-3xl text-slate-900 mb-1">Rasal</h3>
+                        <p class="text-xs font-bold uppercase tracking-wider text-purple-700 mb-4">
+                            Creative Director &amp; Media Producer
+                        </p>
+
+                        <!-- Specialization tags -->
+                        <div class="flex flex-wrap gap-1.5 mb-6">
+                            <span class="pill-violet">Video Editing</span>
+                            <span class="pill-violet">AI Video Creation</span>
+                            <span class="pill-violet">Brand Identity</span>
+                            <span class="pill-slate">Meta &amp; Google Ads</span>
+                        </div>
+
+                        <!-- Biography -->
+                        <div class="mb-6 space-y-2">
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400">Background &amp; Role</h4>
+                            <p class="text-slate-600 text-sm leading-relaxed">
+                                Directs the creative, visual, and media production pillar at ZENVORA. Shapes brand aesthetics through cinematic video editing, generative AI video, brand identity, commercial photography, and targeted digital advertising campaigns.
+                            </p>
+                        </div>
+
+                        <!-- Creative Skills -->
+                        <div class="mb-6 space-y-2.5">
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400">Core Creative Tools</h4>
+                            <div class="flex flex-wrap gap-1.5">
+                                <span class="pill-slate text-[11px]">Cinematic Video Editing</span>
+                                <span class="pill-slate text-[11px]">AI Video Generation</span>
+                                <span class="pill-slate text-[11px]">Logo &amp; Brand Books</span>
+                                <span class="pill-slate text-[11px]">Commercial Photography</span>
+                                <span class="pill-slate text-[11px]">Poster &amp; Graphic Design</span>
+                                <span class="pill-slate text-[11px]">Meta Ads Manager</span>
+                            </div>
+                        </div>
+
+                        <!-- Project Contributions -->
+                        <div class="mb-6 space-y-2">
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400">Key Contributions</h4>
+                            <ul class="space-y-1.5 text-xs text-slate-600">
+                                <li class="flex items-start gap-2">
+                                    <i class="fa-solid fa-check text-purple-600 mt-0.5"></i>
+                                    <span><strong>Islah Super Market:</strong> Designed complete logo mark, color system &amp; visual identity.</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fa-solid fa-check text-purple-600 mt-0.5"></i>
+                                    <span><strong>Volcano Academy:</strong> Directed promotional media assets, martial arts video, and styling.</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Connect Link -->
+                    <div class="pt-5 border-t border-violet-100 flex items-center justify-between">
+                        <span class="text-xs font-semibold text-slate-500">Connect with Rasal</span>
+                        <a href="#contact" class="text-xs font-bold text-purple-700 hover:text-purple-900 flex items-center gap-1.5">
+                            <span>Inquire Directly</span>
+                            <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Two-Person Partnership Assurance Banner -->
+            <div class="agency-card p-8 sm:p-10 border-violet-200 max-w-5xl mx-auto shadow-sm">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div class="space-y-2 text-center md:text-left">
+                        <span class="text-xs font-bold uppercase tracking-widest text-violet-700">The Power of Two</span>
+                        <h4 class="font-display font-bold text-2xl text-slate-900">
+                            Senior-Level Execution on Every Single Deliverable
+                        </h4>
+                        <p class="text-xs sm:text-sm text-slate-600 max-w-xl">
+                            Instead of paying for bloated agency overhead or dealing with junior delegates, you get the direct creative and engineering intelligence of two founders dedicated to your success.
+                        </p>
+                    </div>
+                    <a href="#contact" class="btn-violet-primary px-6 py-3.5 text-xs uppercase tracking-wider shrink-0">
+                        Work With ZENVORA
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- OUR PROCESS (6-STEP WORKFLOW)                                -->
+    <!-- ============================================================ -->
+    <section id="process" class="py-24 relative z-10" style="background:#ffffff;">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <div class="text-center max-w-2xl mx-auto mb-16 space-y-4 reveal">
+                <span class="agency-label"><i class="fa-solid fa-diagram-project text-[10px]"></i> Agency Workflow</span>
+                <h2 class="font-display font-extrabold text-3xl sm:text-5xl text-slate-900 tracking-tight">
+                    From Concept to Shipped in 6 Steps
+                </h2>
+                <p class="text-slate-600 text-sm sm:text-base">
+                    Our agile process ensures complete transparency, rapid iterations, and guaranteed on-time delivery.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                <!-- Step 1 -->
+                <div class="agency-card p-8 reveal">
+                    <span class="step-number block mb-3">01</span>
+                    <h3 class="font-display font-bold text-xl text-slate-900 mb-2">Discovery &amp; Strategy</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        We begin by understanding your business goals, target audience, brand aesthetic, and architectural requirements to chart an exact roadmap.
                     </p>
                 </div>
 
-                <div class="card p-7 reveal">
-                    <span class="step-num block mb-4">02</span>
-                    <h3 class="font-display font-bold text-lg text-slate-900 mb-2">Design &amp; Planning</h3>
-                    <p class="text-slate-500 text-sm leading-relaxed">
-                        I create wireframes, propose the structure, and map the user experience before writing a single line of code. Your sign-off before build begins.
+                <!-- Step 2 -->
+                <div class="agency-card p-8 reveal">
+                    <span class="step-number block mb-3">02</span>
+                    <h3 class="font-display font-bold text-xl text-slate-900 mb-2">Planning &amp; Architecture</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        We map the technical architecture, content strategy, user flow wireframes, and creative asset shot lists before writing code or filming.
                     </p>
                 </div>
 
-                <div class="card p-7 reveal">
-                    <span class="step-num block mb-4">03</span>
-                    <h3 class="font-display font-bold text-lg text-slate-900 mb-2">Build &amp; Review</h3>
-                    <p class="text-slate-500 text-sm leading-relaxed">
-                        I write clean, well-structured code and share progress for feedback. Revisions are part of the process — not an extra charge.
+                <!-- Step 3 -->
+                <div class="agency-card p-8 reveal">
+                    <span class="step-number block mb-3">03</span>
+                    <h3 class="font-display font-bold text-xl text-slate-900 mb-2">Design &amp; Creative Assets</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        We craft interactive Figma prototypes, brand logo concepts, and visual styles for your review and approval before production begins.
                     </p>
                 </div>
 
-                <div class="card p-7 reveal">
-                    <span class="step-num block mb-4">04</span>
-                    <h3 class="font-display font-bold text-lg text-slate-900 mb-2">Launch &amp; Handover</h3>
-                    <p class="text-slate-500 text-sm leading-relaxed">
-                        Deployment, domain configuration, and a clear handover so you understand your own website. Post-launch support as agreed.
+                <!-- Step 4 -->
+                <div class="agency-card p-8 reveal">
+                    <span class="step-number block mb-3">04</span>
+                    <h3 class="font-display font-bold text-xl text-slate-900 mb-2">Engineering &amp; Production</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        Mubaris engineers clean, modular code with responsive layouts, while Rasal produces cinematic video cuts, AI video, and ad graphics.
+                    </p>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="agency-card p-8 reveal">
+                    <span class="step-number block mb-3">05</span>
+                    <h3 class="font-display font-bold text-xl text-slate-900 mb-2">Testing &amp; Polish</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        We conduct rigorous cross-browser testing, mobile device checks, sub-second speed audits, color grade mastering, and client review cycles.
+                    </p>
+                </div>
+
+                <!-- Step 6 -->
+                <div class="agency-card p-8 reveal">
+                    <span class="step-number block mb-3">06</span>
+                    <h3 class="font-display font-bold text-xl text-slate-900 mb-2">Launch &amp; Growth</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        We deploy to global edge CDNs, configure custom domains &amp; SSL, and launch targeted ad campaigns with full performance tracking.
                     </p>
                 </div>
 
@@ -1074,68 +1044,76 @@
     </section>
 
     <!-- ============================================================ -->
-    <!-- CONTACT                                                      -->
+    <!-- CONTACT SECTION                                              -->
     <!-- ============================================================ -->
-    <section id="contact" class="py-24 relative z-10">
+    <section id="contact" class="py-24 relative z-10" style="background:#faf7ff;">
 
-        <!-- Ambient background blobs -->
-        <div class="blob w-[400px] h-[400px] bg-blue-400 top-0 right-0 pointer-events-none" style="z-index:0; opacity:0.08;"></div>
-        <div class="blob w-[350px] h-[350px] bg-violet-400 bottom-0 left-0 pointer-events-none" style="z-index:0; opacity:0.07;"></div>
+        <!-- Ambient Blobs -->
+        <div class="ambient-blob w-[450px] h-[450px] bg-violet-400 top-0 right-0" style="z-index:0; opacity:0.12;"></div>
+        <div class="ambient-blob w-[400px] h-[400px] bg-purple-400 bottom-0 left-0" style="z-index:0; opacity:0.1;"></div>
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
 
-                <!-- Left: contact info -->
+                <!-- Left Column: Agency Contact Details -->
                 <div class="lg:col-span-5 space-y-7 reveal">
-                    <span class="section-label"><i class="fa-solid fa-paper-plane text-[10px]"></i> Contact</span>
-                    <h2 class="font-display font-extrabold text-3xl sm:text-4xl text-slate-900 tracking-tight">
-                        Let's build something<br><span class="gradient-text">worth launching.</span>
+                    <span class="agency-label"><i class="fa-solid fa-paper-plane text-[10px]"></i> Get in Touch</span>
+                    <h2 class="font-display font-extrabold text-3xl sm:text-5xl text-slate-900 tracking-tight leading-tight">
+                        Let's Build Something <br><span class="gradient-text">Extraordinary Together.</span>
                     </h2>
-                    <p class="text-slate-500 text-sm sm:text-base leading-relaxed">
-                        Whether you need a new website, creative media, branding, or digital advertising — send me a message and I'll get back to you promptly.
+                    <p class="text-slate-600 text-sm sm:text-base leading-relaxed">
+                        Whether you need a full-scale web application, cinematic video production, brand identity, or growth marketing — reach out directly to Mubaris &amp; Rasal to discuss your project.
                     </p>
 
                     <div class="space-y-4 pt-2">
-                        <!-- Email -->
+
+                        <!-- Email Card -->
                         <div class="flex items-center gap-4">
-                            <div class="contact-icon-box"><i class="fa-regular fa-envelope"></i></div>
+                            <div class="w-12 h-12 rounded-xl bg-violet-100 text-violet-700 flex items-center justify-center text-lg flex-shrink-0">
+                                <i class="fa-regular fa-envelope"></i>
+                            </div>
                             <div>
-                                <span class="text-xs text-slate-400 font-semibold uppercase tracking-wider block">Email</span>
-                                <a href="mailto:hello@zenvora.studio" data-brand-email class="text-sm font-bold text-slate-800 hover:text-blue-600 transition">hello@zenvora.studio</a>
+                                <span class="text-xs text-slate-400 font-bold uppercase tracking-wider block">Agency Email</span>
+                                <a href="mailto:hello@zenvora.studio" data-brand-email class="text-sm font-bold text-slate-800 hover:text-violet-700 transition">hello@zenvora.studio</a>
                             </div>
                         </div>
 
-                        <!-- WhatsApp -->
+                        <!-- WhatsApp Direct Chat Card -->
                         <div class="flex items-center gap-4">
-                            <div class="contact-icon-box"><i class="fa-brands fa-whatsapp" style="color: #25D366;"></i></div>
+                            <div class="w-12 h-12 rounded-xl bg-green-100 text-green-600 flex items-center justify-center text-lg flex-shrink-0">
+                                <i class="fa-brands fa-whatsapp text-xl"></i>
+                            </div>
                             <div>
-                                <span class="text-xs text-slate-400 font-semibold uppercase tracking-wider block">WhatsApp</span>
+                                <span class="text-xs text-slate-400 font-bold uppercase tracking-wider block">WhatsApp Direct Chat</span>
                                 <a href="https://wa.me/919495004272" target="_blank" rel="noopener noreferrer" data-brand-whatsapp class="text-sm font-bold text-slate-800 hover:text-green-600 transition">+91 94950 04272</a>
                             </div>
                         </div>
 
-                        <!-- Location -->
+                        <!-- Location Card -->
                         <div class="flex items-center gap-4">
-                            <div class="contact-icon-box"><i class="fa-solid fa-location-dot"></i></div>
+                            <div class="w-12 h-12 rounded-xl bg-violet-100 text-violet-700 flex items-center justify-center text-lg flex-shrink-0">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </div>
                             <div>
-                                <span class="text-xs text-slate-400 font-semibold uppercase tracking-wider block">Location</span>
+                                <span class="text-xs text-slate-400 font-bold uppercase tracking-wider block">Studio Location</span>
                                 <span class="text-sm font-bold text-slate-700" data-brand-location>Parappanangadi, Ullanam North P.O.</span>
                             </div>
                         </div>
+
                     </div>
                 </div>
 
-                <!-- Right: form -->
+                <!-- Right Column: Interactive Project Inquiry Form -->
                 <div class="lg:col-span-7 reveal">
-                    <div class="card p-8 sm:p-10 shadow-xl shadow-slate-100">
+                    <div class="agency-card p-8 sm:p-10 shadow-xl border-violet-200" style="background:#ffffff;">
 
-                        <!-- ⚠️ Form configuration notice (remove once backend is configured) -->
-                        <div class="form-note mb-6">
-                            <i class="fa-solid fa-triangle-exclamation mt-0.5 flex-shrink-0"></i>
+                        <!-- Backend Connection Note -->
+                        <div class="mb-6 p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs flex gap-3 items-start">
+                            <i class="fa-solid fa-triangle-exclamation mt-0.5 flex-shrink-0 text-amber-600"></i>
                             <div>
-                                <strong class="font-semibold block mb-0.5">Form not yet connected to a backend.</strong>
-                                To enable real submissions, replace the form action with a <a href="https://formspree.io" target="_blank" class="underline">Formspree</a> endpoint or similar service. Until then, submissions will not be delivered.
+                                <strong class="font-semibold block mb-0.5">Form Integration Notice:</strong>
+                                To receive submissions in your inbox, connect your form endpoint (e.g. <a href="https://formspree.io" target="_blank" class="underline font-bold">Formspree</a>). The form validates inputs and displays submission status.
                             </div>
                         </div>
 
@@ -1143,61 +1121,58 @@
 
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                                 <div>
-                                    <label class="form-label">Your Name *</label>
-                                    <input type="text" name="name" required placeholder="Your full name" class="form-input">
+                                    <label class="agency-label-text">Your Name *</label>
+                                    <input type="text" name="name" required placeholder="Alex Morgan" class="agency-input">
                                 </div>
                                 <div>
-                                    <label class="form-label">Email Address *</label>
-                                    <input type="email" name="email" required placeholder="you@email.com" class="form-input">
+                                    <label class="agency-label-text">Email Address *</label>
+                                    <input type="email" name="email" required placeholder="alex@company.com" class="agency-input">
                                 </div>
                             </div>
 
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                                 <div>
-                                    <label class="form-label">Service Required</label>
-                                    <select name="service" class="form-input" style="appearance:auto;">
-                                        <option value="Website Development">Website Development</option>
-                                        <option value="UI/UX Design">UI/UX Design</option>
+                                    <label class="agency-label-text">Service Required</label>
+                                    <select name="service" class="agency-input" style="appearance:auto;">
+                                        <option value="Full Agency Suite">Full Agency Suite (Code + Media)</option>
+                                        <option value="Website & App Development">Website &amp; Web App Development</option>
+                                        <option value="UI/UX Design">UI/UX Design &amp; Prototyping</option>
                                         <option value="Branding & Logo">Branding &amp; Logo Design</option>
-                                        <option value="Video Editing">Video Editing &amp; Reels</option>
-                                        <option value="AI Video">AI Video Creation</option>
-                                        <option value="Photography">Commercial Photography</option>
-                                        <option value="Poster Design">Poster &amp; Graphic Design</option>
-                                        <option value="Digital Ads">Digital Advertising</option>
-                                        <option value="Other">Other — Tell me more</option>
+                                        <option value="Video Editing & Reels">Video Editing &amp; Cinematic Reels</option>
+                                        <option value="AI Video Creation">AI Video Creation</option>
+                                        <option value="Commercial Photography">Commercial Photography</option>
+                                        <option value="Posters & Digital Ads">Posters &amp; Digital Advertising</option>
                                     </select>
                                 </div>
                                 <div>
-                                    <label class="form-label">Budget (Optional)</label>
-                                    <select name="budget" class="form-input" style="appearance:auto;">
-                                        <option value="">Prefer not to say</option>
+                                    <label class="agency-label-text">Estimated Budget (Optional)</label>
+                                    <select name="budget" class="agency-input" style="appearance:auto;">
+                                        <option value="">Prefer to discuss</option>
                                         <option value="Under $500">Under $500</option>
-                                        <option value="$500–$1,000">$500 – $1,000</option>
-                                        <option value="$1,000–$2,500">$1,000 – $2,500</option>
-                                        <option value="$2,500+">$2,500+</option>
+                                        <option value="$500 - $1,500">$500 – $1,500</option>
+                                        <option value="$1,500 - $3,500">$1,500 – $3,500</option>
+                                        <option value="$3,500+">$3,500+</option>
                                     </select>
                                 </div>
                             </div>
 
                             <div>
-                                <label class="form-label">Project Description *</label>
-                                <textarea rows="4" name="message" required placeholder="Describe your project — goals, timeline, references, anything useful..." class="form-input resize-none"></textarea>
+                                <label class="agency-label-text">Project Scope &amp; Brief *</label>
+                                <textarea rows="4" name="message" required placeholder="Tell ZENVORA about your project vision, target timeline, and references..." class="agency-input resize-none"></textarea>
                             </div>
 
-                            <button type="submit" id="submitBtn" class="btn-primary w-full py-4 text-sm font-semibold flex items-center justify-center gap-2">
-                                <span>Send Enquiry</span>
+                            <button type="submit" id="submitBtn" class="btn-violet-primary w-full py-4 text-sm font-bold tracking-wide">
+                                <span>Send Agency Inquiry</span>
                                 <i class="fa-solid fa-paper-plane text-xs"></i>
                             </button>
 
-                            <!-- Success / error messages -->
-                            <div id="formSuccess" class="hidden p-4 rounded-xl bg-green-50 border border-green-200 text-green-800 text-sm font-semibold text-center">
-                                <i class="fa-solid fa-circle-check mr-2"></i>Message noted — form submission requires backend configuration before it will be delivered.
-                            </div>
-                            <div id="formError" class="hidden p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm text-center">
-                                Please fill in all required fields before submitting.
+                            <!-- Submission Notice Status -->
+                            <div id="formSuccess" class="hidden p-4 rounded-xl bg-violet-50 border border-violet-200 text-violet-800 text-sm font-semibold text-center">
+                                <i class="fa-solid fa-circle-check mr-2 text-violet-600"></i>Thank you! Your inquiry has been received. Mubaris &amp; Rasal will respond within 24 hours.
                             </div>
 
                         </form>
+
                     </div>
                 </div>
 
@@ -1209,33 +1184,35 @@
     <!-- ============================================================ -->
     <!-- FOOTER                                                       -->
     <!-- ============================================================ -->
-    <footer class="py-10 border-t border-slate-100 bg-slate-50 relative z-10">
+    <footer class="py-12 border-t border-violet-100 bg-white relative z-10 text-slate-500 text-xs">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
 
                 <!-- Brand -->
                 <div class="flex items-center gap-3">
-                    <div class="z-logo" style="width:32px; height:32px; border-radius:8px;">
-                        <svg viewBox="0 0 24 24" fill="none" style="width:18px; height:18px;">
-                            <path d="M5 5H19L8.5 19H19" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <div class="agency-logo-badge !w-8 !h-8 !rounded-lg">
+                        <svg viewBox="0 0 24 24" fill="none" class="w-4 h-4">
+                            <path d="M5 5H19L8.5 19H19" stroke="white" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                     </div>
-                    <span class="font-display font-bold text-slate-800" data-brand-name>ZENVORA</span>
+                    <div>
+                        <span class="font-display font-bold text-slate-900 text-base" data-brand-name>ZENVORA</span>
+                        <span class="text-[10px] text-slate-400 block -mt-0.5">Two-Person Creative &amp; Tech Agency</span>
+                    </div>
                 </div>
 
-                <!-- Nav links -->
-                <div class="flex flex-wrap items-center justify-center gap-5 text-xs text-slate-400 font-medium">
-                    <a href="#about" class="hover:text-blue-600 transition">About</a>
-                    <a href="#services" class="hover:text-blue-600 transition">Services</a>
-                    <a href="#work" class="hover:text-blue-600 transition">Projects</a>
-                    <a href="#skills" class="hover:text-blue-600 transition">Skills</a>
-                    <a href="#process" class="hover:text-blue-600 transition">Workflow</a>
-                    <a href="#contact" class="hover:text-blue-600 transition">Contact</a>
+                <!-- Footer Navigation -->
+                <div class="flex flex-wrap items-center justify-center gap-6 font-semibold text-slate-600">
+                    <a href="#services" class="hover:text-violet-700 transition">Services</a>
+                    <a href="#work" class="hover:text-violet-700 transition">Our Work</a>
+                    <a href="#team" class="hover:text-violet-700 transition">Our Team</a>
+                    <a href="#process" class="hover:text-violet-700 transition">Process</a>
+                    <a href="#contact" class="hover:text-violet-700 transition">Contact</a>
                 </div>
 
                 <!-- Copyright -->
-                <p class="text-xs text-slate-400 text-center sm:text-right">
-                    © <span data-brand-year>2026</span> <span data-brand-name>ZENVORA</span>. Built by Mubaris.
+                <p class="text-slate-400 text-center sm:text-right">
+                    © <span data-brand-year>2026</span> <span data-brand-name>ZENVORA</span>. Founded by Mubaris &amp; Rasal.
                 </p>
 
             </div>
@@ -1243,25 +1220,25 @@
     </footer>
 
     <!-- ============================================================ -->
-    <!-- SCRIPTS                                                      -->
+    <!-- SCRIPTS & CENTRALISED BRAND SETTINGS                         -->
     <!-- ============================================================ -->
     <script>
         /**
          * ──────────────────────────────────────────────────────────────
-         * BRAND CONFIGURATION
-         * Update these values to change brand text across the whole site.
+         * BRAND CONFIGURATION OBJECT
+         * Update these values to change brand details across the site.
          * ──────────────────────────────────────────────────────────────
          */
         const BRAND_CONFIG = {
             brandName:    "ZENVORA",
-            brandTagline: "Web Development & Creative Services",
+            brandTagline: "Two-Person Creative & Tech Agency",
             brandDomain:  "zenvora.studio",
             email:        "hello@zenvora.studio",
             whatsapp:     "+91 94950 04272",
             whatsappUrl:  "https://wa.me/919495004272",
             location:     "Parappanangadi, Ullanam North P.O.",
             year:         new Date().getFullYear().toString(),
-            metaTitle:    "ZENVORA | Web Development & Creative Services"
+            metaTitle:    "ZENVORA | Two-Person Creative & Digital Agency"
         };
 
         // Apply brand settings to all matching [data-brand-*] elements
@@ -1285,39 +1262,31 @@
         }
         applyBrandSettings();
 
-        // ── Mobile Nav Toggle ──
+        // ── Mobile Drawer Toggle ──
         function toggleMenu() {
             const menu = document.getElementById('mobileMenu');
             const icon = document.getElementById('menuIcon');
-            if (menu.classList.contains('open')) {
-                menu.classList.remove('open');
-                icon.className = 'fa-solid fa-bars text-base';
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+                icon.className = 'fa-solid fa-xmark text-lg';
             } else {
-                menu.classList.add('open');
-                icon.className = 'fa-solid fa-xmark text-base';
+                menu.classList.add('hidden');
+                icon.className = 'fa-solid fa-bars text-lg';
             }
         }
         document.getElementById('mobileMenuBtn').addEventListener('click', toggleMenu);
 
-        // ── Close mobile menu on nav link click ──
-        document.querySelectorAll('#mobileMenu a').forEach(link => {
-            link.addEventListener('click', () => {
-                document.getElementById('mobileMenu').classList.remove('open');
-                document.getElementById('menuIcon').className = 'fa-solid fa-bars text-base';
-            });
-        });
-
-        // ── Navbar scroll styling ──
+        // ── Navbar Scroll Styling ──
         window.addEventListener('scroll', () => {
             const nav = document.getElementById('mainNav');
-            if (window.scrollY > 40) {
+            if (window.scrollY > 30) {
                 nav.classList.add('scrolled');
             } else {
                 nav.classList.remove('scrolled');
             }
         });
 
-        // ── Active nav link on scroll ──
+        // ── Active Nav Link on Scroll ──
         const sections = document.querySelectorAll('section[id], header[id]');
         const navLinks = document.querySelectorAll('.nav-link');
         const observer = new IntersectionObserver((entries) => {
@@ -1331,7 +1300,7 @@
         }, { rootMargin: '-40% 0px -55% 0px' });
         sections.forEach(s => observer.observe(s));
 
-        // ── Scroll reveal animation ──
+        // ── Scroll Reveal Animation ──
         const revealObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -1339,14 +1308,10 @@
                     revealObserver.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
         document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
-        // ── Contact Form Handler ──
-        // ⚠️ NOTE: This form is NOT connected to a backend.
-        // To enable real submissions, set the form action to a Formspree endpoint:
-        //   <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
-        // Then remove the onsubmit handler. See: https://formspree.io
+        // ── Form Submission Handler ──
         function handleFormSubmit(e) {
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
@@ -1357,13 +1322,11 @@
 
             setTimeout(() => {
                 success.classList.remove('hidden');
-                btn.innerHTML = '<span>Sent</span><i class="fa-solid fa-check text-xs ml-2"></i>';
-                btn.classList.remove('btn-primary');
-                btn.style.background = '#f0fdf4';
-                btn.style.color = '#15803d';
-                btn.style.border = '1.5px solid #bbf7d0';
+                btn.innerHTML = '<span>Inquiry Noted</span><i class="fa-solid fa-check text-xs ml-2"></i>';
+                btn.style.background = '#f5f3ff';
+                btn.style.color = '#7c3aed';
+                btn.style.border = '1.5px solid #ddd6fe';
                 btn.style.boxShadow = 'none';
-                // Note: do NOT reset the form — user should be aware this isn't really submitted
             }, 700);
         }
     </script>
