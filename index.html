@@ -785,182 +785,187 @@
     <!-- ============================================================ -->
     <!-- OUR TEAM / TWO-PERSON AGENCY PROFILES                        -->
     <!-- ============================================================ -->
-    <section id="team" class="py-24 relative z-10" style="background: #faf7ff;">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="team" class="py-24 relative z-10 overflow-hidden" style="background: radial-gradient(circle at 85% 15%, #f6f0ff 0%, #ffffff 55%, #faf7ff 100%);">
+        <!-- Ambient subtle background blob -->
+        <div class="ambient-blob w-[450px] h-[450px] bg-violet-300 top-10 right-0" style="z-index:0;"></div>
 
-            <div class="text-center max-w-3xl mx-auto mb-16 space-y-4 reveal">
-                <span class="agency-label"><i class="fa-solid fa-users text-[10px]"></i> The Agency Duo</span>
-                <h2 class="font-display font-extrabold text-3xl sm:text-5xl text-slate-900 tracking-tight">
-                    Two Creators. One Shared Standard.
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+
+            <!-- Section Header (Syncrely-Inspired Style) -->
+            <div class="mb-14 reveal">
+                <span class="text-violet-600 font-mono text-sm sm:text-base font-semibold tracking-tight block mb-3.5">
+                    (Who stands behind your brand?)
+                </span>
+                <h2 class="font-display font-extrabold text-3xl sm:text-5xl lg:text-6xl text-slate-900 tracking-tight leading-[1.12] max-w-4xl">
+                    Design &amp; code driven <span class="gradient-text">power duo</span> with multidisciplinary craft
                 </h2>
-                <p class="text-slate-600 text-sm sm:text-base">
-                    When you work with ZENVORA, you collaborate directly with the two partners who conceptualize, engineer, and deliver your project. No middle-management, no delegation.
-                </p>
             </div>
 
-            <!-- Two Distinct Co-Founder Profiles Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto mb-12">
+            <!-- Two-Column Power Duo Layout -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start reveal">
 
-                <!-- Profile 1: Mubaris -->
-                <div class="agency-card p-8 sm:p-10 relative flex flex-col justify-between reveal border-violet-200">
-                    <div>
-                        <!-- Header / Monogram Avatar -->
-                        <div class="flex items-center justify-between mb-6">
-                            <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-violet-600 to-indigo-600 text-white font-display font-extrabold text-3xl flex items-center justify-center shadow-lg shadow-violet-200">
-                                M
+                <!-- Left Column: Stadium Duo Frame & Profiles -->
+                <div class="lg:col-span-6 space-y-8">
+
+                    <!-- Stadium / Capsule Photo Container (Matches Reference Layout) -->
+                    <div class="relative w-full aspect-[16/10] sm:aspect-[16/9.5] rounded-full p-1.5 bg-gradient-to-r from-violet-200 via-purple-100 to-indigo-200 shadow-xl shadow-violet-200/50 group overflow-hidden">
+                        <!-- Live image element (will automatically render when duo-team.jpg is placed in project root) -->
+                        <img src="duo-team.jpg" alt="Mubaris &amp; Rasal — ZENVORA Power Duo" class="w-full h-full object-cover rounded-full transition-transform duration-500 group-hover:scale-105" onerror="this.style.display='none'; document.getElementById('duoPlaceholder').classList.remove('hidden');" style="display:none;" />
+
+                        <!-- High-End Duo Photo Placeholder (Clean & Ready for Your Photo) -->
+                        <div id="duoPlaceholder" class="w-full h-full rounded-full bg-gradient-to-br from-violet-50/95 via-purple-50/80 to-indigo-50/95 border border-violet-200/80 flex flex-col items-center justify-center text-center p-6 sm:p-8 relative overflow-hidden backdrop-blur-sm">
+                            <!-- Ambient soft glow inside capsule -->
+                            <div class="absolute -top-10 -left-10 w-36 h-36 bg-violet-400/20 rounded-full blur-2xl pointer-events-none"></div>
+                            <div class="absolute -bottom-10 -right-10 w-36 h-36 bg-purple-400/20 rounded-full blur-2xl pointer-events-none"></div>
+
+                            <!-- Duo Monogram Avatar Badge -->
+                            <div class="relative mb-3.5">
+                                <div class="flex items-center -space-x-3.5">
+                                    <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gradient-to-br from-violet-600 to-indigo-600 text-white font-display font-extrabold text-xl sm:text-2xl flex items-center justify-center shadow-lg shadow-violet-500/25 ring-4 ring-white">
+                                        M
+                                    </div>
+                                    <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gradient-to-br from-purple-600 to-pink-600 text-white font-display font-extrabold text-xl sm:text-2xl flex items-center justify-center shadow-lg shadow-purple-500/25 ring-4 ring-white">
+                                        R
+                                    </div>
+                                </div>
+                                <span class="absolute -bottom-1 left-1/2 -translate-x-1/2 bg-white px-2.5 py-0.5 rounded-full text-[10px] font-black text-violet-700 shadow-sm border border-violet-100 uppercase tracking-widest whitespace-nowrap">Duo</span>
                             </div>
-                            <span class="pill-violet">Co-Founder</span>
-                        </div>
 
-                        <h3 class="font-display font-extrabold text-3xl text-slate-900 mb-1">Mubaris</h3>
-                        <p class="text-xs font-bold uppercase tracking-wider text-violet-700 mb-4">
-                            Lead Web Architect &amp; Software Engineer
-                        </p>
-
-                        <!-- Specialization tags -->
-                        <div class="flex flex-wrap gap-1.5 mb-6">
-                            <span class="pill-violet">Web Engineering</span>
-                            <span class="pill-violet">UI/UX Systems</span>
-                            <span class="pill-violet">Database Architecture</span>
-                            <span class="pill-slate">Full-Stack</span>
-                        </div>
-
-                        <!-- Biography -->
-                        <div class="mb-6 space-y-2">
-                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400">Background &amp; Role</h4>
-                            <p class="text-slate-600 text-sm leading-relaxed">
-                                Leads the engineering and technology pillar at ZENVORA. Specializes in building modern web platforms, fast client interfaces, database pipelines with Supabase, and conversion-optimized web applications with sub-second page loads.
+                            <h3 class="font-display font-bold text-slate-900 text-base sm:text-lg tracking-tight mb-1">Mubaris &amp; Rasal</h3>
+                            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 border border-violet-200 text-violet-700 text-xs font-semibold shadow-xs">
+                                <i class="fa-solid fa-camera text-[10px] text-violet-500"></i>
+                                <span>Duo Photo Placeholder</span>
+                            </div>
+                            <p class="text-[11px] text-slate-500 mt-2 max-w-xs leading-tight">
+                                Drop your portrait photo as <code class="bg-violet-100 text-violet-800 px-1.5 py-0.5 rounded font-mono font-semibold">duo-team.jpg</code> in your project root
                             </p>
                         </div>
-
-                        <!-- Technical Skills -->
-                        <div class="mb-6 space-y-2.5">
-                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400">Core Technical Stack</h4>
-                            <div class="flex flex-wrap gap-1.5">
-                                <span class="pill-slate text-[11px]">React / Next.js</span>
-                                <span class="pill-slate text-[11px]">JavaScript ES6+</span>
-                                <span class="pill-slate text-[11px]">Tailwind CSS</span>
-                                <span class="pill-slate text-[11px]">Supabase / SQL</span>
-                                <span class="pill-slate text-[11px]">HTML5 / CSS3</span>
-                                <span class="pill-slate text-[11px]">UI/UX Figma</span>
-                            </div>
-                        </div>
-
-                        <!-- Project Contributions -->
-                        <div class="mb-6 space-y-2">
-                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400">Key Contributions</h4>
-                            <ul class="space-y-1.5 text-xs text-slate-600">
-                                <li class="flex items-start gap-2">
-                                    <i class="fa-solid fa-check text-violet-600 mt-0.5"></i>
-                                    <span><strong>Volcano Academy:</strong> Engineered full-stack platform, online admissions &amp; student portal.</span>
-                                </li>
-                                <li class="flex items-start gap-2">
-                                    <i class="fa-solid fa-check text-violet-600 mt-0.5"></i>
-                                    <span><strong>Al Barakha Bakery:</strong> Built responsive ordering menu and inquiry pipeline.</span>
-                                </li>
-                            </ul>
-                        </div>
                     </div>
 
-                    <!-- Connect Link -->
-                    <div class="pt-5 border-t border-violet-100 flex items-center justify-between">
-                        <span class="text-xs font-semibold text-slate-500">Connect with Mubaris</span>
-                        <a href="#contact" class="text-xs font-bold text-violet-700 hover:text-violet-900 flex items-center gap-1.5">
-                            <span>Inquire Directly</span>
-                            <i class="fa-solid fa-arrow-right text-[10px]"></i>
-                        </a>
-                    </div>
-                </div>
+                    <!-- Duo Profiles (Side-by-side beneath photo as in Reference) -->
+                    <div class="grid grid-cols-2 gap-6 sm:gap-8 pt-1">
 
-                <!-- Profile 2: Rasal -->
-                <div class="agency-card p-8 sm:p-10 relative flex flex-col justify-between reveal border-purple-200">
-                    <div>
-                        <!-- Header / Monogram Avatar -->
-                        <div class="flex items-center justify-between mb-6">
-                            <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-purple-600 to-pink-600 text-white font-display font-extrabold text-3xl flex items-center justify-center shadow-lg shadow-purple-200">
-                                R
+                        <!-- Member 1: Mubaris -->
+                        <div class="space-y-2">
+                            <div class="flex items-center gap-2">
+                                <h4 class="font-display font-bold text-lg sm:text-xl text-slate-900">Mubaris</h4>
+                                <span class="text-[9px] font-extrabold uppercase tracking-wider text-violet-700 bg-violet-100 px-2 py-0.5 rounded-full">Web</span>
                             </div>
-                            <span class="pill-violet">Co-Founder</span>
-                        </div>
-
-                        <h3 class="font-display font-extrabold text-3xl text-slate-900 mb-1">Rasal</h3>
-                        <p class="text-xs font-bold uppercase tracking-wider text-purple-700 mb-4">
-                            Creative Director &amp; Media Producer
-                        </p>
-
-                        <!-- Specialization tags -->
-                        <div class="flex flex-wrap gap-1.5 mb-6">
-                            <span class="pill-violet">Video Editing</span>
-                            <span class="pill-violet">AI Video Creation</span>
-                            <span class="pill-violet">Brand Identity</span>
-                            <span class="pill-slate">Meta &amp; Google Ads</span>
-                        </div>
-
-                        <!-- Biography -->
-                        <div class="mb-6 space-y-2">
-                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400">Background &amp; Role</h4>
-                            <p class="text-slate-600 text-sm leading-relaxed">
-                                Directs the creative, visual, and media production pillar at ZENVORA. Shapes brand aesthetics through cinematic video editing, generative AI video, brand identity, commercial photography, and targeted digital advertising campaigns.
+                            <p class="text-xs sm:text-sm font-bold text-violet-600">Lead Web Architect</p>
+                            <p class="text-xs text-slate-600 leading-relaxed font-medium">
+                                Web Systems · UI/UX Engineering<br>
+                                Supabase &amp; Full-Stack Apps
                             </p>
-                        </div>
-
-                        <!-- Creative Skills -->
-                        <div class="mb-6 space-y-2.5">
-                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400">Core Creative Tools</h4>
-                            <div class="flex flex-wrap gap-1.5">
-                                <span class="pill-slate text-[11px]">Cinematic Video Editing</span>
-                                <span class="pill-slate text-[11px]">AI Video Generation</span>
-                                <span class="pill-slate text-[11px]">Logo &amp; Brand Books</span>
-                                <span class="pill-slate text-[11px]">Commercial Photography</span>
-                                <span class="pill-slate text-[11px]">Poster &amp; Graphic Design</span>
-                                <span class="pill-slate text-[11px]">Meta Ads Manager</span>
+                            <div class="pt-1.5">
+                                <a href="https://wa.me/919495004272?text=Hi%20Mubaris,%20I%20would%20like%20to%20discuss%20a%20web%20project." target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-violet-700 transition">
+                                    <span>Inquire with Mubaris</span>
+                                    <i class="fa-solid fa-arrow-right text-[10px] text-violet-500"></i>
+                                </a>
                             </div>
                         </div>
 
-                        <!-- Project Contributions -->
-                        <div class="mb-6 space-y-2">
-                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400">Key Contributions</h4>
-                            <ul class="space-y-1.5 text-xs text-slate-600">
-                                <li class="flex items-start gap-2">
-                                    <i class="fa-solid fa-check text-purple-600 mt-0.5"></i>
-                                    <span><strong>Islah Super Market:</strong> Designed complete logo mark, color system &amp; visual identity.</span>
-                                </li>
-                                <li class="flex items-start gap-2">
-                                    <i class="fa-solid fa-check text-purple-600 mt-0.5"></i>
-                                    <span><strong>Volcano Academy:</strong> Directed promotional media assets, martial arts video, and styling.</span>
-                                </li>
-                            </ul>
+                        <!-- Member 2: Rasal -->
+                        <div class="space-y-2">
+                            <div class="flex items-center gap-2">
+                                <h4 class="font-display font-bold text-lg sm:text-xl text-slate-900">Rasal</h4>
+                                <span class="text-[9px] font-extrabold uppercase tracking-wider text-purple-700 bg-purple-100 px-2 py-0.5 rounded-full">Creative</span>
+                            </div>
+                            <p class="text-xs sm:text-sm font-bold text-purple-600">Creative Director</p>
+                            <p class="text-xs text-slate-600 leading-relaxed font-medium">
+                                Cinematic Video · AI Media<br>
+                                Brand Identity &amp; Digital Ads
+                            </p>
+                            <div class="pt-1.5">
+                                <a href="https://wa.me/919495004272?text=Hi%20Rasal,%20I%20would%20like%20to%20discuss%20a%20creative%20or%20media%20project." target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-purple-700 transition">
+                                    <span>Inquire with Rasal</span>
+                                    <i class="fa-solid fa-arrow-right text-[10px] text-purple-500"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- Right Column: Editorial Agency Narrative (Reference Style) -->
+                <div class="lg:col-span-6 space-y-6 pt-2 lg:pt-4">
+
+                    <p class="text-slate-700 text-base sm:text-lg leading-relaxed font-normal">
+                        Our mission is to simplify addressing digital challenges and streamline creativity. Combining technical engineering rigor with high-impact visual storytelling, we master complementary craft disciplines. Partnering with our two-person studio grants effortless access to end-to-end digital excellence and guarantees unmatched quality for your ventures.
+                    </p>
+
+                    <p class="text-slate-600 text-sm sm:text-base leading-relaxed">
+                        We help ambitious brands, institutions, and businesses architect high-performing web platforms, distinct brand identities, and commercial media. Every project is conceived, designed, and deployed directly by the two of us.
+                    </p>
+
+                    <!-- Verified Client / Project Deployments -->
+                    <div class="pt-3 pb-2 space-y-3">
+                        <h5 class="text-xs font-mono font-bold uppercase tracking-wider text-slate-400">
+                            Verified collaborative deployments:
+                        </h5>
+                        <div class="space-y-3">
+                            <a href="https://volcanoacademy.vercel.app" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between p-3.5 rounded-xl bg-white border border-violet-100 hover:border-violet-300 hover:shadow-md transition group">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-9 h-9 rounded-lg bg-violet-100 text-violet-700 flex items-center justify-center font-bold text-sm">
+                                        <i class="fa-solid fa-graduation-cap"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-display font-bold text-slate-900 text-sm group-hover:text-violet-700 transition">Volcano Martial Arts Academy</div>
+                                        <span class="text-xs text-slate-500">Full-Stack Admissions Platform &amp; Dynamic Media</span>
+                                    </div>
+                                </div>
+                                <i class="fa-solid fa-arrow-up-right-from-square text-xs text-slate-400 group-hover:text-violet-600 transition"></i>
+                            </a>
+
+                            <a href="https://albarakhabakery.vercel.app" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between p-3.5 rounded-xl bg-white border border-violet-100 hover:border-violet-300 hover:shadow-md transition group">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-9 h-9 rounded-lg bg-pink-100 text-pink-700 flex items-center justify-center font-bold text-sm">
+                                        <i class="fa-solid fa-bread-slice"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-display font-bold text-slate-900 text-sm group-hover:text-violet-700 transition">Al Barakha Bakery</div>
+                                        <span class="text-xs text-slate-500">Dynamic Ordering Menu &amp; Food Publicity</span>
+                                    </div>
+                                </div>
+                                <i class="fa-solid fa-arrow-up-right-from-square text-xs text-slate-400 group-hover:text-violet-600 transition"></i>
+                            </a>
+
+                            <a href="https://ism-web-blue.vercel.app" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between p-3.5 rounded-xl bg-white border border-violet-100 hover:border-violet-300 hover:shadow-md transition group">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-9 h-9 rounded-lg bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-sm">
+                                        <i class="fa-solid fa-store"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-display font-bold text-slate-900 text-sm group-hover:text-violet-700 transition">Islah Super Market (ISM)</div>
+                                        <span class="text-xs text-slate-500">Complete Brand Identity, Logo Mark &amp; Web</span>
+                                    </div>
+                                </div>
+                                <i class="fa-solid fa-arrow-up-right-from-square text-xs text-slate-400 group-hover:text-violet-600 transition"></i>
+                            </a>
                         </div>
                     </div>
 
-                    <!-- Connect Link -->
-                    <div class="pt-5 border-t border-violet-100 flex items-center justify-between">
-                        <span class="text-xs font-semibold text-slate-500">Connect with Rasal</span>
-                        <a href="#contact" class="text-xs font-bold text-purple-700 hover:text-purple-900 flex items-center gap-1.5">
-                            <span>Inquire Directly</span>
-                            <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                    <!-- Direct Action Buttons -->
+                    <div class="pt-4 flex flex-col sm:flex-row items-center gap-4">
+                        <a href="#contact" class="btn-violet-primary w-full sm:w-auto px-7 py-3.5 text-xs uppercase tracking-wider">
+                            <span>Start A Project With Us</span>
+                            <i class="fa-solid fa-arrow-right text-[11px]"></i>
+                        </a>
+                        <a href="https://wa.me/919495004272?text=Hi%20ZENVORA%20team,%20I'd%20like%20to%20discuss%20a%20project." target="_blank" rel="noopener noreferrer" class="btn-violet-secondary w-full sm:w-auto px-6 py-3.5 text-xs">
+                            <i class="fa-brands fa-whatsapp text-green-600 text-sm"></i>
+                            <span>Chat On WhatsApp</span>
                         </a>
                     </div>
-                </div>
 
-            </div>
-
-            <!-- Two-Person Partnership Assurance Banner -->
-            <div class="agency-card p-8 sm:p-10 border-violet-200 max-w-5xl mx-auto shadow-sm">
-                <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-                    <div class="space-y-2 text-center md:text-left">
-                        <span class="text-xs font-bold uppercase tracking-widest text-violet-700">The Power of Two</span>
-                        <h4 class="font-display font-bold text-2xl text-slate-900">
-                            Senior-Level Execution on Every Single Deliverable
-                        </h4>
-                        <p class="text-xs sm:text-sm text-slate-600 max-w-xl">
-                            Instead of paying for bloated agency overhead or dealing with junior delegates, you get the direct creative and engineering intelligence of two founders dedicated to your success.
-                        </p>
+                    <!-- Trust Assurance Tags -->
+                    <div class="flex flex-wrap items-center gap-4 pt-2 text-xs text-slate-500">
+                        <span class="flex items-center gap-1.5"><i class="fa-solid fa-check text-violet-600"></i> Direct Founder Collaboration</span>
+                        <span class="flex items-center gap-1.5"><i class="fa-solid fa-check text-violet-600"></i> Zero Junior Delegation</span>
+                        <span class="flex items-center gap-1.5"><i class="fa-solid fa-check text-violet-600"></i> Parappanangadi Based</span>
                     </div>
-                    <a href="#contact" class="btn-violet-primary px-6 py-3.5 text-xs uppercase tracking-wider shrink-0">
-                        Work With ZENVORA
-                    </a>
+
                 </div>
+
             </div>
 
         </div>
