@@ -959,7 +959,7 @@
                     <div class="flex flex-wrap items-center gap-4 pt-2 text-xs text-slate-500">
                         <span class="flex items-center gap-1.5"><i class="fa-solid fa-check text-violet-600"></i> Direct Founder Collaboration</span>
                         <span class="flex items-center gap-1.5"><i class="fa-solid fa-check text-violet-600"></i> Zero Junior Delegation</span>
-                        <span class="flex items-center gap-1.5"><i class="fa-solid fa-check text-violet-600"></i> Parappanangadi Based</span>
+                        <span class="flex items-center gap-1.5"><i class="fa-solid fa-check text-violet-600"></i> Parappanangadi &amp; Kondotty, Malappuram</span>
                     </div>
 
                 </div>
@@ -1025,13 +1025,20 @@
                         </div>
 
                         <!-- Location Card -->
-                        <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-xl bg-violet-100 text-violet-700 flex items-center justify-center text-lg flex-shrink-0">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-violet-100 text-violet-700 flex items-center justify-center text-lg flex-shrink-0 mt-0.5">
                                 <i class="fa-solid fa-location-dot"></i>
                             </div>
-                            <div>
-                                <span class="text-xs text-slate-400 font-bold uppercase tracking-wider block">Studio Location</span>
-                                <span class="text-sm font-bold text-slate-700" data-brand-location>Parappanangadi, Ullanam North P.O.</span>
+                            <div class="space-y-1">
+                                <span class="text-xs text-slate-400 font-bold uppercase tracking-wider block">Studio Locations</span>
+                                <div class="text-sm font-bold text-slate-700 flex items-center gap-2">
+                                    <i class="fa-solid fa-map-pin text-[11px] text-violet-600"></i>
+                                    <span data-brand-location-primary>Parappanangadi, Ullanam North P.O.</span>
+                                </div>
+                                <div class="text-sm font-bold text-slate-700 flex items-center gap-2">
+                                    <i class="fa-solid fa-map-pin text-[11px] text-purple-600"></i>
+                                    <span data-brand-location-secondary>Edavannappara, Kondotty, Malappuram</span>
+                                </div>
                             </div>
                         </div>
 
@@ -1173,7 +1180,9 @@
             whatsappSecondaryUrl:"https://wa.me/919495004272",
             whatsapp:            "+91 98469 30473",
             whatsappUrl:         "https://wa.me/919846930473",
-            location:            "Parappanangadi, Ullanam North P.O.",
+            locationPrimary:     "Parappanangadi, Ullanam North P.O.",
+            locationSecondary:   "Edavannappara, Kondotty, Malappuram",
+            location:            "Parappanangadi & Kondotty, Malappuram",
             year:                new Date().getFullYear().toString(),
             metaTitle:           "ZENVORA | Two-Person Creative & Digital Agency"
         };
@@ -1185,6 +1194,8 @@
             q('[data-brand-tagline]').forEach(el => el.textContent = BRAND_CONFIG.brandTagline);
             q('[data-brand-domain]').forEach(el => el.textContent = BRAND_CONFIG.brandDomain);
             q('[data-brand-year]').forEach(el => el.textContent = BRAND_CONFIG.year);
+            q('[data-brand-location-primary]').forEach(el => el.textContent = BRAND_CONFIG.locationPrimary);
+            q('[data-brand-location-secondary]').forEach(el => el.textContent = BRAND_CONFIG.locationSecondary);
             q('[data-brand-location]').forEach(el => el.textContent = BRAND_CONFIG.location);
             q('[data-brand-email]').forEach(el => {
                 el.textContent = BRAND_CONFIG.email;
