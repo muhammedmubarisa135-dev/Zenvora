@@ -3,60 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-brand-meta-title>ZENVORA | Web Engineering & Creative Media Studio</title>
-    <meta name="description" content="Zenvora is a joint web engineering and creative media studio founded by Mubaris (Lead Web Architect) and Rasal (Creative Director) — Zenvora. We engineer premium high-performance websites, cinematic video production, brand identities, AI video, photography, and high-ROI digital advertising.">
+    <title data-brand-meta-title>ZENVORA | Web Development & Creative Services</title>
+    <meta name="description" content="ZENVORA — I build modern, responsive websites and digital experiences, supported by thoughtful branding, creative content, and digital publicity.">
 
-    <!-- Google Fonts -->
+    <!-- Google Fonts: Space Grotesk (headings) + Inter (body) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- FontAwesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-    <!-- Pre-compiled Pure Stylesheet (Offline & 100% Zero-Flash Render) -->
+    <!-- Pre-compiled stylesheet (offline safe) -->
     <link rel="stylesheet" href="./style.css">
 
-    <!-- Standalone Tailwind CSS Engine (Local Fallback) -->
+    <!-- Tailwind local engine -->
     <script src="./tailwind.js"></script>
     <script>
         tailwind.config = {
-            darkMode: 'class',
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        sans: ['"Inter"', 'sans-serif'],
                         display: ['"Space Grotesk"', 'sans-serif']
                     },
                     colors: {
-                        neutral: {
-                            950: '#050505',
-                            900: '#0a0a0a',
-                            850: '#121212',
-                            800: '#1a1a1a',
-                            750: '#222222',
-                            700: '#2d2d2d',
-                            600: '#404040',
-                            500: '#525252',
-                            400: '#737373',
-                            300: '#a3a3a3',
-                            200: '#d4d4d4',
-                            100: '#f5f5f5',
-                            50: '#fafafa'
+                        blue: {
+                            50:  '#eff6ff',
+                            100: '#dbeafe',
+                            200: '#bfdbfe',
+                            300: '#93c5fd',
+                            400: '#60a5fa',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                        },
+                        violet: {
+                            50:  '#f5f3ff',
+                            100: '#ede9fe',
+                            200: '#ddd6fe',
+                            300: '#c4b5fd',
+                            400: '#a78bfa',
+                            500: '#8b5cf6',
+                            600: '#7c3aed',
+                            700: '#6d28d9',
+                        },
+                        slate: {
+                            50:  '#f8fafc',
+                            100: '#f1f5f9',
+                            200: '#e2e8f0',
+                            300: '#cbd5e1',
+                            400: '#94a3b8',
+                            500: '#64748b',
+                            600: '#475569',
+                            700: '#334155',
+                            800: '#1e293b',
+                            900: '#0f172a',
                         }
                     },
                     animation: {
                         'float': 'float 6s ease-in-out infinite',
-                        'pulse-subtle': 'pulseSubtle 4s ease-in-out infinite',
+                        'fade-in': 'fadeIn 0.6s ease-out forwards',
                     },
                     keyframes: {
                         float: {
                             '0%, 100%': { transform: 'translateY(0px)' },
-                            '50%': { transform: 'translateY(-10px)' },
+                            '50%': { transform: 'translateY(-8px)' },
                         },
-                        pulseSubtle: {
-                            '0%, 100%': { opacity: '0.3' },
-                            '50%': { opacity: '0.6' },
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(12px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
                         }
                     }
                 }
@@ -65,803 +83,861 @@
     </script>
 
     <style>
-        /* ========================================================
-           PREMIUM MONOCHROME DESIGN SYSTEM (Black, White & Neutral Grey)
-           ======================================================== */
+        /* ================================================
+           ZENVORA DESIGN SYSTEM — Premium Light Theme
+           Primary: Electric Blue #2563EB
+           Accent: Violet #7C3AED
+           Background: White / Off-white #F8FAFC
+           Text: Charcoal / Deep Navy #1E293B
+        ================================================ */
         :root {
-            --bg-canvas: #050505;
-            --bg-surface: #0e0e0e;
-            --bg-card: rgba(18, 18, 18, 0.75);
-            --border-hairline: rgba(255, 255, 255, 0.08);
-            --border-hover: rgba(255, 255, 255, 0.22);
-            --text-heading: #ffffff;
-            --text-body: #d4d4d4;
-            --text-muted: #737373;
+            --bg-canvas: #ffffff;
+            --bg-surface: #f8fafc;
+            --bg-card: #ffffff;
+            --border-light: #e2e8f0;
+            --border-hover: #93c5fd;
+            --text-heading: #0f172a;
+            --text-body: #334155;
+            --text-muted: #64748b;
+            --blue: #2563eb;
+            --blue-light: #eff6ff;
+            --violet: #7c3aed;
+            --violet-light: #f5f3ff;
         }
+
+        html { scroll-behavior: smooth; }
 
         body {
             background-color: var(--bg-canvas);
             color: var(--text-body);
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-family: 'Inter', sans-serif;
             overflow-x: hidden;
             letter-spacing: -0.01em;
         }
 
-        /* Glassmorphic Surfaces */
-        .glass-panel {
-            background: rgba(14, 14, 14, 0.82);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
+        /* ── Custom Scrollbar ── */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
-        .glass-card {
-            background: rgba(18, 18, 18, 0.7);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.07);
-            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .glass-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(255, 255, 255, 0.22);
-            background: rgba(24, 24, 24, 0.85);
-            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.8), 0 0 40px -15px rgba(255, 255, 255, 0.04);
-        }
+        /* ── Selection ── */
+        ::selection { background: #bfdbfe; color: #1e3a8a; }
 
-        /* Monochrome Metallic & Silver Text Gradients */
-        .gradient-text {
-            background: linear-gradient(180deg, #ffffff 30%, #a3a3a3 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .gradient-text-silver {
-            background: linear-gradient(135deg, #ffffff 0%, #d4d4d4 50%, #737373 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* Primary Monochrome CTA Buttons */
-        .btn-primary {
-            background: #ffffff;
-            color: #050505;
-            font-weight: 700;
-            transition: all 0.25s ease;
-            box-shadow: 0 4px 20px rgba(255, 255, 255, 0.12);
-        }
-        .btn-primary:hover {
-            background: #e5e5e5;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(255, 255, 255, 0.22);
-        }
-
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.04);
-            color: #ffffff;
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            font-weight: 600;
-            transition: all 0.25s ease;
-        }
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
-            color: #ffffff;
-        }
-
-        /* Minimalist Badges & Pills */
-        .badge-mono {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #d4d4d4;
-            font-size: 11px;
-            font-weight: 600;
-            padding: 4px 12px;
-            border-radius: 9999px;
-            letter-spacing: 0.04em;
-        }
-
-        /* Sleek Monochrome Scrollbar */
-        ::-webkit-scrollbar {
-            width: 7px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #050505;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #262626;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #525252;
-        }
-
-        /* Ambient Glows in Monochrome */
-        .ambient-glow {
-            position: absolute;
-            border-radius: 9999px;
-            pointer-events: none;
-            filter: blur(140px);
-            opacity: 0.05;
-            background: #ffffff;
-        }
-
-        /* Monogram Logo Box */
-        .monogram-badge {
+        /* ── ZENVORA Logo / Monogram ── */
+        .z-logo {
             width: 40px;
             height: 40px;
-            border-radius: 12px;
-            background: linear-gradient(135deg, #1f1f1f 0%, #0a0a0a 100%);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-family: 'Space Grotesk', sans-serif;
-            font-weight: 800;
-            font-size: 18px;
-            color: #ffffff;
-            letter-spacing: -0.05em;
-            transition: all 0.3s ease;
+            flex-shrink: 0;
         }
-        .monogram-badge:hover {
-            border-color: rgba(255, 255, 255, 0.4);
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+        .z-logo svg { width: 22px; height: 22px; }
+
+        /* ── Navigation ── */
+        .nav-glass {
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-bottom: 1px solid var(--border-light);
+            transition: box-shadow 0.3s ease;
+        }
+        .nav-glass.scrolled {
+            box-shadow: 0 4px 24px rgba(37,99,235,0.08);
+        }
+        .nav-link {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            transition: color 0.2s ease;
+        }
+        .nav-link:hover { color: var(--blue); }
+        .nav-link.active { color: var(--blue); }
+
+        /* ── Buttons ── */
+        .btn-primary {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: #ffffff;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 14px rgba(37,99,235,0.3);
+        }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(37,99,235,0.4);
+            color: #ffffff;
+        }
+        .btn-secondary {
+            background: #ffffff;
+            color: var(--blue);
+            font-weight: 600;
+            border-radius: 10px;
+            border: 1.5px solid var(--border-light);
+            transition: all 0.25s ease;
+        }
+        .btn-secondary:hover {
+            border-color: var(--blue);
+            background: var(--blue-light);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37,99,235,0.1);
+        }
+
+        /* ── Cards ── */
+        .card {
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            border-radius: 20px;
+            transition: all 0.3s cubic-bezier(0.16,1,0.3,1);
+        }
+        .card:hover {
+            border-color: #93c5fd;
+            box-shadow: 0 12px 40px rgba(37,99,235,0.1);
+            transform: translateY(-4px);
+        }
+        .card-featured {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: #ffffff;
+            border: none;
+        }
+        .card-featured:hover {
+            box-shadow: 0 16px 48px rgba(37,99,235,0.35);
+            border: none;
+        }
+
+        /* ── Section Labels ── */
+        .section-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--blue);
+            background: var(--blue-light);
+            border: 1px solid #bfdbfe;
+            padding: 4px 14px;
+            border-radius: 9999px;
+        }
+
+        /* ── Gradient Text ── */
+        .gradient-text {
+            background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* ── Badges / Pills ── */
+        .pill {
+            display: inline-block;
+            padding: 3px 11px;
+            background: var(--blue-light);
+            color: #1d4ed8;
+            border: 1px solid #bfdbfe;
+            border-radius: 9999px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        .pill-violet {
+            background: var(--violet-light);
+            color: #6d28d9;
+            border-color: #ddd6fe;
+        }
+        .pill-slate {
+            background: #f1f5f9;
+            color: var(--text-muted);
+            border-color: var(--border-light);
+        }
+        .pill-wip {
+            background: #fef3c7;
+            color: #b45309;
+            border-color: #fde68a;
+        }
+
+        /* ── Ambient decoration blobs ── */
+        .blob {
+            position: absolute;
+            border-radius: 9999px;
+            pointer-events: none;
+            filter: blur(80px);
+            opacity: 0.12;
+        }
+
+        /* ── Service icon boxes ── */
+        .service-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+            transition: transform 0.3s ease;
+        }
+        .card:hover .service-icon { transform: scale(1.08); }
+
+        /* ── Skill tags ── */
+        .skill-tag {
+            padding: 6px 14px;
+            background: #f8fafc;
+            border: 1px solid var(--border-light);
+            border-radius: 9px;
+            font-size: 0.78rem;
+            font-weight: 500;
+            color: var(--text-body);
+            transition: all 0.2s ease;
+        }
+        .skill-tag:hover {
+            background: var(--blue-light);
+            border-color: #93c5fd;
+            color: #1d4ed8;
+        }
+
+        /* ── Form inputs ── */
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            background: #f8fafc;
+            border: 1.5px solid var(--border-light);
+            border-radius: 10px;
+            color: var(--text-heading);
+            font-size: 0.875rem;
+            font-family: 'Inter', sans-serif;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            outline: none;
+        }
+        .form-input::placeholder { color: #94a3b8; }
+        .form-input:focus {
+            border-color: var(--blue);
+            box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
+            background: #ffffff;
+        }
+        .form-label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 6px;
+        }
+
+        /* ── Workflow step numbers ── */
+        .step-num {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #dbeafe, #ede9fe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+        }
+
+        /* ── Mobile menu ── */
+        #mobileMenu { display: none; }
+        #mobileMenu.open { display: block; }
+
+        /* ── Form note ── */
+        .form-note {
+            background: #fef3c7;
+            border: 1px solid #fde68a;
+            border-radius: 10px;
+            padding: 12px 16px;
+            font-size: 0.75rem;
+            color: #92400e;
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        /* ── Contact icon boxes ── */
+        .contact-icon-box {
+            width: 48px;
+            height: 48px;
+            background: var(--blue-light);
+            border: 1px solid #bfdbfe;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            color: var(--blue);
+            flex-shrink: 0;
+        }
+
+        /* ── Scroll-animate ── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.55s ease, transform 0.55s ease;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
     </style>
 </head>
 
-<body class="bg-neutral-950 text-neutral-200 font-sans antialiased selection:bg-white selection:text-black relative overflow-x-hidden min-h-screen">
+<body style="background:#ffffff; color:#334155;">
 
-    <!-- ========================================================================== -->
-    <!-- BRAND CONFIGURATION NOTICE:                                                -->
-    <!-- To rename this studio in the future, simply update the `BRAND_CONFIG`     -->
-    <!-- object inside the <script> block at the bottom of this file.               -->
-    <!-- All elements with `data-brand-*` attributes will automatically synchronize. -->
-    <!-- ========================================================================== -->
-
-    <!-- Ambient Subtle Monochrome Lighting -->
-    <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-        <div class="ambient-glow -top-[20%] -left-[10%] w-[650px] h-[650px] animate-pulse-subtle"></div>
-        <div class="ambient-glow top-[40%] -right-[15%] w-[700px] h-[700px] animate-pulse-subtle" style="animation-delay: 2s;"></div>
-        <div class="ambient-glow -bottom-[10%] left-[25%] w-[550px] h-[550px] animate-pulse-subtle" style="animation-delay: 4s;"></div>
-    </div>
-
-    <!-- ======================================================== -->
-    <!-- NAVIGATION BAR -->
-    <!-- ======================================================== -->
-    <nav class="fixed top-0 left-0 right-0 z-50 glass-panel border-b border-white/5 py-4 transition-all duration-300" id="mainNav">
+    <!-- ============================================================ -->
+    <!-- NAVIGATION                                                    -->
+    <!-- ============================================================ -->
+    <nav id="mainNav" class="nav-glass fixed top-0 left-0 right-0 z-50 py-3.5">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between">
-                
-                <!-- Brand / Logo / Wordmark -->
-                <a href="#home" class="flex items-center gap-3.5 group">
-                    <div class="monogram-badge group-hover:scale-105">
-                        <span>Z</span>
+
+                <!-- Logo -->
+                <a href="#home" class="flex items-center gap-3 group">
+                    <div class="z-logo">
+                        <!-- Geometric Z SVG Logo -->
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M5 5H19L8.5 19H19" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
                     </div>
                     <div>
-                        <span class="font-display font-extrabold text-lg sm:text-xl text-white tracking-tight flex items-center gap-2">
-                            <span data-brand-name>ZENVORA</span>
-                        </span>
-                        <span class="text-[10px] tracking-widest uppercase text-neutral-400 font-semibold block -mt-0.5" data-brand-tagline>
-                            Web Engineering & Creative Media
-                        </span>
+                        <span class="font-display font-extrabold text-lg text-slate-900 tracking-tight block leading-none" data-brand-name>ZENVORA</span>
+                        <span class="text-[9px] tracking-widest uppercase text-slate-400 font-semibold block mt-0.5" data-brand-tagline>Web Development &amp; Creative Services</span>
                     </div>
                 </a>
 
-                <!-- Desktop Navigation Links -->
-                <div class="hidden md:flex items-center gap-8">
-                    <a href="#services" class="text-sm font-medium text-neutral-300 hover:text-white transition">Services</a>
-                    <a href="#work" class="text-sm font-medium text-neutral-300 hover:text-white transition">Featured Work</a>
-                    <a href="#profiles" class="text-sm font-medium text-neutral-300 hover:text-white transition">Mubaris & Rasal</a>
-                    <a href="#process" class="text-sm font-medium text-neutral-300 hover:text-white transition">Process</a>
-                    <a href="#pricing" class="text-sm font-medium text-neutral-300 hover:text-white transition">Packages</a>
+                <!-- Desktop Nav -->
+                <div class="hidden md:flex items-center gap-7">
+                    <a href="#about" class="nav-link">About</a>
+                    <a href="#services" class="nav-link">Services</a>
+                    <a href="#work" class="nav-link">Projects</a>
+                    <a href="#skills" class="nav-link">Skills</a>
+                    <a href="#process" class="nav-link">Workflow</a>
                 </div>
 
-                <!-- Header Action CTA -->
-                <div class="hidden sm:flex items-center gap-4">
-                    <a href="#contact" class="btn-primary px-5 py-2.5 rounded-xl text-xs uppercase tracking-wider flex items-center gap-2">
-                        <span>Start A Project</span>
-                        <i class="fa-solid fa-arrow-right text-[11px]"></i>
+                <!-- CTA + Mobile Toggle -->
+                <div class="flex items-center gap-3">
+                    <a href="#contact" class="hidden sm:inline-flex btn-primary px-5 py-2.5 text-sm items-center gap-2">
+                        <span>Start a Project</span>
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
                     </a>
+                    <button id="mobileMenuBtn" class="md:hidden p-2.5 rounded-lg border border-slate-200 text-slate-500 hover:text-blue-600 hover:border-blue-200 transition" aria-label="Toggle Menu">
+                        <i class="fa-solid fa-bars text-base" id="menuIcon"></i>
+                    </button>
                 </div>
-
-                <!-- Mobile Hamburger Button -->
-                <button id="mobileMenuBtn" class="md:hidden p-2.5 rounded-xl bg-neutral-900 border border-white/10 text-neutral-300 hover:text-white focus:outline-none" aria-label="Toggle Menu">
-                    <i class="fa-solid fa-bars text-lg" id="menuIcon"></i>
-                </button>
             </div>
         </div>
 
-        <!-- Mobile Drawer Menu -->
-        <div id="mobileMenu" class="hidden md:hidden glass-panel border-t border-white/5 px-6 py-6 space-y-4">
-            <a href="#services" onclick="toggleMenu()" class="block text-base font-semibold text-neutral-200 hover:text-white">Services</a>
-            <a href="#work" onclick="toggleMenu()" class="block text-base font-semibold text-neutral-200 hover:text-white">Featured Work</a>
-            <a href="#profiles" onclick="toggleMenu()" class="block text-base font-semibold text-neutral-200 hover:text-white">Our Team</a>
-            <a href="#process" onclick="toggleMenu()" class="block text-base font-semibold text-neutral-200 hover:text-white">Process</a>
-            <a href="#pricing" onclick="toggleMenu()" class="block text-base font-semibold text-neutral-200 hover:text-white">Packages</a>
-            <a href="#contact" onclick="toggleMenu()" class="block w-full text-center py-3 rounded-xl font-bold text-sm btn-primary">Start A Project</a>
+        <!-- Mobile Drawer -->
+        <div id="mobileMenu" class="md:hidden border-t border-slate-100 px-6 py-5 space-y-4 bg-white/95 backdrop-blur-xl">
+            <a href="#about" onclick="toggleMenu()" class="block text-base font-semibold text-slate-700 hover:text-blue-600 transition py-1">About</a>
+            <a href="#services" onclick="toggleMenu()" class="block text-base font-semibold text-slate-700 hover:text-blue-600 transition py-1">Services</a>
+            <a href="#work" onclick="toggleMenu()" class="block text-base font-semibold text-slate-700 hover:text-blue-600 transition py-1">Projects</a>
+            <a href="#skills" onclick="toggleMenu()" class="block text-base font-semibold text-slate-700 hover:text-blue-600 transition py-1">Skills</a>
+            <a href="#process" onclick="toggleMenu()" class="block text-base font-semibold text-slate-700 hover:text-blue-600 transition py-1">Workflow</a>
+            <a href="#contact" onclick="toggleMenu()" class="btn-primary block w-full text-center py-3 text-sm font-semibold">Start a Project</a>
         </div>
     </nav>
 
-    <!-- ======================================================== -->
-    <!-- HERO SECTION — Premium Monochrome Centerpiece -->
-    <!-- ======================================================== -->
-    <header id="home" class="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden z-10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            
-            <!-- Hero Top Header -->
-            <div class="text-center max-w-4xl mx-auto space-y-6 mb-14">
-                
-                <!-- Status Badge -->
-                <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full glass-panel border border-white/10 text-xs font-semibold text-neutral-200 shadow-xl">
-                    <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
-                    <span>Available for New Projects</span>
-                    <span class="text-neutral-500">•</span>
-                    <span class="text-neutral-400 font-bold">2026 Studio Season</span>
+    <!-- ============================================================ -->
+    <!-- HERO SECTION                                                  -->
+    <!-- ============================================================ -->
+    <header id="home" class="relative pt-32 pb-20 md:pt-44 md:pb-28 overflow-hidden">
+
+        <!-- Ambient blobs -->
+        <div class="blob w-[600px] h-[600px] bg-blue-500 -top-40 -right-60 pointer-events-none" style="z-index:0;"></div>
+        <div class="blob w-[500px] h-[500px] bg-violet-500 -bottom-40 -left-40 pointer-events-none" style="z-index:0;"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+
+            <!-- Hero text block -->
+            <div class="text-center max-w-4xl mx-auto space-y-7 mb-16">
+
+                <!-- Availability badge -->
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-slate-200 shadow-sm text-xs font-semibold text-slate-500">
+                    <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse inline-block"></span>
+                    Available for new projects &nbsp;·&nbsp; <span class="text-blue-600 font-bold">2026</span>
                 </div>
 
-                <!-- Main Punchy Title -->
-                <h1 class="font-display font-extrabold text-4xl sm:text-6xl lg:text-7xl text-white tracking-tight leading-[1.1]">
-                    We engineer digital platforms <br class="hidden sm:inline">
-                    <span class="gradient-text">and elevate brand power.</span>
+                <!-- Headline -->
+                <h1 class="font-display font-extrabold text-4xl sm:text-6xl lg:text-7xl text-slate-900 tracking-tight leading-[1.08]">
+                    Building Digital Experiences<br class="hidden sm:inline">
+                    <span class="gradient-text">That Move Brands Forward.</span>
                 </h1>
 
-                <!-- Sub-Headline -->
-                <p class="text-neutral-400 text-base sm:text-lg lg:text-xl font-normal leading-relaxed max-w-3xl mx-auto">
-                    A dual creative partnership uniting <strong class="text-white font-semibold">Web Development</strong> with a full-spectrum media suite — cinematic video, bold branding, photography, poster design, and high-ROI digital advertising.
+                <!-- Sub-headline -->
+                <p class="text-slate-500 text-base sm:text-lg lg:text-xl font-normal leading-relaxed max-w-3xl mx-auto">
+                    I build modern, responsive websites and digital experiences, supported by thoughtful branding, creative content, and digital publicity.
                 </p>
 
-                <!-- Action CTAs -->
-                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-3">
-                    <a href="#contact" class="w-full sm:w-auto px-8 py-4 rounded-xl font-bold text-sm btn-primary flex items-center justify-center gap-2.5 group">
+                <!-- CTAs -->
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
+                    <a href="#work" class="btn-primary w-full sm:w-auto px-8 py-4 text-sm inline-flex items-center justify-center gap-2.5">
+                        <i class="fa-solid fa-layer-group text-xs"></i>
+                        <span>Explore My Work</span>
+                    </a>
+                    <a href="#contact" class="btn-secondary w-full sm:w-auto px-8 py-4 text-sm inline-flex items-center justify-center gap-2.5">
                         <span>Start a Project</span>
-                        <i class="fa-solid fa-arrow-up-right-from-square text-xs group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition duration-200"></i>
-                    </a>
-                    <a href="#work" class="w-full sm:w-auto px-8 py-4 rounded-xl font-bold text-sm btn-secondary flex items-center justify-center gap-2.5">
-                        <i class="fa-solid fa-layer-group text-neutral-400 text-xs"></i>
-                        <span>Explore Our Work</span>
+                        <i class="fa-solid fa-arrow-up-right-from-square text-xs text-blue-500"></i>
                     </a>
                 </div>
 
             </div>
 
-            <!-- ── CENTERPIECE: Luxury Dual-Device Showcase (Laptop + Mobile) ── -->
-            <div class="relative max-w-5xl mx-auto mb-16">
-                
-                <div class="glass-panel rounded-3xl p-4 sm:p-8 border border-white/10 shadow-2xl relative overflow-hidden">
-                    
-                    <!-- Showcase Window Header / URL Bar -->
-                    <div class="flex items-center justify-between pb-4 mb-6 border-b border-white/10">
-                        <div class="flex items-center gap-2">
-                            <span class="w-3 h-3 rounded-full bg-neutral-600 inline-block"></span>
-                            <span class="w-3 h-3 rounded-full bg-neutral-700 inline-block"></span>
-                            <span class="w-3 h-3 rounded-full bg-neutral-800 inline-block"></span>
-                            <span class="text-xs text-neutral-400 font-mono ml-2 hidden sm:inline" data-brand-domain>zenvora.studio</span>
+            <!-- Browser / device showcase mockup -->
+            <div class="max-w-4xl mx-auto reveal">
+                <div class="card shadow-2xl shadow-blue-100 overflow-hidden" style="border-radius:20px;">
+                    <!-- Window chrome -->
+                    <div class="flex items-center justify-between px-5 py-3.5 border-b border-slate-100 bg-slate-50">
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-3 h-3 rounded-full bg-red-400 inline-block"></span>
+                            <span class="w-3 h-3 rounded-full bg-yellow-400 inline-block"></span>
+                            <span class="w-3 h-3 rounded-full bg-green-400 inline-block"></span>
                         </div>
-                        <div class="flex items-center gap-2 text-xs">
-                            <span class="px-3 py-1 rounded-full bg-white/5 text-neutral-200 border border-white/10 font-semibold flex items-center gap-1.5">
-                                <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
-                                99+ PageSpeed
-                            </span>
-                            <span class="px-3 py-1 rounded-full bg-white/5 text-neutral-300 border border-white/10 font-semibold hidden sm:inline">
-                                Websites First · 360° Creative Media
-                            </span>
+                        <div class="flex-1 mx-4">
+                            <div class="bg-white border border-slate-200 rounded-lg px-3 py-1.5 text-xs text-slate-400 flex items-center gap-2 max-w-xs mx-auto">
+                                <i class="fa-solid fa-lock text-green-500 text-[10px]"></i>
+                                <span data-brand-domain>zenvora.studio</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-1.5 text-slate-300">
+                            <div class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></div>
+                            <span class="text-[10px] text-slate-400 font-medium">Live</span>
                         </div>
                     </div>
-
-                    <!-- Dual Device Grid inside Showcase -->
-                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-                        
-                        <!-- Laptop Frame / Main Screen Preview (lg:col-span-8) -->
-                        <div class="lg:col-span-8 rounded-2xl bg-neutral-900 border border-white/10 overflow-hidden shadow-2xl group">
-                            <!-- Laptop Screen Top Navigation Mockup -->
-                            <div class="bg-neutral-850 px-4 py-3 border-b border-white/5 flex items-center justify-between">
-                                <div class="flex items-center gap-2">
-                                    <div class="w-6 h-6 rounded-md bg-white text-black flex items-center justify-center text-[10px] font-bold">
-                                        <i class="fa-solid fa-code"></i>
-                                    </div>
-                                    <span class="font-display font-bold text-xs text-white" data-brand-name>ZENVORA</span>
-                                </div>
-                                <div class="hidden sm:flex items-center gap-3 text-[11px] text-neutral-400">
-                                    <span class="text-white font-medium">Web</span>
-                                    <span>UI/UX</span>
-                                    <span>Video</span>
-                                    <span>Branding</span>
-                                    <span>Ads</span>
-                                </div>
-                                <span class="px-2.5 py-1 rounded-md bg-white text-black text-[10px] font-bold">Inquire</span>
-                            </div>
-                            
-                            <!-- Laptop Screen Content Mockup -->
-                            <div class="p-6 sm:p-8 bg-gradient-to-br from-neutral-950 via-neutral-900 to-neutral-850 relative min-h-[260px] flex flex-col justify-between">
-                                <div class="space-y-3 max-w-md">
-                                    <span class="text-[10px] uppercase font-bold tracking-widest text-neutral-300 px-2.5 py-1 rounded-full bg-white/5 border border-white/10 inline-block">
-                                        Joint Creative Portfolio
-                                    </span>
-                                    <h4 class="font-display font-bold text-2xl text-white leading-tight">
-                                        Engineered For Performance & Visual Authority
-                                    </h4>
-                                    <p class="text-xs text-neutral-400 leading-relaxed">
-                                        Full-stack web architecture, responsive modern interfaces, 4K video assets, and conversion-optimized digital publicity.
-                                    </p>
-                                </div>
-
-                                <div class="grid grid-cols-3 gap-3 pt-6 border-t border-white/5 mt-4">
-                                    <div class="p-2.5 rounded-xl bg-neutral-800/60 border border-white/5 text-center">
-                                        <span class="font-display font-extrabold text-base text-white block">0.6s</span>
-                                        <span class="text-[9px] text-neutral-400 uppercase font-semibold">Load Time</span>
-                                    </div>
-                                    <div class="p-2.5 rounded-xl bg-neutral-800/60 border border-white/5 text-center">
-                                        <span class="font-display font-extrabold text-base text-white block">100%</span>
-                                        <span class="text-[9px] text-neutral-400 uppercase font-semibold">Custom Code</span>
-                                    </div>
-                                    <div class="p-2.5 rounded-xl bg-neutral-800/60 border border-white/5 text-center">
-                                        <span class="font-display font-extrabold text-base text-neutral-200 block">360°</span>
-                                        <span class="text-[9px] text-neutral-400 uppercase font-semibold">Brand Suite</span>
-                                    </div>
-                                </div>
-                            </div>
+                    <!-- Mock content area -->
+                    <div class="p-8 sm:p-12 bg-gradient-to-br from-slate-50 via-white to-blue-50/40 min-h-[220px] flex flex-col justify-between">
+                        <div class="space-y-4 max-w-lg">
+                            <span class="pill">Web Development · Mubaris</span>
+                            <h4 class="font-display font-bold text-2xl text-slate-900">
+                                Responsive, fast &amp; built to last.
+                            </h4>
+                            <p class="text-sm text-slate-500 leading-relaxed">
+                                Clean architecture, modern design, and genuine craft — from custom websites to full creative suites.
+                            </p>
                         </div>
-
-                        <!-- Mobile Device Mockup (lg:col-span-4) -->
-                        <div class="lg:col-span-4 rounded-3xl bg-neutral-900 border-2 border-white/15 p-3 shadow-2xl relative max-w-[280px] mx-auto w-full">
-                            <!-- Mobile Notch -->
-                            <div class="w-20 h-4 bg-neutral-950 rounded-full mx-auto mb-3 flex items-center justify-center">
-                                <span class="w-2 h-2 rounded-full bg-neutral-800"></span>
-                            </div>
-
-                            <!-- Mobile Screen Content -->
-                            <div class="rounded-2xl bg-neutral-950 p-4 border border-white/5 space-y-4">
-                                <div class="flex items-center justify-between pb-2 border-b border-white/5">
-                                    <span class="text-[11px] font-bold text-white">Mobile Optimized</span>
-                                    <span class="w-2 h-2 rounded-full bg-white"></span>
-                                </div>
-
-                                <div class="space-y-2">
-                                    <div class="h-20 rounded-xl bg-neutral-850 border border-white/10 p-3 flex flex-col justify-end">
-                                        <span class="text-[10px] font-bold text-white block">Video & AI Media</span>
-                                        <span class="text-[9px] text-neutral-400">Vertical reels & post-production</span>
-                                    </div>
-                                    <div class="h-14 rounded-xl bg-neutral-850 border border-white/5 p-2.5 flex items-center gap-2.5">
-                                        <div class="w-8 h-8 rounded-lg bg-white/10 text-white flex items-center justify-center text-xs">
-                                            <i class="fa-solid fa-bullhorn"></i>
-                                        </div>
-                                        <div>
-                                            <span class="text-[10px] font-bold text-white block">Meta & Google Ads</span>
-                                            <span class="text-[8px] text-neutral-400">Targeted traffic funnels</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="pt-2 border-t border-white/5 flex items-center justify-between text-[10px] text-neutral-400">
-                                    <span>Brand Publicity</span>
-                                    <span class="text-white font-semibold">Active ✓</span>
-                                </div>
-                            </div>
-
-                            <!-- Home indicator bar -->
-                            <div class="w-24 h-1 bg-white/20 rounded-full mx-auto mt-3"></div>
-                        </div>
-
-                    </div>
-
-                </div>
-            </div>
-
-            <!-- ── DUAL PILLAR CARDS (Websites First vs Creative Solutions) ── -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-                
-                <!-- Pillar 1: Websites First (Main Expertise) -->
-                <div class="glass-card p-8 rounded-3xl relative group">
-                    <div class="flex items-center justify-between mb-6">
-                        <div class="w-14 h-14 rounded-2xl bg-white/10 border border-white/15 text-white flex items-center justify-center text-2xl group-hover:scale-105 group-hover:bg-white group-hover:text-black transition duration-300">
-                            <i class="fa-solid fa-laptop-code"></i>
-                        </div>
-                        <span class="badge-mono">
-                            Core Focus · Web Engineering
-                        </span>
-                    </div>
-
-                    <h3 class="font-display font-bold text-2xl text-white mb-3">
-                        Websites First
-                    </h3>
-                    <p class="text-neutral-400 text-sm leading-relaxed mb-6">
-                        Your website is the foundation of your digital authority. We engineer pixel-perfect, responsive web platforms and web applications with sub-second page loads, clean architecture, and conversion-optimized structure.
-                    </p>
-
-                    <div class="space-y-2.5 text-xs text-neutral-300 font-medium pt-4 border-t border-white/5">
-                        <div class="flex items-center gap-2.5">
-                            <i class="fa-solid fa-check text-neutral-400"></i>
-                            <span>Custom High-Converting Web Platforms & Single-Page Apps</span>
-                        </div>
-                        <div class="flex items-center gap-2.5">
-                            <i class="fa-solid fa-check text-neutral-400"></i>
-                            <span>React, Next.js, Modern JavaScript & Tailwind CSS</span>
-                        </div>
-                        <div class="flex items-center gap-2.5">
-                            <i class="fa-solid fa-check text-neutral-400"></i>
-                            <span>SEO 100/100, Core Web Vitals & Sub-Second Page Speeds</span>
-                        </div>
-                        <div class="flex items-center gap-2.5">
-                            <i class="fa-solid fa-check text-neutral-400"></i>
-                            <span>Database Pipelines, Admin Dashboards & Form Integrations</span>
+                        <!-- Tech row -->
+                        <div class="flex flex-wrap gap-2 pt-6 mt-6 border-t border-slate-100">
+                            <span class="pill-slate pill">HTML5 / CSS3</span>
+                            <span class="pill-slate pill">JavaScript ES6+</span>
+                            <span class="pill-slate pill">Tailwind CSS</span>
+                            <span class="pill-slate pill">Supabase</span>
+                            <span class="pill-violet pill">UI/UX Design</span>
+                            <span class="pill-violet pill">Figma</span>
                         </div>
                     </div>
                 </div>
-
-                <!-- Pillar 2: Creative Solutions & 360° Publicity (Extended Services) -->
-                <div class="glass-card p-8 rounded-3xl relative group">
-                    <div class="flex items-center justify-between mb-6">
-                        <div class="w-14 h-14 rounded-2xl bg-white/10 border border-white/15 text-white flex items-center justify-center text-2xl group-hover:scale-105 group-hover:bg-white group-hover:text-black transition duration-300">
-                            <i class="fa-solid fa-wand-magic-sparkles"></i>
-                        </div>
-                        <span class="badge-mono">
-                            360° Creative Media Suite
-                        </span>
-                    </div>
-
-                    <h3 class="font-display font-bold text-2xl text-white mb-3">
-                        Creative Media & Publicity
-                    </h3>
-                    <p class="text-neutral-400 text-sm leading-relaxed mb-6">
-                        A great website needs attention and authority. We craft the complete visual ecosystem — cinematic video editing, AI video creation, brand identity, commercial photography, poster design, and digital advertising campaigns.
-                    </p>
-
-                    <div class="space-y-2.5 text-xs text-neutral-300 font-medium pt-4 border-t border-white/5">
-                        <div class="flex items-center gap-2.5">
-                            <i class="fa-solid fa-check text-neutral-400"></i>
-                            <span>Cinematic Video Editing, Reels & Short-Form Content</span>
-                        </div>
-                        <div class="flex items-center gap-2.5">
-                            <i class="fa-solid fa-check text-neutral-400"></i>
-                            <span>AI Video Creation & Futuristic Visual Storytelling</span>
-                        </div>
-                        <div class="flex items-center gap-2.5">
-                            <i class="fa-solid fa-check text-neutral-400"></i>
-                            <span>Brand Identity, Logo Design & Complete Brand Guidelines</span>
-                        </div>
-                        <div class="flex items-center gap-2.5">
-                            <i class="fa-solid fa-check text-neutral-400"></i>
-                            <span>Meta & Google Ads Campaign Management & Optimization</span>
-                        </div>
-                        <div class="flex items-center gap-2.5">
-                            <i class="fa-solid fa-check text-neutral-400"></i>
-                            <span>Commercial Photography & High-Impact Poster / Graphic Design</span>
-                        </div>
-                    </div>
-                </div>
-
             </div>
 
         </div>
     </header>
 
-    <!-- ======================================================== -->
-    <!-- VALUE & PERFORMANCE METRICS BAR -->
-    <!-- ======================================================== -->
-    <section class="py-12 border-y border-white/5 relative z-10 glass-panel">
+    <!-- ============================================================ -->
+    <!-- ABOUT ME                                                      -->
+    <!-- ============================================================ -->
+    <section id="about" class="py-24 bg-slate-50 relative z-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-y md:divide-y-0 md:divide-x divide-white/10">
-                <div class="pt-4 md:pt-0">
-                    <span class="font-display font-extrabold text-3xl sm:text-4xl text-white block">99<span class="text-neutral-400">%</span></span>
-                    <span class="text-xs text-neutral-400 uppercase tracking-widest font-semibold mt-1 block">Google PageSpeed</span>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
+
+                <!-- Left: portrait/monogram card -->
+                <div class="reveal flex justify-center lg:justify-end">
+                    <div class="relative max-w-sm w-full">
+                        <!-- Main card -->
+                        <div class="card p-8 text-center relative z-10">
+                            <!-- Monogram avatar -->
+                            <div class="w-24 h-24 rounded-2xl bg-gradient-to-br from-blue-500 to-violet-600 text-white font-display font-extrabold text-4xl flex items-center justify-center mx-auto mb-5 shadow-lg shadow-blue-200">
+                                M
+                            </div>
+                            <h3 class="font-display font-bold text-2xl text-slate-900 mb-1">Mubaris</h3>
+                            <p class="text-sm text-slate-500 font-medium mb-5">Founder &amp; Web Developer · ZENVORA</p>
+                            <div class="flex flex-wrap gap-2 justify-center mb-6">
+                                <span class="pill">Web Development</span>
+                                <span class="pill-violet pill">UI/UX</span>
+                                <span class="pill-slate pill">Branding</span>
+                                <span class="pill-slate pill">Creative Media</span>
+                            </div>
+                            <div class="flex items-center justify-center gap-5 pt-5 border-t border-slate-100 text-slate-400">
+                                <a href="https://github.com/muhammedmubarisa135-dev" target="_blank" class="hover:text-blue-600 transition text-lg" title="GitHub"><i class="fa-brands fa-github"></i></a>
+                                <a href="#contact" class="hover:text-blue-600 transition text-lg" title="Send a message"><i class="fa-regular fa-envelope"></i></a>
+                            </div>
+                        </div>
+                        <!-- Floating decoration -->
+                        <div class="absolute -bottom-4 -right-4 w-24 h-24 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center z-0">
+                            <i class="fa-solid fa-code text-blue-300 text-2xl"></i>
+                        </div>
+                    </div>
                 </div>
-                <div class="pt-4 md:pt-0">
-                    <span class="font-display font-extrabold text-3xl sm:text-4xl text-white block">100<span class="text-neutral-400">%</span></span>
-                    <span class="text-xs text-neutral-400 uppercase tracking-widest font-semibold mt-1 block">Custom Clean Code</span>
+
+                <!-- Right: bio text -->
+                <div class="reveal space-y-6">
+                    <span class="section-label"><i class="fa-solid fa-user text-[10px]"></i> About Me</span>
+                    <h2 class="font-display font-extrabold text-3xl sm:text-4xl text-slate-900 tracking-tight leading-tight">
+                        One creator. A full range<br>of <span class="gradient-text">digital capabilities.</span>
+                    </h2>
+                    <div class="space-y-4 text-slate-500 text-sm sm:text-base leading-relaxed">
+                        <p>
+                            I'm Mubaris — a web developer and creative technologist behind <strong class="text-slate-700 font-semibold">ZENVORA</strong>. My core work is building custom websites and web applications that are fast, responsive, and purposefully designed.
+                        </p>
+                        <p>
+                            Beyond development, I work across a range of creative services: UI/UX design, brand identity, logo design, video editing, AI-assisted video creation, commercial photography, poster design, and digital advertising. These capabilities let me support a project from concept through to promotion.
+                        </p>
+                        <p>
+                            I believe in clean code, honest communication, and building things that genuinely serve their purpose. I work directly with clients — no layers of agency overhead.
+                        </p>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-4 pt-2">
+                        <a href="#work" class="btn-primary px-6 py-3 text-sm inline-flex items-center justify-center gap-2">
+                            <span>See My Projects</span>
+                            <i class="fa-solid fa-arrow-right text-xs"></i>
+                        </a>
+                        <a href="#contact" class="btn-secondary px-6 py-3 text-sm inline-flex items-center justify-center gap-2">
+                            <span>Get in Touch</span>
+                        </a>
+                    </div>
                 </div>
-                <div class="pt-4 md:pt-0">
-                    <span class="font-display font-extrabold text-3xl sm:text-4xl text-white block">360<span class="text-neutral-400">°</span></span>
-                    <span class="text-xs text-neutral-400 uppercase tracking-widest font-semibold mt-1 block">Creative Media Suite</span>
-                </div>
-                <div class="pt-4 md:pt-0">
-                    <span class="font-display font-extrabold text-3xl sm:text-4xl text-white block">24/7</span>
-                    <span class="text-xs text-neutral-400 uppercase tracking-widest font-semibold mt-1 block">Direct Founder Access</span>
-                </div>
+
             </div>
+
         </div>
     </section>
 
-    <!-- ======================================================== -->
-    <!-- SERVICES SECTION — Full Creative Suite -->
-    <!-- ======================================================== -->
+    <!-- ============================================================ -->
+    <!-- SERVICES                                                      -->
+    <!-- ============================================================ -->
     <section id="services" class="py-24 relative z-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            
-            <div class="text-center max-w-2xl mx-auto mb-16 space-y-3">
-                <span class="text-xs font-bold tracking-widest uppercase text-neutral-400">Everything Your Brand Needs</span>
-                <h2 class="font-display font-extrabold text-3xl sm:text-5xl text-white tracking-tight">
-                    One Studio. Complete Capabilities.
+
+            <div class="text-center max-w-2xl mx-auto mb-16 space-y-4 reveal">
+                <span class="section-label"><i class="fa-solid fa-briefcase text-[10px]"></i> Services</span>
+                <h2 class="font-display font-extrabold text-3xl sm:text-5xl text-slate-900 tracking-tight">
+                    What I Build &amp; Create
                 </h2>
-                <p class="text-neutral-400 text-sm sm:text-base">
-                    From engineering your core web platform to delivering viral reels, commercial photography, and ad management — everything is crafted in-house.
+                <p class="text-slate-500 text-sm sm:text-base">
+                    Website development is my primary focus. The creative services below support the full digital presence of the projects I build.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+
+                <!-- A. Web Development (primary — wide card) -->
+                <div class="card card-featured p-8 lg:col-span-2 reveal">
+                    <div class="flex items-start justify-between mb-5">
+                        <div class="service-icon bg-white/20 text-white">
+                            <i class="fa-solid fa-laptop-code"></i>
+                        </div>
+                        <span class="text-[10px] font-bold uppercase tracking-widest text-blue-200 border border-blue-400/30 px-3 py-1 rounded-full bg-blue-500/20">★ Primary Focus</span>
+                    </div>
+                    <h3 class="font-display font-bold text-2xl text-white mb-3">Website Development</h3>
+                    <p class="text-blue-100 text-sm leading-relaxed mb-6">
+                        Custom-coded, responsive websites and web applications built from scratch. Mobile-first, semantic HTML, and genuinely maintained code.
+                    </p>
+                    <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-blue-100 font-medium">
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-blue-300"></i> Custom HTML / CSS / JavaScript</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-blue-300"></i> Mobile-first responsive layouts</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-blue-300"></i> Supabase / database integration</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-blue-300"></i> Admin dashboards &amp; portals</li>
+                    </ul>
+                </div>
+
+                <!-- B. UI/UX & Branding -->
+                <div class="card p-7 reveal">
+                    <div class="service-icon bg-violet-50 text-violet-600 mb-5">
+                        <i class="fa-solid fa-pen-ruler"></i>
+                    </div>
+                    <h3 class="font-display font-bold text-xl text-slate-900 mb-2">UI/UX, Logo &amp; Branding</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-5">
+                        User interface design, wireframes, logo design, and brand identity systems.
+                    </p>
+                    <ul class="space-y-1.5 text-xs text-slate-600 font-medium">
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-blue-400"></i> Wireframes &amp; prototypes</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-blue-400"></i> Logo &amp; wordmark design</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-blue-400"></i> Brand guidelines &amp; systems</li>
+                    </ul>
+                </div>
+
+                <!-- C. Video & Photo -->
+                <div class="card p-7 reveal">
+                    <div class="service-icon bg-blue-50 text-blue-600 mb-5">
+                        <i class="fa-solid fa-film"></i>
+                    </div>
+                    <h3 class="font-display font-bold text-xl text-slate-900 mb-2">Video, AI Video &amp; Photography</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-5">
+                        Video editing, AI-assisted video creation, and commercial photography.
+                    </p>
+                    <ul class="space-y-1.5 text-xs text-slate-600 font-medium">
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-blue-400"></i> Video editing &amp; reels</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-blue-400"></i> AI video creation</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-blue-400"></i> Commercial photography</li>
+                    </ul>
+                </div>
+
+                <!-- D. Digital Advertising (wide card) -->
+                <div class="card p-8 lg:col-span-2 reveal">
+                    <div class="flex items-start justify-between mb-5">
+                        <div class="service-icon bg-slate-100 text-slate-600">
+                            <i class="fa-solid fa-bullhorn"></i>
+                        </div>
+                        <span class="pill-slate pill">Digital Advertising</span>
+                    </div>
+                    <h3 class="font-display font-bold text-2xl text-slate-900 mb-3">Poster Design, Ads &amp; Business Promotion</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed mb-6">
+                        Promotional poster and graphic design, Meta and Google advertising campaigns, and digital publicity to help businesses reach their audience.
+                    </p>
+                    <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-600 font-medium">
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-blue-400"></i> Poster &amp; graphic design</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-blue-400"></i> Meta Ads (Instagram / Facebook)</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-blue-400"></i> Google Search &amp; Display Ads</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-blue-400"></i> Business promotion &amp; publicity</li>
+                    </ul>
+                </div>
+
+                <!-- E. Photography standalone -->
+                <!-- (merged into C above) -->
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- FEATURED PROJECTS                                            -->
+    <!-- ============================================================ -->
+    <section id="work" class="py-24 bg-slate-50 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-14 gap-6 reveal">
+                <div class="space-y-3">
+                    <span class="section-label"><i class="fa-solid fa-folder-open text-[10px]"></i> Featured Projects</span>
+                    <h2 class="font-display font-extrabold text-3xl sm:text-5xl text-slate-900 tracking-tight">Real Work, Real Craft</h2>
+                </div>
+                <p class="text-slate-500 text-sm max-w-sm">
+                    Projects I've designed, built, and delivered. Clearly labelled where work is in progress or conceptual.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+                <!-- Project 1: Karate Academy (real live project) -->
+                <div class="card overflow-hidden reveal">
+                    <div class="h-60 bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 relative flex items-center justify-center p-6">
+                        <div class="absolute inset-0 opacity-10" style="background-image: url('hero-bg.jpg'); background-size: cover; background-position: center;"></div>
+                        <div class="relative z-10 text-center space-y-3">
+                            <span class="inline-block px-3 py-1 bg-white/20 border border-white/30 text-white text-[10px] font-bold uppercase tracking-widest rounded-full">Website &amp; Web App</span>
+                            <h3 class="font-display font-bold text-2xl sm:text-3xl text-white">Karate Academy</h3>
+                            <p class="text-xs text-blue-100 max-w-xs mx-auto">Institutional website with online admissions, student portal, and admin dashboard.</p>
+                        </div>
+                    </div>
+                    <div class="p-7">
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="pill">JavaScript ES6+</span>
+                            <span class="pill-slate pill">Supabase</span>
+                            <span class="pill-slate pill">Tailwind CSS</span>
+                            <span class="pill-slate pill">HTML5</span>
+                        </div>
+                        <p class="text-slate-500 text-sm leading-relaxed mb-6">
+                            A full-featured academy website including online admission intake, student-facing dashboard, fee tracking, galleries, and a protected admin control panel. Built with a Supabase backend and modern JavaScript.
+                        </p>
+                        <div class="flex items-center justify-between pt-5 border-t border-slate-100">
+                            <a href="../volcano.html" target="_blank" class="text-sm font-bold text-blue-600 hover:text-blue-800 flex items-center gap-2 transition">
+                                <span>View Project Details</span>
+                                <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+                            </a>
+                            <span class="text-xs text-green-600 font-semibold flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse inline-block"></span>
+                                Production Ready
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 2: Al Barakha Bakery -->
+                <div class="card overflow-hidden reveal">
+                    <div class="h-60 bg-gradient-to-br from-amber-500 via-orange-500 to-rose-600 relative flex items-center justify-center p-6">
+                        <div class="relative z-10 text-center space-y-3">
+                            <span class="inline-block px-3 py-1 bg-white/20 border border-white/30 text-white text-[10px] font-bold uppercase tracking-widest rounded-full">Bakery Ordering Website</span>
+                            <h3 class="font-display font-bold text-2xl sm:text-3xl text-white">Al Barakha Bakery</h3>
+                            <p class="text-xs text-orange-100 max-w-xs mx-auto">Business website with menu display, order inquiry, and digital promotion.</p>
+                        </div>
+                    </div>
+                    <div class="p-7">
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="pill">HTML5 / CSS3</span>
+                            <span class="pill-slate pill">JavaScript</span>
+                            <span class="pill-slate pill">Responsive Design</span>
+                        </div>
+                        <p class="text-slate-500 text-sm leading-relaxed mb-6">
+                            A bakery business website featuring an attractive product menu, order inquiry workflow, business information, and digital promotional assets to support the client's online presence.
+                        </p>
+                        <div class="flex items-center justify-between pt-5 border-t border-slate-100">
+                            <a href="#contact" class="text-sm font-bold text-blue-600 hover:text-blue-800 flex items-center gap-2 transition">
+                                <span>Request Project Details</span>
+                                <i class="fa-solid fa-arrow-right text-xs"></i>
+                            </a>
+                            <span class="pill-slate pill text-[10px]">Business Website</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 3: ISM Logo & Branding -->
+                <div class="card overflow-hidden reveal">
+                    <div class="h-60 bg-gradient-to-br from-violet-600 via-purple-700 to-indigo-800 relative flex items-center justify-center p-6">
+                        <div class="relative z-10 text-center space-y-3">
+                            <span class="inline-block px-3 py-1 bg-white/20 border border-white/30 text-white text-[10px] font-bold uppercase tracking-widest rounded-full">Logo &amp; Brand Identity</span>
+                            <h3 class="font-display font-bold text-2xl sm:text-3xl text-white">Islah Super Market (ISM)</h3>
+                            <p class="text-xs text-violet-100 max-w-xs mx-auto">Complete logo design and brand identity system for a local supermarket.</p>
+                        </div>
+                    </div>
+                    <div class="p-7">
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="pill-violet pill">Logo Design</span>
+                            <span class="pill-violet pill">Brand Identity</span>
+                            <span class="pill-slate pill">Typography</span>
+                            <span class="pill-slate pill">Color System</span>
+                        </div>
+                        <p class="text-slate-500 text-sm leading-relaxed mb-6">
+                            Designed the brand identity for ISM (Islah Super Market), including logo, wordmark, color palette, and supporting visual identity assets for print and digital use.
+                        </p>
+                        <div class="flex items-center justify-between pt-5 border-t border-slate-100">
+                            <a href="#contact" class="text-sm font-bold text-blue-600 hover:text-blue-800 flex items-center gap-2 transition">
+                                <span>Request Case Details</span>
+                                <i class="fa-solid fa-arrow-right text-xs"></i>
+                            </a>
+                            <span class="pill-violet pill text-[10px]">Branding</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 4: ZENVORA Portfolio (this site) -->
+                <div class="card overflow-hidden reveal">
+                    <div class="h-60 bg-gradient-to-br from-slate-700 via-slate-800 to-slate-900 relative flex items-center justify-center p-6">
+                        <div class="relative z-10 text-center space-y-3">
+                            <span class="inline-block px-3 py-1 bg-white/10 border border-white/20 text-white text-[10px] font-bold uppercase tracking-widest rounded-full">Portfolio Website</span>
+                            <h3 class="font-display font-bold text-2xl sm:text-3xl text-white">ZENVORA Portfolio</h3>
+                            <p class="text-xs text-slate-300 max-w-xs mx-auto">This portfolio site — designed and built by me, deployed on GitHub Pages.</p>
+                        </div>
+                    </div>
+                    <div class="p-7">
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="pill">HTML5 / CSS3</span>
+                            <span class="pill-slate pill">Tailwind CSS</span>
+                            <span class="pill-slate pill">Vanilla JS</span>
+                            <span class="pill-slate pill">GitHub Pages</span>
+                        </div>
+                        <p class="text-slate-500 text-sm leading-relaxed mb-6">
+                            A hand-coded static portfolio website with no framework dependencies — built for performance and clarity. Offline-safe Tailwind, smooth scroll animations, and a premium light-theme design.
+                        </p>
+                        <div class="flex items-center justify-between pt-5 border-t border-slate-100">
+                            <a href="https://muhammedmubarisa135-dev.github.io/Zenvora/" target="_blank" class="text-sm font-bold text-blue-600 hover:text-blue-800 flex items-center gap-2 transition">
+                                <span>View Live Site</span>
+                                <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+                            </a>
+                            <span class="text-xs text-green-600 font-semibold flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse inline-block"></span>
+                                Live on GitHub Pages
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SKILLS & TOOLS                                               -->
+    <!-- ============================================================ -->
+    <section id="skills" class="py-24 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <div class="text-center max-w-2xl mx-auto mb-14 space-y-4 reveal">
+                <span class="section-label"><i class="fa-solid fa-wrench text-[10px]"></i> Skills &amp; Tools</span>
+                <h2 class="font-display font-extrabold text-3xl sm:text-5xl text-slate-900 tracking-tight">Technologies I Work With</h2>
+                <p class="text-slate-500 text-sm sm:text-base">
+                    Tools and technologies I use across web development, design, and creative production.
                 </p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 
-                <!-- Service 1: Website Development (Main Focus · Wide Card) -->
-                <div class="glass-card p-8 rounded-3xl relative overflow-hidden group lg:col-span-2 border border-white/15">
-                    <div class="flex items-center justify-between mb-5">
-                        <div class="w-14 h-14 rounded-2xl bg-white/10 border border-white/15 text-white flex items-center justify-center text-2xl group-hover:scale-105 group-hover:bg-white group-hover:text-black transition duration-300">
+                <!-- Web Development -->
+                <div class="card p-6 reveal">
+                    <div class="flex items-center gap-3 mb-5">
+                        <div class="service-icon bg-blue-50 text-blue-600 w-10 h-10 rounded-xl text-base">
                             <i class="fa-solid fa-code"></i>
                         </div>
-                        <span class="badge-mono bg-white/10 text-white border-white/20">
-                            ★ Primary Focus
-                        </span>
+                        <h4 class="font-display font-bold text-sm text-slate-800">Web Development</h4>
                     </div>
-                    <h3 class="font-display font-bold text-2xl text-white mb-2">Website Development</h3>
-                    <p class="text-neutral-300 text-sm leading-relaxed mb-6">
-                        Custom-coded, lightning-fast websites engineered from scratch. Mobile-first, SEO-ready, and conversion-optimized to build trust and drive business inquiries.
-                    </p>
-                    <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-neutral-300 font-medium">
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neutral-400"></i> Custom HTML5 / React / Next.js</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neutral-400"></i> Mobile-First & Responsive Layouts</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neutral-400"></i> Sub-Second Page Speeds (95+)</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neutral-400"></i> Supabase / Database Integrations</li>
-                    </ul>
-                </div>
-
-                <!-- Service 2: UI/UX Design -->
-                <div class="glass-card p-7 rounded-3xl relative overflow-hidden group">
-                    <div class="w-14 h-14 rounded-2xl bg-white/10 border border-white/15 text-white flex items-center justify-center text-2xl mb-5 group-hover:scale-105 group-hover:bg-white group-hover:text-black transition duration-300">
-                        <i class="fa-solid fa-pen-ruler"></i>
-                    </div>
-                    <h3 class="font-display font-bold text-xl text-white mb-2">UI/UX Design</h3>
-                    <p class="text-neutral-400 text-sm leading-relaxed mb-5">
-                        Intuitive user journeys, wireframes, and interactive Figma prototypes crafted for clarity and effortless conversion.
-                    </p>
-                    <ul class="space-y-1.5 text-xs text-neutral-300 font-medium">
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neutral-400"></i> User Research & Wireframes</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neutral-400"></i> Interactive Figma Prototypes</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neutral-400"></i> Modern Design Systems</li>
-                    </ul>
-                </div>
-
-                <!-- Service 3: Branding & Logo Design -->
-                <div class="glass-card p-7 rounded-3xl relative overflow-hidden group">
-                    <div class="w-14 h-14 rounded-2xl bg-white/10 border border-white/15 text-white flex items-center justify-center text-2xl mb-5 group-hover:scale-105 group-hover:bg-white group-hover:text-black transition duration-300">
-                        <i class="fa-solid fa-crown"></i>
-                    </div>
-                    <h3 class="font-display font-bold text-xl text-white mb-2">Branding & Logo Design</h3>
-                    <p class="text-neutral-400 text-sm leading-relaxed mb-5">
-                        Distinctive logos, typography, color palettes, and comprehensive brand guidelines that establish market presence.
-                    </p>
-                    <ul class="space-y-1.5 text-xs text-neutral-300 font-medium">
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neutral-400"></i> Logo & Wordmark Design</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neutral-400"></i> Brand Guidelines & Typography</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neutral-400"></i> Visual Identity Systems</li>
-                    </ul>
-                </div>
-
-                <!-- Service 4: Poster & Graphic Design -->
-                <div class="glass-card p-7 rounded-3xl relative overflow-hidden group">
-                    <div class="w-14 h-14 rounded-2xl bg-white/10 border border-white/15 text-white flex items-center justify-center text-2xl mb-5 group-hover:scale-105 group-hover:bg-white group-hover:text-black transition duration-300">
-                        <i class="fa-solid fa-palette"></i>
-                    </div>
-                    <h3 class="font-display font-bold text-xl text-white mb-2">Poster & Graphic Design</h3>
-                    <p class="text-neutral-400 text-sm leading-relaxed mb-5">
-                        High-impact promotional posters, social media banners, event flyers, and visual marketing assets that demand attention.
-                    </p>
-                    <ul class="space-y-1.5 text-xs text-neutral-300 font-medium">
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neutral-400"></i> Event & Commercial Posters</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neutral-400"></i> Social Media Visual Graphics</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neutral-400"></i> Print & Digital Ready Collateral</li>
-                    </ul>
-                </div>
-
-                <!-- Service 5: Video Editing -->
-                <div class="glass-card p-7 rounded-3xl relative overflow-hidden group">
-                    <div class="w-14 h-14 rounded-2xl bg-white/10 border border-white/15 text-white flex items-center justify-center text-2xl mb-5 group-hover:scale-105 group-hover:bg-white group-hover:text-black transition duration-300">
-                        <i class="fa-solid fa-film"></i>
-                    </div>
-                    <h3 class="font-display font-bold text-xl text-white mb-2">Video Editing & Motion</h3>
-                    <p class="text-neutral-400 text-sm leading-relaxed mb-5">
-                        Cinematic cuts, vertical reels, promotional commercials, and sound design that capture attention within the first 3 seconds.
-                    </p>
-                    <ul class="space-y-1.5 text-xs text-neutral-300 font-medium">
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neutral-400"></i> Reels & Short-Form Content</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neutral-400"></i> Commercial Brand Films</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neutral-400"></i> Color Grading & Audio Mix</li>
-                    </ul>
-                </div>
-
-                <!-- Service 6: AI Video Creation -->
-                <div class="glass-card p-7 rounded-3xl relative overflow-hidden group">
-                    <div class="w-14 h-14 rounded-2xl bg-white/10 border border-white/15 text-white flex items-center justify-center text-2xl mb-5 group-hover:scale-105 group-hover:bg-white group-hover:text-black transition duration-300">
-                        <i class="fa-solid fa-wand-magic"></i>
-                    </div>
-                    <h3 class="font-display font-bold text-xl text-white mb-2">AI Video Creation</h3>
-                    <p class="text-neutral-400 text-sm leading-relaxed mb-5">
-                        Cutting-edge AI-generated videos, avatars, and generative visual storytelling that position your brand at the technology forefront.
-                    </p>
-                    <ul class="space-y-1.5 text-xs text-neutral-300 font-medium">
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neutral-400"></i> AI Visual Storytelling</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neutral-400"></i> Text-to-Video Production</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neutral-400"></i> Dynamic Content Generation</li>
-                    </ul>
-                </div>
-
-                <!-- Service 7: Photography -->
-                <div class="glass-card p-7 rounded-3xl relative overflow-hidden group">
-                    <div class="w-14 h-14 rounded-2xl bg-white/10 border border-white/15 text-white flex items-center justify-center text-2xl mb-5 group-hover:scale-105 group-hover:bg-white group-hover:text-black transition duration-300">
-                        <i class="fa-solid fa-camera"></i>
-                    </div>
-                    <h3 class="font-display font-bold text-xl text-white mb-2">Commercial Photography</h3>
-                    <p class="text-neutral-400 text-sm leading-relaxed mb-5">
-                        High-resolution product, lifestyle, event, and portrait photography with professional lighting and magazine-grade retouching.
-                    </p>
-                    <ul class="space-y-1.5 text-xs text-neutral-300 font-medium">
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neutral-400"></i> Product & Commercial Shoots</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neutral-400"></i> Editorial & Portrait Photography</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neutral-400"></i> Professional Retouching</li>
-                    </ul>
-                </div>
-
-                <!-- Service 8: Digital Advertising & Promotion (Wide Card) -->
-                <div class="glass-card p-8 rounded-3xl relative overflow-hidden group lg:col-span-2">
-                    <div class="flex items-center justify-between mb-5">
-                        <div class="w-14 h-14 rounded-2xl bg-white/10 border border-white/15 text-white flex items-center justify-center text-2xl group-hover:scale-105 group-hover:bg-white group-hover:text-black transition duration-300">
-                            <i class="fa-solid fa-bullhorn"></i>
-                        </div>
-                        <span class="badge-mono">
-                            Traffic & Conversion
-                        </span>
-                    </div>
-                    <h3 class="font-display font-bold text-2xl text-white mb-2">Digital Advertising & Business Promotion</h3>
-                    <p class="text-neutral-300 text-sm leading-relaxed mb-6">
-                        Data-driven paid advertising on Meta (Instagram/Facebook) and Google. We pair creative ad production with precise audience targeting and lead capture funnels.
-                    </p>
-                    <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-neutral-300 font-medium">
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neutral-400"></i> Meta Ads (Instagram / Facebook)</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neutral-400"></i> Google Search & Display Ads</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neutral-400"></i> Funnel Optimization & A/B Testing</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neutral-400"></i> High-ROI Lead Generation</li>
-                    </ul>
-                </div>
-
-            </div>
-
-        </div>
-    </section>
-
-    <!-- ======================================================== -->
-    <!-- FEATURED WORK / PORTFOLIO -->
-    <!-- ======================================================== -->
-    <section id="work" class="py-24 bg-neutral-900/60 border-y border-white/5 relative z-10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            
-            <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
-                <div>
-                    <span class="text-xs font-bold tracking-widest uppercase text-neutral-400">Verified Work</span>
-                    <h2 class="font-display font-extrabold text-3xl sm:text-5xl text-white tracking-tight mt-1">
-                        Featured Projects
-                    </h2>
-                </div>
-                <p class="text-neutral-400 text-sm max-w-md">
-                    Explore digital solutions we have designed, engineered, and delivered with proven results.
-                </p>
-            </div>
-
-            <!-- Project Cards Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                
-                <!-- Project 1: Volcano Martial Arts Academy (Real Live Project) -->
-                <div class="glass-card rounded-3xl overflow-hidden group">
-                    <div class="h-64 sm:h-72 bg-gradient-to-tr from-neutral-900 via-neutral-850 to-neutral-800 relative overflow-hidden flex items-center justify-center p-6 border-b border-white/5">
-                        <div class="absolute inset-0 bg-cover bg-center opacity-25 group-hover:scale-105 group-hover:opacity-35 transition duration-500" style="background-image: url('hero-bg.jpg');"></div>
-                        <div class="relative z-10 text-center space-y-3">
-                            <span class="badge-mono bg-white/10 text-white border-white/20">Full-Stack Live System</span>
-                            <h3 class="font-display font-extrabold text-2xl sm:text-3xl text-white">Volcano Martial Arts Academy</h3>
-                            <p class="text-xs text-neutral-300 max-w-sm mx-auto">Complete institutional platform with online admission pipelines, student portal, and multi-tier admin dashboard.</p>
-                        </div>
-                    </div>
-                    <div class="p-8">
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="px-3 py-1 rounded-lg bg-neutral-800 text-[11px] font-semibold text-neutral-300 border border-white/5">JavaScript ES6+</span>
-                            <span class="px-3 py-1 rounded-lg bg-neutral-800 text-[11px] font-semibold text-neutral-300 border border-white/5">Supabase Backend</span>
-                            <span class="px-3 py-1 rounded-lg bg-neutral-800 text-[11px] font-semibold text-neutral-300 border border-white/5">Tailwind CSS</span>
-                            <span class="px-3 py-1 rounded-lg bg-neutral-800 text-[11px] font-semibold text-neutral-300 border border-white/5">Vercel Deploy</span>
-                        </div>
-                        <p class="text-neutral-400 text-sm leading-relaxed mb-6">
-                            Engineered a comprehensive martial arts academy platform featuring online admission intake, synchronized Supabase data pipelines, fee tracking, interactive galleries, and protected administrative control panels.
-                        </p>
-                        <div class="flex items-center justify-between pt-4 border-t border-white/5">
-                            <a href="../volcano.html" target="_blank" class="text-sm font-bold text-white hover:text-neutral-300 flex items-center gap-2 group-hover:gap-3 transition-all duration-200">
-                                <span>View System Details</span>
-                                <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
-                            </a>
-                            <span class="text-xs text-neutral-300 font-semibold flex items-center gap-1.5">
-                                <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span> Production Ready
-                            </span>
-                        </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="skill-tag">HTML5</span>
+                        <span class="skill-tag">CSS3</span>
+                        <span class="skill-tag">JavaScript (ES6+)</span>
+                        <span class="skill-tag">Tailwind CSS</span>
+                        <span class="skill-tag">Supabase</span>
+                        <span class="skill-tag">Git / GitHub</span>
+                        <span class="skill-tag">GitHub Pages</span>
+                        <span class="skill-tag">Responsive Design</span>
                     </div>
                 </div>
 
-                <!-- Project 2: SaaS Platform Architecture Concept -->
-                <div class="glass-card rounded-3xl overflow-hidden group">
-                    <div class="h-64 sm:h-72 bg-gradient-to-tr from-neutral-900 via-neutral-850 to-neutral-800 relative overflow-hidden flex items-center justify-center p-6 border-b border-white/5">
-                        <div class="relative z-10 text-center space-y-3">
-                            <span class="badge-mono">B2B SaaS Architecture</span>
-                            <h3 class="font-display font-extrabold text-2xl sm:text-3xl text-white">FlowMetrics Cloud Dashboard</h3>
-                            <p class="text-xs text-neutral-300 max-w-sm mx-auto">Real-time revenue monitoring and churn analytics interface designed for modern subscription software.</p>
+                <!-- Design & Branding -->
+                <div class="card p-6 reveal">
+                    <div class="flex items-center gap-3 mb-5">
+                        <div class="service-icon bg-violet-50 text-violet-600 w-10 h-10 rounded-xl text-base">
+                            <i class="fa-solid fa-pen-nib"></i>
                         </div>
+                        <h4 class="font-display font-bold text-sm text-slate-800">Design &amp; Branding</h4>
                     </div>
-                    <div class="p-8">
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="px-3 py-1 rounded-lg bg-neutral-800 text-[11px] font-semibold text-neutral-300 border border-white/5">Next.js</span>
-                            <span class="px-3 py-1 rounded-lg bg-neutral-800 text-[11px] font-semibold text-neutral-300 border border-white/5">React UI</span>
-                            <span class="px-3 py-1 rounded-lg bg-neutral-800 text-[11px] font-semibold text-neutral-300 border border-white/5">Data Visualization</span>
-                            <span class="px-3 py-1 rounded-lg bg-neutral-800 text-[11px] font-semibold text-neutral-300 border border-white/5">Clean Code</span>
-                        </div>
-                        <p class="text-neutral-400 text-sm leading-relaxed mb-6">
-                            Architected an interactive business intelligence dashboard prototype featuring live metrics rendering, automated summary exports, and responsive multi-screen layouts.
-                        </p>
-                        <div class="flex items-center justify-between pt-4 border-t border-white/5">
-                            <a href="#contact" class="text-sm font-bold text-white hover:text-neutral-300 flex items-center gap-2 group-hover:gap-3 transition-all duration-200">
-                                <span>Request Architecture Overview</span>
-                                <i class="fa-solid fa-arrow-right text-xs"></i>
-                            </a>
-                            <span class="text-xs text-neutral-400 font-semibold">Web Application</span>
-                        </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="skill-tag">Figma</span>
+                        <span class="skill-tag">UI/UX Design</span>
+                        <span class="skill-tag">Logo Design</span>
+                        <span class="skill-tag">Brand Identity</span>
+                        <span class="skill-tag">Typography</span>
+                        <span class="skill-tag">Colour Systems</span>
+                        <span class="skill-tag">Poster Design</span>
+                        <span class="skill-tag">Visual Identity</span>
                     </div>
                 </div>
 
-                <!-- Project 3: Modern Minimalist E-Commerce Storefront -->
-                <div class="glass-card rounded-3xl overflow-hidden group">
-                    <div class="h-64 sm:h-72 bg-gradient-to-tr from-neutral-900 via-neutral-850 to-neutral-800 relative overflow-hidden flex items-center justify-center p-6 border-b border-white/5">
-                        <div class="relative z-10 text-center space-y-3">
-                            <span class="badge-mono">Headless Commerce</span>
-                            <h3 class="font-display font-extrabold text-2xl sm:text-3xl text-white">Lumina Lifestyle Goods</h3>
-                            <p class="text-xs text-neutral-300 max-w-sm mx-auto">Lightning-fast minimalist e-commerce concept with dynamic product browsing and streamlined checkout.</p>
+                <!-- Video & Media -->
+                <div class="card p-6 reveal">
+                    <div class="flex items-center gap-3 mb-5">
+                        <div class="service-icon bg-rose-50 text-rose-500 w-10 h-10 rounded-xl text-base">
+                            <i class="fa-solid fa-clapperboard"></i>
                         </div>
+                        <h4 class="font-display font-bold text-sm text-slate-800">Video &amp; Media</h4>
                     </div>
-                    <div class="p-8">
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="px-3 py-1 rounded-lg bg-neutral-800 text-[11px] font-semibold text-neutral-300 border border-white/5">Next.js 14</span>
-                            <span class="px-3 py-1 rounded-lg bg-neutral-800 text-[11px] font-semibold text-neutral-300 border border-white/5">Tailwind CSS</span>
-                            <span class="px-3 py-1 rounded-lg bg-neutral-800 text-[11px] font-semibold text-neutral-300 border border-white/5">Cart Mechanics</span>
-                            <span class="px-3 py-1 rounded-lg bg-neutral-800 text-[11px] font-semibold text-neutral-300 border border-white/5">Edge Cache</span>
-                        </div>
-                        <p class="text-neutral-400 text-sm leading-relaxed mb-6">
-                            Delivers sub-800ms page transitions, custom cart drawer mechanics, instant search filtering, and high-converting visual hierarchy for premium brands.
-                        </p>
-                        <div class="flex items-center justify-between pt-4 border-t border-white/5">
-                            <a href="#contact" class="text-sm font-bold text-white hover:text-neutral-300 flex items-center gap-2 group-hover:gap-3 transition-all duration-200">
-                                <span>Request Demo Walkthrough</span>
-                                <i class="fa-solid fa-arrow-right text-xs"></i>
-                            </a>
-                            <span class="text-xs text-neutral-400 font-semibold">Storefront</span>
-                        </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="skill-tag">Video Editing</span>
+                        <span class="skill-tag">AI Video Creation</span>
+                        <span class="skill-tag">Reels &amp; Short-form</span>
+                        <span class="skill-tag">Color Grading</span>
+                        <span class="skill-tag">Photography</span>
+                        <span class="skill-tag">Photo Retouching</span>
                     </div>
                 </div>
 
-                <!-- Project 4: High-Conversion Corporate Portal -->
-                <div class="glass-card rounded-3xl overflow-hidden group">
-                    <div class="h-64 sm:h-72 bg-gradient-to-tr from-neutral-900 via-neutral-850 to-neutral-800 relative overflow-hidden flex items-center justify-center p-6 border-b border-white/5">
-                        <div class="relative z-10 text-center space-y-3">
-                            <span class="badge-mono">High-Impact Landing Page</span>
-                            <h3 class="font-display font-extrabold text-2xl sm:text-3xl text-white">Apex Capital Group</h3>
-                            <p class="text-xs text-neutral-300 max-w-sm mx-auto">Venture capital and corporate portfolio platform with bespoke interactive metrics display.</p>
+                <!-- Digital Marketing -->
+                <div class="card p-6 reveal">
+                    <div class="flex items-center gap-3 mb-5">
+                        <div class="service-icon bg-amber-50 text-amber-600 w-10 h-10 rounded-xl text-base">
+                            <i class="fa-solid fa-chart-line"></i>
                         </div>
+                        <h4 class="font-display font-bold text-sm text-slate-800">Digital Marketing</h4>
                     </div>
-                    <div class="p-8">
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="px-3 py-1 rounded-lg bg-neutral-800 text-[11px] font-semibold text-neutral-300 border border-white/5">Modern HTML5</span>
-                            <span class="px-3 py-1 rounded-lg bg-neutral-800 text-[11px] font-semibold text-neutral-300 border border-white/5">Custom Styling</span>
-                            <span class="px-3 py-1 rounded-lg bg-neutral-800 text-[11px] font-semibold text-neutral-300 border border-white/5">Figma UI</span>
-                            <span class="px-3 py-1 rounded-lg bg-neutral-800 text-[11px] font-semibold text-neutral-300 border border-white/5">SEO 100/100</span>
-                        </div>
-                        <p class="text-neutral-400 text-sm leading-relaxed mb-6">
-                            Elevates brand credibility through minimal dark-mode typography, interactive inquiry forms, and frictionless stakeholder communication flows.
-                        </p>
-                        <div class="flex items-center justify-between pt-4 border-t border-white/5">
-                            <a href="#contact" class="text-sm font-bold text-white hover:text-neutral-300 flex items-center gap-2 group-hover:gap-3 transition-all duration-200">
-                                <span>Request Case Details</span>
-                                <i class="fa-solid fa-arrow-right text-xs"></i>
-                            </a>
-                            <span class="text-xs text-neutral-400 font-semibold">Corporate</span>
-                        </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="skill-tag">Meta Ads</span>
+                        <span class="skill-tag">Google Ads</span>
+                        <span class="skill-tag">Social Media</span>
+                        <span class="skill-tag">Digital Advertising</span>
+                        <span class="skill-tag">Business Promotion</span>
+                        <span class="skill-tag">Campaign Setup</span>
                     </div>
                 </div>
 
@@ -870,252 +946,53 @@
         </div>
     </section>
 
-    <!-- ======================================================== -->
-    <!-- ABOUT US / SEPARATE PROFILES — ZENVORA FOUNDERS            -->
-    <!-- ======================================================== -->
-    <section id="profiles" class="py-24 relative z-10">
+    <!-- ============================================================ -->
+    <!-- MY WORKFLOW / PROCESS                                        -->
+    <!-- ============================================================ -->
+    <section id="process" class="py-24 bg-slate-50 relative z-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            
-            <div class="text-center max-w-3xl mx-auto mb-16 space-y-3">
-                <span class="text-xs font-bold tracking-widest uppercase text-neutral-400">The Joint Creative Force</span>
-                <h2 class="font-display font-extrabold text-3xl sm:text-5xl text-white tracking-tight">
-                    Engineering Precision Meets Visual Direction
+
+            <div class="text-center max-w-2xl mx-auto mb-14 space-y-4 reveal">
+                <span class="section-label"><i class="fa-solid fa-diagram-project text-[10px]"></i> My Workflow</span>
+                <h2 class="font-display font-extrabold text-3xl sm:text-5xl text-slate-900 tracking-tight">
+                    How I Work With Clients
                 </h2>
-                <p class="text-neutral-400 text-sm sm:text-base">
-                    Instead of hiring disconnected freelancers, our dual partnership provides you with dedicated leadership across both software engineering and creative media production.
-                </p>
-            </div>
-
-            <!-- Profiles Grid: Mubaris & Rasal -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto mb-12">
-                
-                <!-- ======================================================== -->
-                <!-- PROFILE 1: MUBARIS — Web Architect & Zenvora Co-Founder        -->
-                <!-- ======================================================== -->
-                <div class="glass-card p-8 sm:p-10 rounded-3xl relative flex flex-col justify-between group border border-white/10 hover:border-white/25">
-                    <div>
-                        <!-- Avatar / Monogram Header -->
-                        <div class="flex items-center justify-between mb-6">
-                            <div class="w-16 h-16 rounded-2xl bg-neutral-900 border border-white/15 flex items-center justify-center text-white text-2xl font-display font-extrabold shadow-lg">
-                                <span>M</span>
-                            </div>
-                            <span class="badge-mono bg-white/10 text-white border-white/20">
-                                Web Architecture & Systems
-                            </span>
-                        </div>
-
-                        <!-- Name & Role Title -->
-                        <h3 class="font-display font-extrabold text-3xl text-white mb-1">Mubaris</h3>
-                        <p class="text-xs font-bold uppercase tracking-wider text-neutral-400 mb-4">
-                            Co-Founder · Lead Web Architect & Full-Stack Developer
-                        </p>
-
-                        <!-- Specialisation Pill Tags -->
-                        <div class="flex flex-wrap gap-1.5 mb-6">
-                            <span class="badge-mono">Websites First</span>
-                            <span class="badge-mono">UI/UX</span>
-                            <span class="badge-mono">Full-Stack Architecture</span>
-                            <span class="badge-mono">Performance 99+</span>
-                        </div>
-
-                        <!-- ======================================================== -->
-                        <!-- EDIT MUBARIS BIO: Customize your Zenvora profile here -->
-                        <!-- ======================================================== -->
-                        <div class="mb-6">
-                            <h4 class="text-xs font-bold uppercase tracking-wider text-neutral-400 mb-2">Biography</h4>
-                            <p class="text-neutral-300 text-sm leading-relaxed" data-bio-mubaris>
-                                Dedicated web architect and software developer with a primary focus on engineering high-performance websites and modern full-stack web applications. Committed to clean code, sub-second response times, intuitive user experiences, and rock-solid database integrations that convert visitors into clients.
-                            </p>
-                        </div>
-
-                        <!-- Technical Skills & Stack -->
-                        <div class="mb-6">
-                            <h4 class="text-xs font-bold uppercase tracking-wider text-neutral-400 mb-2.5">Core Technical Skills</h4>
-                            <div class="flex flex-wrap gap-2">
-                                <span class="px-2.5 py-1 rounded-lg bg-neutral-850 text-neutral-300 text-[11px] font-semibold border border-white/5">React / Next.js</span>
-                                <span class="px-2.5 py-1 rounded-lg bg-neutral-850 text-neutral-300 text-[11px] font-semibold border border-white/5">JavaScript ES6+</span>
-                                <span class="px-2.5 py-1 rounded-lg bg-neutral-850 text-neutral-300 text-[11px] font-semibold border border-white/5">Tailwind CSS</span>
-                                <span class="px-2.5 py-1 rounded-lg bg-neutral-850 text-neutral-300 text-[11px] font-semibold border border-white/5">Supabase / SQL</span>
-                                <span class="px-2.5 py-1 rounded-lg bg-neutral-850 text-neutral-300 text-[11px] font-semibold border border-white/5">UI/UX Prototyping</span>
-                                <span class="px-2.5 py-1 rounded-lg bg-neutral-850 text-neutral-300 text-[11px] font-semibold border border-white/5">Core Web Vitals</span>
-                            </div>
-                        </div>
-
-                        <!-- Real Project Contributions -->
-                        <div class="mb-6">
-                            <h4 class="text-xs font-bold uppercase tracking-wider text-neutral-400 mb-2">Key Project Contributions</h4>
-                            <ul class="space-y-1.5 text-xs text-neutral-300">
-                                <li class="flex items-start gap-2">
-                                    <i class="fa-solid fa-check text-neutral-400 mt-0.5"></i>
-                                    <span><strong>Volcano Academy:</strong> Engineered full-stack web architecture, admission pipelines, student portal, and admin control panels.</span>
-                                </li>
-                                <li class="flex items-start gap-2">
-                                    <i class="fa-solid fa-check text-neutral-400 mt-0.5"></i>
-                                    <span><strong>Modern Web Platforms:</strong> Developed high-speed responsive user interfaces and robust data pipelines.</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <!-- Connect Bar -->
-                    <div class="pt-4 border-t border-white/5 flex items-center justify-between">
-                        <span class="text-xs text-neutral-400 font-semibold">Connect with Mubaris</span>
-                        <div class="flex items-center gap-3 text-neutral-400 text-sm">
-                            <a href="#contact" class="hover:text-white transition" title="Inquire with Mubaris"><i class="fa-solid fa-envelope"></i></a>
-                            <a href="https://github.com/muhammedmubarisa135-dev" target="_blank" class="hover:text-white transition" title="GitHub"><i class="fa-brands fa-github"></i></a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ======================================================== -->
-                <!-- PROFILE 2: RASAL (Creative Director & Media Lead)        -->
-                <!-- ======================================================== -->
-                <div class="glass-card p-8 sm:p-10 rounded-3xl relative flex flex-col justify-between group border border-white/10 hover:border-white/25">
-                    <div>
-                        <!-- Avatar / Monogram Header -->
-                        <div class="flex items-center justify-between mb-6">
-                            <div class="w-16 h-16 rounded-2xl bg-neutral-900 border border-white/15 flex items-center justify-center text-white text-2xl font-display font-extrabold shadow-lg">
-                                <span>R</span>
-                            </div>
-                            <span class="badge-mono bg-white/10 text-white border-white/20">
-                                Creative Direction & Media
-                            </span>
-                        </div>
-
-                        <!-- Name & Role Title -->
-                        <h3 class="font-display font-extrabold text-3xl text-white mb-1">Rasal</h3>
-                        <p class="text-xs font-bold uppercase tracking-wider text-neutral-400 mb-4">
-                            Co-Founder · Creative Director & Digital Media Lead
-                        </p>
-
-                        <!-- Specialisation Pill Tags -->
-                        <div class="flex flex-wrap gap-1.5 mb-6">
-                            <span class="badge-mono">Video Editing</span>
-                            <span class="badge-mono">AI Video</span>
-                            <span class="badge-mono">Branding</span>
-                            <span class="badge-mono">Poster Design</span>
-                            <span class="badge-mono">Meta & Google Ads</span>
-                        </div>
-
-                        <!-- ======================================================== -->
-                        <!-- EDIT RASAL BIO: You can customize your background here   -->
-                        <!-- ======================================================== -->
-                        <div class="mb-6">
-                            <h4 class="text-xs font-bold uppercase tracking-wider text-neutral-400 mb-2">Biography</h4>
-                            <p class="text-neutral-300 text-sm leading-relaxed" data-bio-rasal>
-                                Creative director and visual media producer specializing in cinematic video editing, AI video creation, brand identity systems, photography, and high-impact digital advertising. Passionate about shaping memorable brand aesthetics and executing data-driven campaigns that build genuine business authority.
-                            </p>
-                        </div>
-
-                        <!-- Creative Skills & Tools -->
-                        <div class="mb-6">
-                            <h4 class="text-xs font-bold uppercase tracking-wider text-neutral-400 mb-2.5">Core Creative Skills</h4>
-                            <div class="flex flex-wrap gap-2">
-                                <span class="px-2.5 py-1 rounded-lg bg-neutral-850 text-neutral-300 text-[11px] font-semibold border border-white/5">Cinematic Video Editing</span>
-                                <span class="px-2.5 py-1 rounded-lg bg-neutral-850 text-neutral-300 text-[11px] font-semibold border border-white/5">AI Video Creation</span>
-                                <span class="px-2.5 py-1 rounded-lg bg-neutral-850 text-neutral-300 text-[11px] font-semibold border border-white/5">Brand Identity & Logos</span>
-                                <span class="px-2.5 py-1 rounded-lg bg-neutral-850 text-neutral-300 text-[11px] font-semibold border border-white/5">Poster & Graphic Design</span>
-                                <span class="px-2.5 py-1 rounded-lg bg-neutral-850 text-neutral-300 text-[11px] font-semibold border border-white/5">Commercial Photography</span>
-                                <span class="px-2.5 py-1 rounded-lg bg-neutral-850 text-neutral-300 text-[11px] font-semibold border border-white/5">Meta & Google Ads</span>
-                            </div>
-                        </div>
-
-                        <!-- Real Project Contributions -->
-                        <div class="mb-6">
-                            <h4 class="text-xs font-bold uppercase tracking-wider text-neutral-400 mb-2">Key Project Contributions</h4>
-                            <ul class="space-y-1.5 text-xs text-neutral-300">
-                                <li class="flex items-start gap-2">
-                                    <i class="fa-solid fa-check text-neutral-400 mt-0.5"></i>
-                                    <span><strong>Volcano Academy:</strong> Directed promotional media assets, visual content styling, and overall brand presence.</span>
-                                </li>
-                                <li class="flex items-start gap-2">
-                                    <i class="fa-solid fa-check text-neutral-400 mt-0.5"></i>
-                                    <span><strong>Creative Media Suites:</strong> Produced cinematic video reels, promotional posters, and ad campaign creative direction.</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <!-- Connect Bar -->
-                    <div class="pt-4 border-t border-white/5 flex items-center justify-between">
-                        <span class="text-xs text-neutral-400 font-semibold">Connect with Rasal</span>
-                        <div class="flex items-center gap-3 text-neutral-400 text-sm">
-                            <a href="#contact" class="hover:text-white transition" title="Inquire with Rasal"><i class="fa-solid fa-envelope"></i></a>
-                            <a href="#contact" class="hover:text-white transition" title="Media Portfolio"><i class="fa-solid fa-camera"></i></a>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- Joint Partnership Assurance Banner -->
-            <div class="glass-card p-8 sm:p-10 rounded-3xl border border-white/10 max-w-5xl mx-auto">
-                <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-                    <div class="space-y-2 text-center md:text-left">
-                        <span class="text-xs font-bold uppercase tracking-widest text-neutral-400">Complete Brand Synergy</span>
-                        <h4 class="font-display font-bold text-xl sm:text-2xl text-white">
-                            Two Minds. One Shared Creative Standard.
-                        </h4>
-                        <p class="text-xs sm:text-sm text-neutral-400 max-w-xl">
-                            By combining technical web development with cinematic media and marketing, we ensure every aspect of your brand communicates precision, luxury, and measurable results.
-                        </p>
-                    </div>
-                    <a href="#contact" class="btn-primary px-6 py-3.5 rounded-xl text-xs uppercase tracking-wider shrink-0">
-                        Work With Zenvora
-                    </a>
-                </div>
-            </div>
-
-        </div>
-    </section>
-
-    <!-- ======================================================== -->
-    <!-- 4-STEP COLLABORATION PROCESS -->
-    <!-- ======================================================== -->
-    <section id="process" class="py-24 bg-neutral-900/60 border-y border-white/5 relative z-10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            
-            <div class="text-center max-w-2xl mx-auto mb-16 space-y-3">
-                <span class="text-xs font-bold tracking-widest uppercase text-neutral-400">Our Workflow</span>
-                <h2 class="font-display font-extrabold text-3xl sm:text-5xl text-white tracking-tight">
-                    From Concept to Shipped in 4 Steps
-                </h2>
-                <p class="text-neutral-400 text-sm sm:text-base">
-                    Our direct agile process eliminates agency bloat, ensuring direct founder collaboration and on-time delivery.
+                <p class="text-slate-500 text-sm sm:text-base">
+                    A straightforward, collaborative process — from first conversation to finished product.
                 </p>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                
-                <div class="glass-card p-6 rounded-2xl relative">
-                    <span class="font-display font-extrabold text-4xl text-neutral-700 block mb-4">01</span>
-                    <h3 class="font-display font-bold text-lg text-white mb-2">Discovery & Strategy</h3>
-                    <p class="text-neutral-400 text-xs leading-relaxed">
-                        We define your project objectives, target audience, brand aesthetic, and architectural requirements to chart an exact roadmap.
+
+                <div class="card p-7 reveal">
+                    <span class="step-num block mb-4">01</span>
+                    <h3 class="font-display font-bold text-lg text-slate-900 mb-2">Discovery &amp; Scoping</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed">
+                        We start with a conversation. I ask about your goals, audience, visual preferences, and technical requirements. No obligation.
                     </p>
                 </div>
 
-                <div class="glass-card p-6 rounded-2xl relative">
-                    <span class="font-display font-extrabold text-4xl text-neutral-700 block mb-4">02</span>
-                    <h3 class="font-display font-bold text-lg text-white mb-2">UI/UX & Creative Assets</h3>
-                    <p class="text-neutral-400 text-xs leading-relaxed">
-                        We design high-fidelity interactive wireframes and produce video/photo creative directions for your review and approval.
+                <div class="card p-7 reveal">
+                    <span class="step-num block mb-4">02</span>
+                    <h3 class="font-display font-bold text-lg text-slate-900 mb-2">Design &amp; Planning</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed">
+                        I create wireframes, propose the structure, and map the user experience before writing a single line of code. Your sign-off before build begins.
                     </p>
                 </div>
 
-                <div class="glass-card p-6 rounded-2xl relative">
-                    <span class="font-display font-extrabold text-4xl text-neutral-700 block mb-4">03</span>
-                    <h3 class="font-display font-bold text-lg text-white mb-2">Engineering & Build</h3>
-                    <p class="text-neutral-400 text-xs leading-relaxed">
-                        We write modular, clean code with speed optimization, database setup, mobile testing, and post-production asset mastering.
+                <div class="card p-7 reveal">
+                    <span class="step-num block mb-4">03</span>
+                    <h3 class="font-display font-bold text-lg text-slate-900 mb-2">Build &amp; Review</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed">
+                        I write clean, well-structured code and share progress for feedback. Revisions are part of the process — not an extra charge.
                     </p>
                 </div>
 
-                <div class="glass-card p-6 rounded-2xl relative">
-                    <span class="font-display font-extrabold text-4xl text-neutral-700 block mb-4">04</span>
-                    <h3 class="font-display font-bold text-lg text-white mb-2">Launch & Growth</h3>
-                    <p class="text-neutral-400 text-xs leading-relaxed">
-                        We deploy to global edge CDNs, configure custom domains & SSL, and launch ad campaigns with full performance tracking.
+                <div class="card p-7 reveal">
+                    <span class="step-num block mb-4">04</span>
+                    <h3 class="font-display font-bold text-lg text-slate-900 mb-2">Launch &amp; Handover</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed">
+                        Deployment, domain configuration, and a clear handover so you understand your own website. Post-launch support as agreed.
                     </p>
                 </div>
 
@@ -1124,217 +1001,137 @@
         </div>
     </section>
 
-    <!-- ======================================================== -->
-    <!-- PACKAGES & INVESTMENT -->
-    <!-- ======================================================== -->
-    <section id="pricing" class="py-24 relative z-10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            
-            <div class="text-center max-w-2xl mx-auto mb-16 space-y-3">
-                <span class="text-xs font-bold tracking-widest uppercase text-neutral-400">Transparent Offerings</span>
-                <h2 class="font-display font-extrabold text-3xl sm:text-5xl text-white tracking-tight">
-                    Packages Tailored To Your Vision
-                </h2>
-                <p class="text-neutral-400 text-sm sm:text-base">
-                    Every package includes responsive mobile optimization, speed engineering, and direct founder communication.
-                </p>
-            </div>
+    <!-- ============================================================ -->
+    <!-- CONTACT                                                      -->
+    <!-- ============================================================ -->
+    <section id="contact" class="py-24 relative z-10">
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
-                
-                <!-- Tier 1: Starter -->
-                <div class="glass-card p-8 rounded-3xl flex flex-col justify-between">
-                    <div>
-                        <span class="text-xs font-bold uppercase tracking-wider text-neutral-400 block mb-2">Starter Package</span>
-                        <h3 class="font-display font-extrabold text-2xl text-white mb-2">High-Impact Landing Page</h3>
-                        <p class="text-neutral-400 text-xs mb-6 leading-relaxed">Perfect for new product launches, personal brands, and high-converting single offers.</p>
-                        
-                        <div class="mb-6 pb-6 border-b border-white/5">
-                            <span class="font-display font-extrabold text-3xl sm:text-4xl text-white">$499</span>
-                            <span class="text-xs text-neutral-400">/ one-time</span>
-                        </div>
+        <!-- Ambient background blobs -->
+        <div class="blob w-[400px] h-[400px] bg-blue-400 top-0 right-0 pointer-events-none" style="z-index:0; opacity:0.08;"></div>
+        <div class="blob w-[350px] h-[350px] bg-violet-400 bottom-0 left-0 pointer-events-none" style="z-index:0; opacity:0.07;"></div>
 
-                        <ul class="space-y-3 text-xs text-neutral-300 font-medium mb-8">
-                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-neutral-400"></i> Bespoke 1-Page Responsive Layout</li>
-                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-neutral-400"></i> Fast Turnaround (3–5 Days)</li>
-                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-neutral-400"></i> Lead Generation Contact Form</li>
-                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-neutral-400"></i> Speed & SEO Optimization (95+)</li>
-                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-neutral-400"></i> 14 Days Post-Launch Support</li>
-                        </ul>
-                    </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
-                    <a href="#contact" class="btn-secondary w-full py-3.5 rounded-xl text-xs uppercase tracking-wider text-center block">
-                        Choose Starter
-                    </a>
-                </div>
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
 
-                <!-- Tier 2: Complete Studio Package (Featured) -->
-                <div class="glass-card p-8 rounded-3xl flex flex-col justify-between border-2 border-white/25 shadow-2xl relative">
-                    <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-white text-black text-[10px] font-extrabold tracking-wider uppercase shadow-lg">
-                        Most Popular
-                    </div>
-
-                    <div>
-                        <span class="text-xs font-bold uppercase tracking-wider text-white block mb-2">Growth Package</span>
-                        <h3 class="font-display font-extrabold text-2xl text-white mb-2">Complete Business Website & Brand</h3>
-                        <p class="text-neutral-400 text-xs mb-6 leading-relaxed">For businesses requiring an authoritative multi-page web platform and cohesive visual media.</p>
-                        
-                        <div class="mb-6 pb-6 border-b border-white/5">
-                            <span class="font-display font-extrabold text-3xl sm:text-4xl text-white">$1,199</span>
-                            <span class="text-xs text-neutral-400">/ one-time</span>
-                        </div>
-
-                        <ul class="space-y-3 text-xs text-neutral-300 font-medium mb-8">
-                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-white"></i> Up to 6 Custom Engineered Pages</li>
-                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-white"></i> Brand Identity & Logo Guidelines</li>
-                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-white"></i> Interactive Media Showcase / Gallery</li>
-                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-white"></i> Dynamic Inquiry & Lead Funnel</li>
-                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-white"></i> Database / CMS Sync (Supabase)</li>
-                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-white"></i> 30 Days Direct Founder Warranty</li>
-                        </ul>
-                    </div>
-
-                    <a href="#contact" class="btn-primary w-full py-3.5 rounded-xl text-xs uppercase tracking-wider text-center block">
-                        Choose Growth
-                    </a>
-                </div>
-
-                <!-- Tier 3: Custom & Retainer -->
-                <div class="glass-card p-8 rounded-3xl flex flex-col justify-between">
-                    <div>
-                        <span class="text-xs font-bold uppercase tracking-wider text-neutral-400 block mb-2">Full-Service Suite</span>
-                        <h3 class="font-display font-extrabold text-2xl text-white mb-2">Full-Stack App & 360° Media</h3>
-                        <p class="text-neutral-400 text-xs mb-6 leading-relaxed">Custom software platforms, SaaS MVPs, video campaigns, photography, and ad management.</p>
-                        
-                        <div class="mb-6 pb-6 border-b border-white/5">
-                            <span class="font-display font-extrabold text-3xl sm:text-4xl text-white">$2,499+</span>
-                            <span class="text-xs text-neutral-400">/ custom quote</span>
-                        </div>
-
-                        <ul class="space-y-3 text-xs text-neutral-300 font-medium mb-8">
-                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-neutral-400"></i> Full-Stack Web App Architecture</li>
-                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-neutral-400"></i> User Authentication & Role Dashboards</li>
-                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-neutral-400"></i> Cinematic Reels & AI Video Assets</li>
-                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-neutral-400"></i> Meta & Google Ads Campaign Setup</li>
-                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-neutral-400"></i> Priority Retainer & Support</li>
-                        </ul>
-                    </div>
-
-                    <a href="#contact" class="btn-secondary w-full py-3.5 rounded-xl text-xs uppercase tracking-wider text-center block">
-                        Discuss Custom Scope
-                    </a>
-                </div>
-
-            </div>
-
-        </div>
-    </section>
-
-    <!-- ======================================================== -->
-    <!-- CONTACT / GET IN TOUCH -->
-    <!-- ======================================================== -->
-    <section id="contact" class="py-24 bg-neutral-900/60 border-t border-white/5 relative z-10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-                
-                <!-- Left Details -->
-                <div class="lg:col-span-5 space-y-6">
-                    <span class="text-xs font-bold tracking-widest uppercase text-neutral-400">Get In Touch</span>
-                    <h2 class="font-display font-extrabold text-3xl sm:text-5xl text-white tracking-tight">
-                        Let's build something remarkable together.
+                <!-- Left: contact info -->
+                <div class="lg:col-span-5 space-y-7 reveal">
+                    <span class="section-label"><i class="fa-solid fa-paper-plane text-[10px]"></i> Contact</span>
+                    <h2 class="font-display font-extrabold text-3xl sm:text-4xl text-slate-900 tracking-tight">
+                        Let's build something<br><span class="gradient-text">worth launching.</span>
                     </h2>
-                    <p class="text-neutral-400 text-sm sm:text-base leading-relaxed">
-                        Whether you need a new high-speed website, cinematic video content, a complete brand redesign, or ad campaigns that generate customers — reach out to discuss your project.
+                    <p class="text-slate-500 text-sm sm:text-base leading-relaxed">
+                        Whether you need a new website, creative media, branding, or digital advertising — send me a message and I'll get back to you promptly.
                     </p>
 
-                    <div class="space-y-4 pt-4">
+                    <div class="space-y-4 pt-2">
+                        <!-- Email -->
                         <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-xl bg-neutral-900 border border-white/10 text-white flex items-center justify-center text-lg">
-                                <i class="fa-regular fa-envelope"></i>
-                            </div>
+                            <div class="contact-icon-box"><i class="fa-regular fa-envelope"></i></div>
                             <div>
-                                <span class="text-xs text-neutral-400 font-semibold block">Email Directly</span>
-                                <a href="mailto:hello@zenvora.studio" data-brand-email class="text-sm font-bold text-white hover:text-neutral-300 transition">hello@zenvora.studio</a>
+                                <span class="text-xs text-slate-400 font-semibold uppercase tracking-wider block">Email</span>
+                                <a href="mailto:hello@zenvora.studio" data-brand-email class="text-sm font-bold text-slate-800 hover:text-blue-600 transition">hello@zenvora.studio</a>
                             </div>
                         </div>
 
+                        <!-- WhatsApp placeholder -->
                         <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-xl bg-neutral-900 border border-white/10 text-white flex items-center justify-center text-lg">
-                                <i class="fa-brands fa-whatsapp"></i>
-                            </div>
+                            <div class="contact-icon-box"><i class="fa-brands fa-whatsapp" style="color: #25D366;"></i></div>
                             <div>
-                                <span class="text-xs text-neutral-400 font-semibold block">WhatsApp Direct Chat</span>
-                                <a href="https://wa.me/910000000000" data-brand-whatsapp target="_blank" class="text-sm font-bold text-white hover:text-neutral-300 transition">+91 00000 00000</a>
+                                <span class="text-xs text-slate-400 font-semibold uppercase tracking-wider block">WhatsApp</span>
+                                <span class="text-sm font-bold text-slate-400 italic" data-brand-whatsapp>Add your number before launch</span>
                             </div>
                         </div>
 
+                        <!-- Location -->
                         <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-xl bg-neutral-900 border border-white/10 text-white flex items-center justify-center text-lg">
-                                <i class="fa-solid fa-location-dot"></i>
-                            </div>
+                            <div class="contact-icon-box"><i class="fa-solid fa-location-dot"></i></div>
                             <div>
-                                <span class="text-xs text-neutral-400 font-semibold block">Location</span>
-                                <span class="text-sm font-bold text-white" data-brand-location>Worldwide Remote · Seamless Communication</span>
+                                <span class="text-xs text-slate-400 font-semibold uppercase tracking-wider block">Location</span>
+                                <span class="text-sm font-bold text-slate-700" data-brand-location>Worldwide Remote · Direct Communication</span>
+                            </div>
+                        </div>
+
+                        <!-- GitHub -->
+                        <div class="flex items-center gap-4">
+                            <div class="contact-icon-box"><i class="fa-brands fa-github"></i></div>
+                            <div>
+                                <span class="text-xs text-slate-400 font-semibold uppercase tracking-wider block">GitHub</span>
+                                <a href="https://github.com/muhammedmubarisa135-dev" target="_blank" class="text-sm font-bold text-slate-800 hover:text-blue-600 transition">muhammedmubarisa135-dev</a>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Right Interactive Inquiry Form -->
-                <div class="lg:col-span-7">
-                    <div class="glass-panel p-8 sm:p-10 rounded-3xl border border-white/10 shadow-2xl relative">
-                        <form id="contactForm" onsubmit="handleFormSubmit(event)" class="space-y-6">
-                            
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <!-- Right: form -->
+                <div class="lg:col-span-7 reveal">
+                    <div class="card p-8 sm:p-10 shadow-xl shadow-slate-100">
+
+                        <!-- ⚠️ Form configuration notice (remove once backend is configured) -->
+                        <div class="form-note mb-6">
+                            <i class="fa-solid fa-triangle-exclamation mt-0.5 flex-shrink-0"></i>
+                            <div>
+                                <strong class="font-semibold block mb-0.5">Form not yet connected to a backend.</strong>
+                                To enable real submissions, replace the form action with a <a href="https://formspree.io" target="_blank" class="underline">Formspree</a> endpoint or similar service. Until then, submissions will not be delivered.
+                            </div>
+                        </div>
+
+                        <form id="contactForm" onsubmit="handleFormSubmit(event)" class="space-y-5">
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                                 <div>
-                                    <label class="block text-xs font-semibold text-neutral-300 uppercase tracking-wider mb-2">Your Name *</label>
-                                    <input type="text" required placeholder="Alex Morgan" class="w-full px-4 py-3 rounded-xl bg-neutral-900 border border-white/10 text-white placeholder-neutral-500 text-sm focus:outline-none focus:border-white transition">
+                                    <label class="form-label">Your Name *</label>
+                                    <input type="text" name="name" required placeholder="Your full name" class="form-input">
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-semibold text-neutral-300 uppercase tracking-wider mb-2">Email Address *</label>
-                                    <input type="email" required placeholder="alex@company.com" class="w-full px-4 py-3 rounded-xl bg-neutral-900 border border-white/10 text-white placeholder-neutral-500 text-sm focus:outline-none focus:border-white transition">
+                                    <label class="form-label">Email Address *</label>
+                                    <input type="email" name="email" required placeholder="you@email.com" class="form-input">
                                 </div>
                             </div>
 
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                                 <div>
-                                    <label class="block text-xs font-semibold text-neutral-300 uppercase tracking-wider mb-2">Primary Service Required</label>
-                                    <select class="w-full px-4 py-3 rounded-xl bg-neutral-900 border border-white/10 text-white text-sm focus:outline-none focus:border-white transition">
-                                        <option value="Website Development">Website Development (Main Focus)</option>
-                                        <option value="UI/UX Design">UI/UX Design & Prototyping</option>
-                                        <option value="Video Editing & Reels">Video Editing & Cinematic Reels</option>
-                                        <option value="AI Video Creation">AI Video Creation</option>
-                                        <option value="Branding & Logo">Branding & Logo Design</option>
-                                        <option value="Poster Design">Poster & Graphic Design</option>
-                                        <option value="Commercial Photography">Commercial Photography</option>
-                                        <option value="Digital Ads (Meta/Google)">Digital Ads & Business Promotion</option>
-                                        <option value="Complete 360 Suite">Full 360° Studio Package</option>
+                                    <label class="form-label">Service Required</label>
+                                    <select name="service" class="form-input" style="appearance:auto;">
+                                        <option value="Website Development">Website Development</option>
+                                        <option value="UI/UX Design">UI/UX Design</option>
+                                        <option value="Branding & Logo">Branding &amp; Logo Design</option>
+                                        <option value="Video Editing">Video Editing &amp; Reels</option>
+                                        <option value="AI Video">AI Video Creation</option>
+                                        <option value="Photography">Commercial Photography</option>
+                                        <option value="Poster Design">Poster &amp; Graphic Design</option>
+                                        <option value="Digital Ads">Digital Advertising</option>
+                                        <option value="Other">Other — Tell me more</option>
                                     </select>
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-semibold text-neutral-300 uppercase tracking-wider mb-2">Estimated Budget</label>
-                                    <select class="w-full px-4 py-3 rounded-xl bg-neutral-900 border border-white/10 text-white text-sm focus:outline-none focus:border-white transition">
-                                        <option value="$500 - $1,000">$500 – $1,000</option>
-                                        <option value="$1,000 - $2,500">$1,000 – $2,500</option>
-                                        <option value="$2,500 - $5,000">$2,500 – $5,000</option>
-                                        <option value="$5,000+">$5,000+</option>
+                                    <label class="form-label">Budget (Optional)</label>
+                                    <select name="budget" class="form-input" style="appearance:auto;">
+                                        <option value="">Prefer not to say</option>
+                                        <option value="Under $500">Under $500</option>
+                                        <option value="$500–$1,000">$500 – $1,000</option>
+                                        <option value="$1,000–$2,500">$1,000 – $2,500</option>
+                                        <option value="$2,500+">$2,500+</option>
                                     </select>
                                 </div>
                             </div>
 
                             <div>
-                                <label class="block text-xs font-semibold text-neutral-300 uppercase tracking-wider mb-2">Project Brief & Details *</label>
-                                <textarea rows="4" required placeholder="Tell Zenvora about your project goals, references, and timeline..." class="w-full px-4 py-3 rounded-xl bg-neutral-900 border border-white/10 text-white placeholder-neutral-500 text-sm focus:outline-none focus:border-white transition resize-none"></textarea>
+                                <label class="form-label">Project Description *</label>
+                                <textarea rows="4" name="message" required placeholder="Describe your project — goals, timeline, references, anything useful..." class="form-input resize-none"></textarea>
                             </div>
 
-                            <button type="submit" id="submitBtn" class="btn-primary w-full py-4 rounded-xl text-sm tracking-wide flex items-center justify-center gap-2">
-                                <span>Send Project Inquiry</span>
+                            <button type="submit" id="submitBtn" class="btn-primary w-full py-4 text-sm font-semibold flex items-center justify-center gap-2">
+                                <span>Send Enquiry</span>
                                 <i class="fa-solid fa-paper-plane text-xs"></i>
                             </button>
 
-                            <div id="formSuccess" class="hidden p-4 rounded-xl bg-white/10 border border-white/20 text-white text-xs font-semibold text-center">
-                                ✦ Thank you! Your inquiry has been received. Zenvora will respond within 12 hours.
+                            <!-- Success / error messages -->
+                            <div id="formSuccess" class="hidden p-4 rounded-xl bg-green-50 border border-green-200 text-green-800 text-sm font-semibold text-center">
+                                <i class="fa-solid fa-circle-check mr-2"></i>Message noted — form submission requires backend configuration before it will be delivered.
+                            </div>
+                            <div id="formError" class="hidden p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm text-center">
+                                Please fill in all required fields before submitting.
                             </div>
 
                         </form>
@@ -1346,131 +1143,168 @@
         </div>
     </section>
 
-    <!-- ======================================================== -->
-    <!-- FOOTER -->
-    <!-- ======================================================== -->
-    <footer class="py-12 bg-neutral-950 border-t border-white/5 relative z-10 text-neutral-400 text-xs">
+    <!-- ============================================================ -->
+    <!-- FOOTER                                                       -->
+    <!-- ============================================================ -->
+    <footer class="py-10 border-t border-slate-100 bg-slate-50 relative z-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
-                
+
+                <!-- Brand -->
                 <div class="flex items-center gap-3">
-                    <div class="monogram-badge !w-8 !h-8 !text-xs">
-                        <span>Z</span>
+                    <div class="z-logo" style="width:32px; height:32px; border-radius:8px;">
+                        <svg viewBox="0 0 24 24" fill="none" style="width:18px; height:18px;">
+                            <path d="M5 5H19L8.5 19H19" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
                     </div>
-                    <span class="font-display font-bold text-white text-base" data-brand-name>ZENVORA</span>
+                    <span class="font-display font-bold text-slate-800" data-brand-name>ZENVORA</span>
                 </div>
 
-                <div class="flex items-center gap-6">
-                    <a href="#services" class="hover:text-white transition">Services</a>
-                    <a href="#work" class="hover:text-white transition">Work</a>
-                    <a href="#profiles" class="hover:text-white transition">Mubaris & Rasal</a>
-                    <a href="#pricing" class="hover:text-white transition">Packages</a>
-                    <a href="#contact" class="hover:text-white transition">Contact</a>
+                <!-- Nav links -->
+                <div class="flex flex-wrap items-center justify-center gap-5 text-xs text-slate-400 font-medium">
+                    <a href="#about" class="hover:text-blue-600 transition">About</a>
+                    <a href="#services" class="hover:text-blue-600 transition">Services</a>
+                    <a href="#work" class="hover:text-blue-600 transition">Projects</a>
+                    <a href="#skills" class="hover:text-blue-600 transition">Skills</a>
+                    <a href="#process" class="hover:text-blue-600 transition">Workflow</a>
+                    <a href="#contact" class="hover:text-blue-600 transition">Contact</a>
                 </div>
 
-                <p>© <span data-brand-year>2026</span> <span data-brand-name>ZENVORA</span>. Premium Web & Creative Studio.</p>
+                <!-- Copyright -->
+                <p class="text-xs text-slate-400 text-center sm:text-right">
+                    © <span data-brand-year>2026</span> <span data-brand-name>ZENVORA</span>. Built by Mubaris.
+                </p>
+
             </div>
         </div>
     </footer>
 
-    <!-- ========================================================================== -->
-    <!-- SCRIPTS & CENTRALISED BRAND SETTINGS                                        -->
-    <!-- ========================================================================== -->
+    <!-- ============================================================ -->
+    <!-- SCRIPTS                                                      -->
+    <!-- ============================================================ -->
     <script>
         /**
-         * --------------------------------------------------------------------------
-         * BRAND CONFIGURATION OBJECT
-         * To update the brand name or contact information across the whole site,
-         * simply edit the fields below:
-         * --------------------------------------------------------------------------
+         * ──────────────────────────────────────────────────────────────
+         * BRAND CONFIGURATION
+         * Update these values to change brand text across the whole site.
+         * ──────────────────────────────────────────────────────────────
          */
         const BRAND_CONFIG = {
-            brandName: "ZENVORA",
-            brandTagline: "Web Engineering & Creative Media",
-            brandDomain: "zenvora.studio",
-            email: "hello@zenvora.studio",
-            whatsapp: "+91 00000 00000",
-            whatsappUrl: "https://wa.me/910000000000",
-            location: "Worldwide Remote · Direct Access",
-            year: "2026",
-            metaTitle: "ZENVORA | Web Engineering & Creative Media Studio"
+            brandName:    "ZENVORA",
+            brandTagline: "Web Development & Creative Services",
+            brandDomain:  "zenvora.studio",
+            email:        "hello@zenvora.studio",
+            // ⚠️ REPLACE with your real WhatsApp number before going live
+            whatsapp:     "Add your number before launch",
+            whatsappUrl:  "#contact",
+            location:     "Worldwide Remote · Direct Communication",
+            year:         new Date().getFullYear().toString(),
+            metaTitle:    "ZENVORA | Web Development & Creative Services"
         };
 
-        // Automatically bind brand settings to all matching data attributes
+        // Apply brand settings to all matching [data-brand-*] elements
         function applyBrandSettings() {
-            document.querySelectorAll('[data-brand-name]').forEach(el => {
-                el.textContent = BRAND_CONFIG.brandName;
-            });
-            document.querySelectorAll('[data-brand-tagline]').forEach(el => {
-                el.textContent = BRAND_CONFIG.brandTagline;
-            });
-            document.querySelectorAll('[data-brand-domain]').forEach(el => {
-                el.textContent = BRAND_CONFIG.brandDomain;
-            });
-            document.querySelectorAll('[data-brand-email]').forEach(el => {
+            const q = (sel) => document.querySelectorAll(sel);
+            q('[data-brand-name]').forEach(el => el.textContent = BRAND_CONFIG.brandName);
+            q('[data-brand-tagline]').forEach(el => el.textContent = BRAND_CONFIG.brandTagline);
+            q('[data-brand-domain]').forEach(el => el.textContent = BRAND_CONFIG.brandDomain);
+            q('[data-brand-year]').forEach(el => el.textContent = BRAND_CONFIG.year);
+            q('[data-brand-location]').forEach(el => el.textContent = BRAND_CONFIG.location);
+            q('[data-brand-email]').forEach(el => {
                 el.textContent = BRAND_CONFIG.email;
                 if (el.tagName === 'A') el.href = `mailto:${BRAND_CONFIG.email}`;
             });
-            document.querySelectorAll('[data-brand-whatsapp]').forEach(el => {
+            q('[data-brand-whatsapp]').forEach(el => {
                 el.textContent = BRAND_CONFIG.whatsapp;
                 if (el.tagName === 'A') el.href = BRAND_CONFIG.whatsappUrl;
-            });
-            document.querySelectorAll('[data-brand-location]').forEach(el => {
-                el.textContent = BRAND_CONFIG.location;
-            });
-            document.querySelectorAll('[data-brand-year]').forEach(el => {
-                el.textContent = BRAND_CONFIG.year;
             });
             const metaTitle = document.querySelector('[data-brand-meta-title]');
             if (metaTitle) metaTitle.textContent = BRAND_CONFIG.metaTitle;
         }
-
-        // Initialize brand settings
         applyBrandSettings();
 
-        // Mobile Drawer Toggle
+        // ── Mobile Nav Toggle ──
         function toggleMenu() {
             const menu = document.getElementById('mobileMenu');
             const icon = document.getElementById('menuIcon');
-            if (menu.classList.contains('hidden')) {
-                menu.classList.remove('hidden');
-                icon.classList.remove('fa-bars');
-                icon.classList.add('fa-xmark');
+            if (menu.classList.contains('open')) {
+                menu.classList.remove('open');
+                icon.className = 'fa-solid fa-bars text-base';
             } else {
-                menu.classList.add('hidden');
-                icon.classList.remove('fa-xmark');
-                icon.classList.add('fa-bars');
+                menu.classList.add('open');
+                icon.className = 'fa-solid fa-xmark text-base';
             }
         }
         document.getElementById('mobileMenuBtn').addEventListener('click', toggleMenu);
 
-        // Contact Form Submission Handler
+        // ── Close mobile menu on nav link click ──
+        document.querySelectorAll('#mobileMenu a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('mobileMenu').classList.remove('open');
+                document.getElementById('menuIcon').className = 'fa-solid fa-bars text-base';
+            });
+        });
+
+        // ── Navbar scroll styling ──
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('mainNav');
+            if (window.scrollY > 40) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // ── Active nav link on scroll ──
+        const sections = document.querySelectorAll('section[id], header[id]');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    const active = document.querySelector(`.nav-link[href="#${entry.target.id}"]`);
+                    if (active) active.classList.add('active');
+                }
+            });
+        }, { rootMargin: '-40% 0px -55% 0px' });
+        sections.forEach(s => observer.observe(s));
+
+        // ── Scroll reveal animation ──
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+        // ── Contact Form Handler ──
+        // ⚠️ NOTE: This form is NOT connected to a backend.
+        // To enable real submissions, set the form action to a Formspree endpoint:
+        //   <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+        // Then remove the onsubmit handler. See: https://formspree.io
         function handleFormSubmit(e) {
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
             const success = document.getElementById('formSuccess');
-            
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Submitting...`;
+
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i>Sending...';
             btn.disabled = true;
 
             setTimeout(() => {
-                btn.innerHTML = `<span>Inquiry Sent!</span> <i class="fa-solid fa-check"></i>`;
-                btn.style.backgroundColor = '#ffffff';
-                btn.style.color = '#000000';
                 success.classList.remove('hidden');
-                document.getElementById('contactForm').reset();
-            }, 800);
+                btn.innerHTML = '<span>Sent</span><i class="fa-solid fa-check text-xs ml-2"></i>';
+                btn.classList.remove('btn-primary');
+                btn.style.background = '#f0fdf4';
+                btn.style.color = '#15803d';
+                btn.style.border = '1.5px solid #bbf7d0';
+                btn.style.boxShadow = 'none';
+                // Note: do NOT reset the form — user should be aware this isn't really submitted
+            }, 700);
         }
-
-        // Navbar blur and shadow on scroll
-        window.addEventListener('scroll', () => {
-            const nav = document.getElementById('mainNav');
-            if (window.scrollY > 40) {
-                nav.classList.add('shadow-2xl', 'bg-neutral-950/95');
-            } else {
-                nav.classList.remove('shadow-2xl', 'bg-neutral-950/95');
-            }
-        });
     </script>
+
 </body>
 </html>
