@@ -348,6 +348,61 @@
             opacity: 1;
             transform: translateY(0);
         }
+
+        /* ══════════════════════════════════════════════
+           KAYLADS LIVE CODING HERO STYLES
+        ══════════════════════════════════════════════ */
+
+        /* Hero Section base */
+        .kaylads-hero {
+            background: #080e14;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Animated code gradient for "Deliver it." */
+        .kaylads-code-gradient {
+            background: linear-gradient(135deg, #1cbbb3 0%, #6deee8 40%, #a8f3f1 60%, #1cbbb3 100%);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: kaylads-shimmer 4s ease-in-out infinite;
+        }
+        @keyframes kaylads-shimmer {
+            0%   { background-position: 0% 50%; }
+            50%  { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Code tag pills inside editor mockup */
+        .kaylads-code-tag {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-size: 0.68rem;
+            font-weight: 700;
+            font-family: 'Courier New', monospace;
+            background: rgba(28, 187, 179, 0.12);
+            color: #6deee8;
+            border: 1px solid rgba(28, 187, 179, 0.3);
+            letter-spacing: 0.02em;
+            transition: background 0.2s ease;
+        }
+        .kaylads-code-tag:hover {
+            background: rgba(28, 187, 179, 0.22);
+        }
+
+        /* Reduced motion: disable canvas animation, show static dark bg */
+        @media (prefers-reduced-motion: reduce) {
+            .kaylads-hero canvas { display: none; }
+            .kaylads-code-gradient { animation: none; }
+        }
+
+        /* Mobile tweaks for hero canvas */
+        @media (max-width: 640px) {
+            .kaylads-hero { min-height: auto; }
+        }
     </style>
 </head>
 
@@ -409,110 +464,137 @@
     </nav>
 
     <!-- ============================================================ -->
-    <!-- HERO SECTION                                                  -->
+    <!-- HERO SECTION — Live Coding Background                        -->
     <!-- ============================================================ -->
-    <header id="home" class="relative pt-32 pb-20 md:pt-44 md:pb-28 overflow-hidden" style="background: linear-gradient(180deg, #d8edf1 0%, #c1dde4 40%, #9bcfd8 80%, #82c6d2 100%);">
+    <header id="home" class="kaylads-hero relative pt-32 pb-20 md:pt-44 md:pb-28 overflow-hidden">
 
-        <!-- Ambient Teal Blobs -->
-        <div class="ambient-blob w-[580px] h-[580px] bg-violet-400 -top-32 -right-40" style="z-index:0; opacity:0.25;"></div>
-        <div class="ambient-blob w-[480px] h-[480px] bg-violet-300 -bottom-40 -left-40" style="z-index:0; opacity:0.25;"></div>
+        <!-- Live Coding Canvas (z-index:0, covers entire hero) -->
+        <canvas id="codeCanvas" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;"></canvas>
 
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <!-- Dark Overlay for readability -->
+        <div style="position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(8,20,30,0.72) 0%,rgba(8,20,30,0.55) 50%,rgba(8,20,30,0.72) 100%);pointer-events:none;"></div>
+
+        <!-- Ambient Cyan Glows -->
+        <div style="position:absolute;width:500px;height:500px;border-radius:9999px;background:rgba(28,187,179,0.12);filter:blur(100px);top:-100px;right:-100px;z-index:1;pointer-events:none;"></div>
+        <div style="position:absolute;width:400px;height:400px;border-radius:9999px;background:rgba(100,200,255,0.08);filter:blur(90px);bottom:-80px;left:-80px;z-index:1;pointer-events:none;"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative" style="z-index:2;">
 
             <div class="text-center max-w-4xl mx-auto space-y-7 mb-16">
 
+                <!-- Live Coding Label -->
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest" style="background:rgba(28,187,179,0.15);border:1px solid rgba(28,187,179,0.4);color:#6deee8;">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse inline-block"></span>
+                    Live Development Studio
+                </div>
+
                 <!-- Agency Headline -->
-                <h1 class="font-display font-extrabold text-4xl sm:text-6xl lg:text-7xl text-slate-900 tracking-tight leading-[1.08]">
+                <h1 class="font-display font-extrabold text-4xl sm:text-6xl lg:text-7xl tracking-tight leading-[1.08]" style="color:#f0fafb;">
                     Dream it, Design it,<br class="hidden sm:inline">
-                    <span class="gradient-text">Deliver it.</span>
+                    <span class="kaylads-code-gradient">Deliver it.</span>
                 </h1>
 
                 <!-- Agency Sub-copy -->
-                <p class="text-slate-600 text-base sm:text-lg lg:text-xl font-normal leading-relaxed max-w-3xl mx-auto">
-                    <strong class="text-slate-900 font-semibold">KAYLADS</strong> is a boutique creative agency uniting high-performance website engineering with cinematic video, bold brand identities, commercial photography, and high-impact digital advertising.
+                <p class="text-base sm:text-lg lg:text-xl font-normal leading-relaxed max-w-3xl mx-auto" style="color:rgba(203,230,236,0.9);">
+                    <strong style="color:#ffffff;font-weight:700;">KAYLADS</strong> is a boutique creative agency uniting high-performance website engineering with cinematic video, bold brand identities, commercial photography, and high-impact digital advertising.
                 </p>
 
                 <!-- Dual Action CTAs -->
                 <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
-                    <a href="#contact" class="btn-violet-primary w-full sm:w-auto px-8 py-4 text-sm">
+                    <a href="#contact" class="btn-violet-primary w-full sm:w-auto px-8 py-4 text-sm" style="box-shadow:0 8px 30px rgba(28,187,179,0.45);">
                         <span>Start A Project</span>
                         <i class="fa-solid fa-arrow-right text-xs"></i>
                     </a>
-                    <a href="#work" class="btn-violet-secondary w-full sm:w-auto px-8 py-4 text-sm">
-                        <i class="fa-solid fa-layer-group text-xs text-violet-600"></i>
+                    <a href="#work" class="w-full sm:w-auto px-8 py-4 text-sm font-bold rounded-xl flex items-center justify-center gap-2 transition-all" style="background:rgba(255,255,255,0.08);color:#c8f0ee;border:1.5px solid rgba(28,187,179,0.45);backdrop-filter:blur(8px);" onmouseover="this.style.background='rgba(28,187,179,0.18)'" onmouseout="this.style.background='rgba(255,255,255,0.08)'">
+                        <i class="fa-solid fa-layer-group text-xs" style="color:#1cbbb3;"></i>
                         <span>Explore Our Work</span>
                     </a>
                 </div>
 
             </div>
 
-            <!-- Two-Pillar Collaborative Showcase Mockup -->
+            <!-- Code Editor Mockup (Two-Pillar Showcase) -->
             <div class="max-w-5xl mx-auto reveal">
-                <div class="agency-card p-6 sm:p-9 shadow-2xl border-violet-200" style="background:#ffffff; border-radius:26px;">
+                <!-- Outer editor chrome -->
+                <div class="rounded-2xl overflow-hidden shadow-2xl" style="background:#0d1117;border:1px solid rgba(28,187,179,0.35);box-shadow:0 30px 80px rgba(0,0,0,0.6),0 0 0 1px rgba(28,187,179,0.15),0 0 60px rgba(28,187,179,0.08);">
 
-                    <!-- Browser Header Bar -->
-                    <div class="flex items-center justify-between pb-4 mb-6 border-b border-violet-200">
+                    <!-- Editor Title Bar -->
+                    <div class="flex items-center justify-between px-5 py-3" style="background:#161b22;border-bottom:1px solid rgba(28,187,179,0.2);">
                         <div class="flex items-center gap-2">
-                            <span class="w-3 h-3 rounded-full bg-red-400 inline-block"></span>
+                            <span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span>
                             <span class="w-3 h-3 rounded-full bg-amber-400 inline-block"></span>
-                            <span class="w-3 h-3 rounded-full bg-green-400 inline-block"></span>
-                            <div class="ml-3 px-3 py-1 rounded-lg bg-violet-100 text-[11px] font-mono text-violet-700 font-semibold hidden sm:inline-flex items-center gap-1.5">
-                                <i class="fa-solid fa-lock text-[9px]"></i>
-                                <span data-brand-domain>kaylads.studio</span>
+                            <span class="w-3 h-3 rounded-full bg-emerald-400 inline-block"></span>
+                            <div class="ml-4 flex items-center gap-2 text-[11px] font-mono" style="color:#7d9bb3;">
+                                <i class="fa-solid fa-code text-[10px]" style="color:#1cbbb3;"></i>
+                                <span>kaylads.studio — project workspace</span>
                             </div>
                         </div>
-                        <div class="flex items-center gap-2 text-xs">
-                            <span class="pill-violet">100% In-House Collaboration</span>
+                        <div class="flex items-center gap-3 text-[10px] font-mono" style="color:#4a7fa0;">
+                            <span style="background:rgba(28,187,179,0.18);color:#1cbbb3;padding:2px 10px;border-radius:20px;border:1px solid rgba(28,187,179,0.3);">100% In-House</span>
+                            <span>● LIVE</span>
                         </div>
                     </div>
 
-                    <!-- Dual Collaborative Pillars Grid -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Editor Body — Dual Pillars -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-0">
 
-                        <!-- Pillar 1: Web Engineering (Mubaris) -->
-                        <div class="p-6 rounded-2xl border border-violet-200 space-y-4" style="background:rgba(224,243,245,0.45);">
-                            <div class="flex items-center justify-between">
-                                <div class="w-10 h-10 rounded-xl bg-violet-600 text-white flex items-center justify-center text-lg shadow-md shadow-violet-300">
-                                    <i class="fa-solid fa-code"></i>
+                        <!-- Pillar 1: Web Engineering -->
+                        <div class="p-6 sm:p-8" style="border-right:1px solid rgba(28,187,179,0.15);">
+                            <div class="flex items-center justify-between mb-5">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-9 h-9 rounded-xl flex items-center justify-center" style="background:linear-gradient(135deg,#1cbbb3,#0d807a);box-shadow:0 4px 16px rgba(28,187,179,0.35);">
+                                        <i class="fa-solid fa-code text-white text-sm"></i>
+                                    </div>
+                                    <span class="text-xs font-bold uppercase tracking-wider" style="color:#1cbbb3;">Led by Mubaris</span>
                                 </div>
-                                <span class="pill-violet text-[10px]">Led by Mubaris</span>
+                                <span class="text-[10px] font-mono" style="color:#4a7fa0;">index.tsx</span>
                             </div>
-                            <div>
-                                <h3 class="font-display font-bold text-xl text-slate-900 mb-1">Web Architecture &amp; Apps</h3>
-                                <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                                    Custom code, responsive architecture, database integrations (Supabase), lightning sub-second speeds, and admin dashboards.
-                                </p>
-                            </div>
-                            <div class="flex flex-wrap gap-1.5 pt-1">
-                                <span class="pill-slate text-[10px]">HTML5 / React</span>
-                                <span class="pill-slate text-[10px]">Tailwind CSS</span>
-                                <span class="pill-slate text-[10px]">Supabase</span>
-                                <span class="pill-slate text-[10px]">UI/UX Figma</span>
+                            <h3 class="font-display font-bold text-xl mb-2" style="color:#e2f5f5;">Web Architecture &amp; Apps</h3>
+                            <p class="text-sm leading-relaxed mb-5" style="color:#7db8c8;">
+                                Custom code, responsive architecture, database integrations (Supabase), lightning sub-second speeds, and admin dashboards.
+                            </p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="kaylads-code-tag">HTML5 / React</span>
+                                <span class="kaylads-code-tag">Tailwind CSS</span>
+                                <span class="kaylads-code-tag">Supabase</span>
+                                <span class="kaylads-code-tag">UI/UX Figma</span>
                             </div>
                         </div>
 
-                        <!-- Pillar 2: Creative Media & Promotion (Rasal) -->
-                        <div class="p-6 rounded-2xl border border-violet-200 space-y-4" style="background:rgba(240,249,250,0.7);">
-                            <div class="flex items-center justify-between">
-                                <div class="w-10 h-10 rounded-xl bg-violet-700 text-white flex items-center justify-center text-lg shadow-md shadow-violet-300">
-                                    <i class="fa-solid fa-film"></i>
+                        <!-- Pillar 2: Creative Media -->
+                        <div class="p-6 sm:p-8">
+                            <div class="flex items-center justify-between mb-5">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-9 h-9 rounded-xl flex items-center justify-center" style="background:linear-gradient(135deg,#6fc8cb,#1cbbb3);box-shadow:0 4px 16px rgba(111,200,203,0.3);">
+                                        <i class="fa-solid fa-film text-white text-sm"></i>
+                                    </div>
+                                    <span class="text-xs font-bold uppercase tracking-wider" style="color:#6fc8cb;">Led by Rasal</span>
                                 </div>
-                                <span class="pill-violet text-[10px]">Led by Rasal</span>
+                                <span class="text-[10px] font-mono" style="color:#4a7fa0;">media.config.js</span>
                             </div>
-                            <div>
-                                <h3 class="font-display font-bold text-xl text-slate-900 mb-1">Creative Media &amp; Ads</h3>
-                                <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                                    Cinematic video editing, AI video creation, brand identity &amp; logo design, commercial photography, and Meta/Google ad campaigns.
-                                </p>
-                            </div>
-                            <div class="flex flex-wrap gap-1.5 pt-1">
-                                <span class="pill-slate text-[10px]">Video Reels</span>
-                                <span class="pill-slate text-[10px]">AI Video</span>
-                                <span class="pill-slate text-[10px]">Logo &amp; Brand</span>
-                                <span class="pill-slate text-[10px]">Meta Ads</span>
+                            <h3 class="font-display font-bold text-xl mb-2" style="color:#e2f5f5;">Creative Media &amp; Ads</h3>
+                            <p class="text-sm leading-relaxed mb-5" style="color:#7db8c8;">
+                                Cinematic video editing, AI video creation, brand identity &amp; logo design, commercial photography, and Meta/Google ad campaigns.
+                            </p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="kaylads-code-tag">Video Reels</span>
+                                <span class="kaylads-code-tag">AI Video</span>
+                                <span class="kaylads-code-tag">Logo &amp; Brand</span>
+                                <span class="kaylads-code-tag">Meta Ads</span>
                             </div>
                         </div>
 
+                    </div>
+
+                    <!-- Terminal Status Bar -->
+                    <div class="flex items-center gap-4 px-5 py-2 text-[10px] font-mono" style="background:#0b0f14;border-top:1px solid rgba(28,187,179,0.12);color:#3d6678;">
+                        <span style="color:#1cbbb3;">✓</span>
+                        <span>kaylads-studio ready</span>
+                        <span>·</span>
+                        <span id="terminalClock" style="color:#5a8fa6;"></span>
+                        <span>·</span>
+                        <span style="color:#4a9960;">node v20 · npm 10</span>
+                        <span class="ml-auto" style="color:#2b6b7a;">Ln 42, Col 18</span>
                     </div>
 
                 </div>
@@ -520,21 +602,21 @@
 
             <!-- Highlights Bar -->
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-5xl mx-auto mt-12 text-center">
-                <div class="p-4 rounded-2xl border border-violet-200 backdrop-blur-md shadow-sm" style="background:rgba(255,255,255,0.85);">
-                    <span class="font-display font-extrabold text-2xl text-violet-700 block">2 Founders</span>
-                    <span class="text-xs text-slate-700 font-medium">Direct Partner Access</span>
+                <div class="p-4 rounded-2xl backdrop-blur-md shadow-sm" style="background:rgba(13,17,23,0.7);border:1px solid rgba(28,187,179,0.25);">
+                    <span class="font-display font-extrabold text-2xl block" style="color:#1cbbb3;">2 Founders</span>
+                    <span class="text-xs font-medium" style="color:#7db8c8;">Direct Partner Access</span>
                 </div>
-                <div class="p-4 rounded-2xl border border-violet-200 backdrop-blur-md shadow-sm" style="background:rgba(255,255,255,0.85);">
-                    <span class="font-display font-extrabold text-2xl text-violet-700 block">100% In-House</span>
-                    <span class="text-xs text-slate-700 font-medium">Zero Freelance Outsourcing</span>
+                <div class="p-4 rounded-2xl backdrop-blur-md shadow-sm" style="background:rgba(13,17,23,0.7);border:1px solid rgba(28,187,179,0.25);">
+                    <span class="font-display font-extrabold text-2xl block" style="color:#1cbbb3;">100% In-House</span>
+                    <span class="text-xs font-medium" style="color:#7db8c8;">Zero Freelance Outsourcing</span>
                 </div>
-                <div class="p-4 rounded-2xl border border-violet-200 backdrop-blur-md shadow-sm" style="background:rgba(255,255,255,0.85);">
-                    <span class="font-display font-extrabold text-2xl text-violet-700 block">Code + Media</span>
-                    <span class="text-xs text-slate-700 font-medium">Full Spectrum Delivery</span>
+                <div class="p-4 rounded-2xl backdrop-blur-md shadow-sm" style="background:rgba(13,17,23,0.7);border:1px solid rgba(28,187,179,0.25);">
+                    <span class="font-display font-extrabold text-2xl block" style="color:#1cbbb3;">Code + Media</span>
+                    <span class="text-xs font-medium" style="color:#7db8c8;">Full Spectrum Delivery</span>
                 </div>
-                <div class="p-4 rounded-2xl border border-violet-200 backdrop-blur-md shadow-sm" style="background:rgba(255,255,255,0.85);">
-                    <span class="font-display font-extrabold text-2xl text-violet-700 block">Fast Turnaround</span>
-                    <span class="text-xs text-slate-700 font-medium">Agile Production Sprint</span>
+                <div class="p-4 rounded-2xl backdrop-blur-md shadow-sm" style="background:rgba(13,17,23,0.7);border:1px solid rgba(28,187,179,0.25);">
+                    <span class="font-display font-extrabold text-2xl block" style="color:#1cbbb3;">Fast Turnaround</span>
+                    <span class="text-xs font-medium" style="color:#7db8c8;">Agile Production Sprint</span>
                 </div>
             </div>
 
@@ -1294,6 +1376,233 @@
                 btn.style.boxShadow = 'none';
             }, 700);
         }
+    </script>
+
+    <!-- ============================================================ -->
+    <!-- LIVE CODING CANVAS ANIMATION ENGINE                          -->
+    <!-- ============================================================ -->
+    <script>
+    (function() {
+        'use strict';
+
+        // ── Respect prefers-reduced-motion ──
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+        const canvas = document.getElementById('codeCanvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+
+        // ── Code snippets pool (realistic syntax-highlighted lines) ──
+        const CODE_LINES = [
+            // HTML/JSX
+            { text: '<div className="hero-section">', color: '#e06c75' },
+            { text: '  <h1>Dream it, Design it</h1>', color: '#abb2bf' },
+            { text: '  <Button onClick={startProject}>', color: '#e06c75' },
+            { text: 'export default function KAYLADS() {', color: '#c678dd' },
+            { text: '  return <Agency name="KAYLADS" />', color: '#abb2bf' },
+            { text: 'import React, { useState } from "react"', color: '#c678dd' },
+            { text: 'const [isLive, setIsLive] = useState(true)', color: '#61afef' },
+            { text: '<nav className="nav-glass fixed top-0">', color: '#e06c75' },
+            { text: '  <Logo brand="KAYLADS" />', color: '#abb2bf' },
+            // CSS/Tailwind
+            { text: '.hero { background: #080e14; }', color: '#e5c07b' },
+            { text: '  animation: shimmer 4s infinite;', color: '#98c379' },
+            { text: '@keyframes float { transform: translateY(-8px) }', color: '#56b6c2' },
+            { text: 'backdrop-filter: blur(18px);', color: '#e5c07b' },
+            { text: '  border: 1px solid rgba(28,187,179,0.4);', color: '#98c379' },
+            { text: 'box-shadow: 0 30px 80px rgba(0,0,0,0.6);', color: '#e5c07b' },
+            // JavaScript
+            { text: 'const agency = new KAYLADS({ duo: true })', color: '#61afef' },
+            { text: 'async function buildProject(brief) {', color: '#c678dd' },
+            { text: '  const result = await agency.deliver()', color: '#61afef' },
+            { text: '  return { web, media, brand, ads }', color: '#abb2bf' },
+            { text: '}', color: '#abb2bf' },
+            { text: 'const services = ["Web", "Video", "Brand"]', color: '#e5c07b' },
+            { text: 'services.map(s => <ServiceCard key={s} />', color: '#98c379' },
+            { text: 'window.addEventListener("scroll", onScroll)', color: '#61afef' },
+            { text: 'document.querySelector("#contact").focus()', color: '#56b6c2' },
+            // TypeScript / Next.js
+            { text: 'interface Project { name: string; live: boolean }', color: '#56b6c2' },
+            { text: 'type Agency = "Creative" | "Tech" | "Both"', color: '#c678dd' },
+            { text: 'export const metadata = { title: "KAYLADS" }', color: '#e5c07b' },
+            { text: 'const getStaticProps = async () => ({', color: '#61afef' },
+            { text: '  props: { agency: await fetchData() }', color: '#abb2bf' },
+            // Python
+            { text: 'def build_brand(name: str) -> dict:', color: '#c678dd' },
+            { text: '    return {"agency": name, "duo": True}', color: '#98c379' },
+            { text: 'class KAYLADS(CreativeAgency):', color: '#e06c75' },
+            { text: '    members = ["Mubaris", "Rasal"]', color: '#e5c07b' },
+            // Terminal / Shell
+            { text: '$ npm run build  ✓ compiled successfully', color: '#98c379' },
+            { text: '$ git push origin main  → kaylads.studio', color: '#56b6c2' },
+            { text: '$ vercel deploy --prod  ✓ Ready', color: '#98c379' },
+            { text: '// Performance: 100 / 100 (Lighthouse)', color: '#4a5568' },
+            { text: '/* Designed & built by KAYLADS duo */', color: '#4a5568' },
+        ];
+
+        // ── Column configuration ──
+        const NUM_COLS = 6;
+        let cols = [];
+        let W = 0, H = 0;
+
+        function initCols() {
+            cols = [];
+            for (let i = 0; i < NUM_COLS; i++) {
+                const segment = W / NUM_COLS;
+                cols.push({
+                    x: segment * i + Math.random() * (segment * 0.4),
+                    y: Math.random() * -800,
+                    speed: 0.35 + Math.random() * 0.55,
+                    fontSize: 11 + Math.floor(Math.random() * 4),
+                    lineHeight: 22,
+                    opacity: 0.28 + Math.random() * 0.38,
+                    lines: buildColumnLines(),
+                    lineOffset: 0,
+                    cursorLine: Math.floor(Math.random() * 8),
+                    cursorBlink: 0,
+                    lineNumStart: Math.floor(Math.random() * 40) + 1,
+                    typingLineIdx: 0,
+                    typingCharPos: 0,
+                    typingTimer: 0,
+                });
+            }
+        }
+
+        function buildColumnLines() {
+            const arr = [];
+            const n = 18 + Math.floor(Math.random() * 10);
+            for (let i = 0; i < n; i++) {
+                arr.push(CODE_LINES[Math.floor(Math.random() * CODE_LINES.length)]);
+            }
+            return arr;
+        }
+
+        function resize() {
+            const hero = document.getElementById('home');
+            W = hero ? hero.offsetWidth : window.innerWidth;
+            H = hero ? hero.offsetHeight : window.innerHeight;
+            canvas.width  = W;
+            canvas.height = H;
+            initCols();
+        }
+
+        // ── Draw ──
+        let lastTime = 0;
+        let rafId = null;
+        let paused = false;
+
+        function draw(ts) {
+            if (paused) { rafId = requestAnimationFrame(draw); return; }
+            const dt = Math.min(ts - lastTime, 50); // cap delta
+            lastTime = ts;
+
+            ctx.clearRect(0, 0, W, H);
+
+            cols.forEach(col => {
+                // Scroll column downward
+                col.y += col.speed * (dt / 16);
+                const totalH = col.lines.length * col.lineHeight;
+                if (col.y > H + 40) {
+                    col.y = -totalH;
+                    col.lines = buildColumnLines();
+                    col.lineNumStart = Math.floor(Math.random() * 40) + 1;
+                    col.cursorLine = Math.floor(Math.random() * 8);
+                }
+
+                // Advance typing animation
+                col.typingTimer += dt;
+                if (col.typingTimer > 60) {
+                    col.typingTimer = 0;
+                    const curLine = col.lines[col.typingLineIdx % col.lines.length];
+                    col.typingCharPos++;
+                    if (col.typingCharPos > (curLine ? curLine.text.length : 20) + 8) {
+                        col.typingCharPos = 0;
+                        col.typingLineIdx = (col.typingLineIdx + 1) % col.lines.length;
+                    }
+                }
+
+                // Blink cursor
+                col.cursorBlink = (col.cursorBlink + dt * 0.001) % 1;
+
+                ctx.font = `${col.fontSize}px 'Courier New', monospace`;
+                ctx.textBaseline = 'top';
+
+                col.lines.forEach((line, idx) => {
+                    const ly = col.y + idx * col.lineHeight;
+                    if (ly < -col.lineHeight || ly > H + col.lineHeight) return;
+
+                    const lineNum = col.lineNumStart + idx;
+                    const isTypingLine = (idx === col.typingLineIdx % col.lines.length);
+                    const isCursorLine = (idx === col.cursorLine);
+                    const lineOpacity = col.opacity * (isCursorLine ? 1.4 : isTypingLine ? 1.2 : 1.0);
+
+                    // Line number gutter
+                    ctx.globalAlpha = Math.min(lineOpacity * 0.55, 0.6);
+                    ctx.fillStyle = '#3d566a';
+                    ctx.fillText(String(lineNum).padStart(3, ' '), col.x, ly);
+
+                    // Code text
+                    const textX = col.x + 34;
+                    let displayText = line.text;
+                    if (isTypingLine) {
+                        displayText = line.text.slice(0, col.typingCharPos);
+                    }
+                    ctx.globalAlpha = Math.min(lineOpacity, 0.85);
+                    ctx.fillStyle = line.color;
+                    ctx.fillText(displayText, textX, ly);
+
+                    // Blinking cursor on typing line
+                    if (isTypingLine && col.cursorBlink < 0.5) {
+                        const charW = col.fontSize * 0.6;
+                        const cursorX = textX + ctx.measureText(displayText).width + 1;
+                        ctx.globalAlpha = Math.min(lineOpacity * 1.5, 0.9);
+                        ctx.fillStyle = '#1cbbb3';
+                        ctx.fillRect(cursorX, ly + 1, 2, col.fontSize - 2);
+                    }
+
+                    // Glow on active cursor line
+                    if (isCursorLine) {
+                        ctx.globalAlpha = lineOpacity * 0.08;
+                        ctx.fillStyle = '#1cbbb3';
+                        ctx.fillRect(col.x, ly - 1, Math.min(280, W * 0.4), col.lineHeight + 1);
+                    }
+                });
+            });
+
+            ctx.globalAlpha = 1;
+            rafId = requestAnimationFrame(draw);
+        }
+
+        // ── Pause when tab is hidden ──
+        document.addEventListener('visibilitychange', () => {
+            paused = document.hidden;
+        });
+
+        // ── Terminal clock ──
+        function tickClock() {
+            const el = document.getElementById('terminalClock');
+            if (!el) return;
+            const now = new Date();
+            const h = String(now.getHours()).padStart(2,'0');
+            const m = String(now.getMinutes()).padStart(2,'0');
+            const s = String(now.getSeconds()).padStart(2,'0');
+            el.textContent = `${h}:${m}:${s}`;
+        }
+        tickClock();
+        setInterval(tickClock, 1000);
+
+        // ── Init ──
+        resize();
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(resize, 200);
+        });
+
+        lastTime = performance.now();
+        rafId = requestAnimationFrame(draw);
+
+    })();
     </script>
 
 </body>
