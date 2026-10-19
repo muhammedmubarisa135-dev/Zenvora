@@ -432,7 +432,6 @@
 
                 <!-- Desktop Navigation Links -->
                 <div class="hidden md:flex items-center gap-7">
-                    <a href="#services" class="nav-link">Services</a>
                     <a href="#work" class="nav-link">Our Work</a>
                     <a href="#team" class="nav-link">Our Team</a>
                     <a href="#contact" class="nav-link">Contact</a>
@@ -454,7 +453,6 @@
 
         <!-- Mobile Drawer Menu -->
         <div id="mobileMenu" class="hidden md:hidden border-t border-violet-200 px-6 py-5 space-y-4 backdrop-blur-xl" style="background:rgba(207,230,236,0.98);">
-            <a href="#services" onclick="toggleMenu()" class="block text-base font-semibold text-slate-700 hover:text-violet-600 transition py-1">Services</a>
             <a href="#work" onclick="toggleMenu()" class="block text-base font-semibold text-slate-700 hover:text-violet-600 transition py-1">Our Work</a>
             <a href="#team" onclick="toggleMenu()" class="block text-base font-semibold text-slate-700 hover:text-violet-600 transition py-1">Our Team</a>
             <a href="#contact" onclick="toggleMenu()" class="block text-base font-semibold text-slate-700 hover:text-violet-600 transition py-1">Contact</a>
@@ -500,13 +498,13 @@
 
                 <!-- Dual Action CTAs -->
                 <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
-                    <a href="#contact" class="btn-violet-primary w-full sm:w-auto px-8 py-4 text-sm" style="box-shadow:0 8px 30px rgba(28,187,179,0.45);">
-                        <span>Start A Project</span>
-                        <i class="fa-solid fa-arrow-right text-xs"></i>
-                    </a>
-                    <a href="#work" class="w-full sm:w-auto px-8 py-4 text-sm font-bold rounded-xl flex items-center justify-center gap-2 transition-all" style="background:rgba(255,255,255,0.08);color:#c8f0ee;border:1.5px solid rgba(28,187,179,0.45);backdrop-filter:blur(8px);" onmouseover="this.style.background='rgba(28,187,179,0.18)'" onmouseout="this.style.background='rgba(255,255,255,0.08)'">
-                        <i class="fa-solid fa-layer-group text-xs" style="color:#1cbbb3;"></i>
+                    <a href="#work" class="btn-violet-primary w-full sm:w-auto px-8 py-4 text-sm" style="box-shadow:0 8px 30px rgba(28,187,179,0.45);">
+                        <i class="fa-solid fa-layer-group text-xs mr-1"></i>
                         <span>Explore Our Work</span>
+                    </a>
+                    <a href="#contact" class="w-full sm:w-auto px-8 py-4 text-sm font-bold rounded-xl flex items-center justify-center gap-2 transition-all" style="background:rgba(255,255,255,0.08);color:#c8f0ee;border:1.5px solid rgba(28,187,179,0.45);backdrop-filter:blur(8px);" onmouseover="this.style.background='rgba(28,187,179,0.18)'" onmouseout="this.style.background='rgba(255,255,255,0.08)'">
+                        <span>Start A Project</span>
+                        <i class="fa-solid fa-arrow-right text-xs" style="color:#1cbbb3;"></i>
                     </a>
                 </div>
 
@@ -599,159 +597,8 @@
                 </div>
             </div>
 
-            <!-- Highlights Bar -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-5xl mx-auto mt-12 text-center">
-                <div class="p-4 rounded-2xl backdrop-blur-md shadow-sm" style="background:rgba(13,17,23,0.7);border:1px solid rgba(28,187,179,0.25);">
-                    <span class="font-display font-extrabold text-2xl block" style="color:#1cbbb3;">2 Founders</span>
-                    <span class="text-xs font-medium" style="color:#7db8c8;">Direct Partner Access</span>
-                </div>
-                <div class="p-4 rounded-2xl backdrop-blur-md shadow-sm" style="background:rgba(13,17,23,0.7);border:1px solid rgba(28,187,179,0.25);">
-                    <span class="font-display font-extrabold text-2xl block" style="color:#1cbbb3;">100% In-House</span>
-                    <span class="text-xs font-medium" style="color:#7db8c8;">Zero Freelance Outsourcing</span>
-                </div>
-                <div class="p-4 rounded-2xl backdrop-blur-md shadow-sm" style="background:rgba(13,17,23,0.7);border:1px solid rgba(28,187,179,0.25);">
-                    <span class="font-display font-extrabold text-2xl block" style="color:#1cbbb3;">Code + Media</span>
-                    <span class="text-xs font-medium" style="color:#7db8c8;">Full Spectrum Delivery</span>
-                </div>
-                <div class="p-4 rounded-2xl backdrop-blur-md shadow-sm" style="background:rgba(13,17,23,0.7);border:1px solid rgba(28,187,179,0.25);">
-                    <span class="font-display font-extrabold text-2xl block" style="color:#1cbbb3;">Fast Turnaround</span>
-                    <span class="text-xs font-medium" style="color:#7db8c8;">Agile Production Sprint</span>
-                </div>
-            </div>
-
         </div>
     </header>
-
-    <!-- ============================================================ -->
-    <!-- SERVICES SECTION                                              -->
-    <!-- ============================================================ -->
-    <section id="services" class="py-24 relative z-10" style="background: linear-gradient(180deg, #82c6d2 0%, #bde0e8 25%, #cbe6ec 100%);">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-            <div class="text-center max-w-2xl mx-auto mb-16 space-y-4 reveal">
-                <span class="agency-label"><i class="fa-solid fa-briefcase text-[10px]"></i> Agency Capabilities</span>
-                <h2 class="font-display font-extrabold text-3xl sm:text-5xl text-slate-900 tracking-tight">
-                    Full-Service Creative &amp; Tech
-                </h2>
-                <p class="text-slate-700 text-sm sm:text-base">
-                    From engineering your core web platform to producing cinematic commercial video and paid ad funnels — we craft the entire digital ecosystem.
-                </p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-                <!-- Service 1: Web Development -->
-                <div class="agency-card p-8 reveal">
-                    <div class="agency-icon-box bg-violet-100 text-violet-700 mb-6">
-                        <i class="fa-solid fa-code"></i>
-                    </div>
-                    <span class="pill-violet text-[10px] mb-2">Engineering</span>
-                    <h3 class="font-display font-bold text-2xl text-slate-900 mb-3">Website &amp; App Development</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed mb-6">
-                        Custom-coded, lightning-fast web platforms and applications engineered from scratch with clean, scalable code.
-                    </p>
-                    <ul class="space-y-2 text-xs text-slate-600 font-medium pt-4 border-t border-violet-200">
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-violet-600"></i> Custom HTML5 / React / Modern JS</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-violet-600"></i> Mobile-first responsive layouts</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-violet-600"></i> Supabase / Database integrations</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-violet-600"></i> Secure client portals &amp; dashboards</li>
-                    </ul>
-                </div>
-
-                <!-- Service 2: UI/UX Design -->
-                <div class="agency-card p-8 reveal">
-                    <div class="agency-icon-box bg-violet-100 text-violet-700 mb-6">
-                        <i class="fa-solid fa-pen-ruler"></i>
-                    </div>
-                    <span class="pill-violet text-[10px] mb-2">Design</span>
-                    <h3 class="font-display font-bold text-2xl text-slate-900 mb-3">UI/UX &amp; Product Design</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed mb-6">
-                        Intuitive user journeys, wireframes, and interactive Figma prototypes designed for effortless user conversion.
-                    </p>
-                    <ul class="space-y-2 text-xs text-slate-600 font-medium pt-4 border-t border-violet-200">
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-violet-600"></i> User journey mapping &amp; wireframes</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-violet-600"></i> Interactive Figma clickable prototypes</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-violet-600"></i> Scalable design systems &amp; UI kits</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-violet-600"></i> Accessibility &amp; contrast audits</li>
-                    </ul>
-                </div>
-
-                <!-- Service 3: Branding & Logo Design -->
-                <div class="agency-card p-8 reveal">
-                    <div class="agency-icon-box bg-teal-100 text-teal-700 mb-6" style="background:#e0f3f5; color:#0d807a;">
-                        <i class="fa-solid fa-crown"></i>
-                    </div>
-                    <span class="pill-violet text-[10px] mb-2">Identity</span>
-                    <h3 class="font-display font-bold text-2xl text-slate-900 mb-3">Branding &amp; Logo Design</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed mb-6">
-                        Distinctive logos, typography, color palettes, and comprehensive guidelines that build enduring brand authority.
-                    </p>
-                    <ul class="space-y-2 text-xs text-slate-600 font-medium pt-4 border-t border-violet-200">
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-violet-600"></i> Logo marks &amp; custom typography</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-violet-600"></i> Comprehensive brand guidelines</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-violet-600"></i> Color psychology &amp; visual hierarchy</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-violet-600"></i> Vector asset delivery for print/digital</li>
-                    </ul>
-                </div>
-
-                <!-- Service 4: Video Editing & AI Video -->
-                <div class="agency-card p-8 reveal">
-                    <div class="agency-icon-box mb-6" style="background:#e0f3f5; color:#0d807a;">
-                        <i class="fa-solid fa-film"></i>
-                    </div>
-                    <span class="pill-violet text-[10px] mb-2">Media</span>
-                    <h3 class="font-display font-bold text-2xl text-slate-900 mb-3">Video Editing &amp; AI Video</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed mb-6">
-                        Cinematic cuts, vertical reels, commercials, and generative AI video storytelling that command audience attention.
-                    </p>
-                    <ul class="space-y-2 text-xs text-slate-600 font-medium pt-4 border-t border-violet-200">
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-violet-600"></i> Vertical reels &amp; TikTok video suites</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-violet-600"></i> Generative AI video creation</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-violet-600"></i> Sound design, voiceovers &amp; SFX</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-violet-600"></i> Professional color grading (LUTs)</li>
-                    </ul>
-                </div>
-
-                <!-- Service 5: Commercial Photography -->
-                <div class="agency-card p-8 reveal">
-                    <div class="agency-icon-box bg-rose-100 text-rose-700 mb-6">
-                        <i class="fa-solid fa-camera"></i>
-                    </div>
-                    <span class="pill-violet text-[10px] mb-2">Visuals</span>
-                    <h3 class="font-display font-bold text-2xl text-slate-900 mb-3">Commercial Photography</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed mb-6">
-                        High-resolution product, lifestyle, and portrait commercial photography with professional lighting and retouching.
-                    </p>
-                    <ul class="space-y-2 text-xs text-slate-600 font-medium pt-4 border-t border-violet-200">
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-violet-600"></i> High-resolution product photography</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-violet-600"></i> Commercial portraiture &amp; lifestyle</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-violet-600"></i> High-end retouching &amp; backdrop styling</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-violet-600"></i> Web-optimized asset compression</li>
-                    </ul>
-                </div>
-
-                <!-- Service 6: Advertising & Promotion -->
-                <div class="agency-card p-8 reveal">
-                    <div class="agency-icon-box bg-amber-100 text-amber-700 mb-6">
-                        <i class="fa-solid fa-bullhorn"></i>
-                    </div>
-                    <span class="pill-violet text-[10px] mb-2">Growth</span>
-                    <h3 class="font-display font-bold text-2xl text-slate-900 mb-3">Posters, Ads &amp; Promotion</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed mb-6">
-                        Promotional poster and graphic design, Meta/Google paid campaigns, and digital publicity funnels that drive inquiries.
-                    </p>
-                    <ul class="space-y-2 text-xs text-slate-600 font-medium pt-4 border-t border-violet-200">
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-violet-600"></i> High-impact promotional poster design</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-violet-600"></i> Meta Ads (Instagram &amp; Facebook)</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-violet-600"></i> Google Search &amp; Display setup</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-violet-600"></i> Lead generation funnels &amp; tracking</li>
-                    </ul>
-                </div>
-
-            </div>
-
-        </div>
-    </section>
 
     <!-- ============================================================ -->
     <!-- OUR WORK / FEATURED PROJECTS                                 -->
@@ -879,14 +726,17 @@
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
-            <!-- Section Header (Syncrely-Inspired Style) -->
-            <div class="mb-14 reveal">
-                <span class="text-violet-700 font-mono text-sm sm:text-base font-semibold tracking-tight block mb-3.5">
+            <!-- Section Header -->
+            <div class="mb-12 reveal max-w-3xl">
+                <span class="text-teal-700 font-mono text-xs sm:text-sm font-bold uppercase tracking-wider block mb-3">
                     (Who stands behind your brand?)
                 </span>
-                <h2 class="font-display font-extrabold text-3xl sm:text-5xl lg:text-6xl text-slate-900 tracking-tight leading-[1.12] max-w-4xl">
+                <h2 class="font-display font-extrabold text-3xl sm:text-5xl lg:text-6xl text-slate-900 tracking-tight leading-[1.12]">
                     Design &amp; code driven <span class="gradient-text">power duo</span> with multidisciplinary craft
                 </h2>
+                <p class="text-slate-600 text-sm sm:text-base leading-relaxed mt-4">
+                    We're Mubaris and Rasal—a two-person creative &amp; tech agency based in Malappuram, Kerala. Mubaris leads web architecture and full-stack systems, while Rasal directs commercial video, brand identities, and visual media. Every project is conceived, crafted, and deployed directly by the two of us—giving you 100% direct founder access with zero agency overhead.
+                </p>
             </div>
 
             <!-- Two-Column Power Duo Layout: Mubaris & Rasal with Work & Contact -->
@@ -1253,7 +1103,6 @@
 
                 <!-- Footer Navigation -->
                 <div class="flex flex-wrap items-center justify-center gap-6 font-semibold text-teal-200">
-                    <a href="#services" class="hover:text-white transition">Services</a>
                     <a href="#work" class="hover:text-white transition">Our Work</a>
                     <a href="#team" class="hover:text-white transition">Our Team</a>
                     <a href="#contact" class="hover:text-white transition">Contact</a>
