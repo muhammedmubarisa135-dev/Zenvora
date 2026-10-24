@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
     <title data-brand-meta-title>KAYLADS | Two-Person Creative & Digital Agency</title>
     <meta name="description" content="KAYLADS is a premium two-person creative agency founded by Mubaris (Web Architect) and Rasal (Creative Director). We engineer high-performance websites and produce cinematic video, bold brand identities, photography, and high-impact digital advertising.">
 
@@ -1210,12 +1212,28 @@
             }, 300);
         }
 
-        // ── Load Admin-Added Projects into Our Work section ──
+        // ── Load Admin-Added Projects into Our Work section (Security Hardened & Offline Resilient) ──
         (function loadAdminProjects() {
             const STORAGE_KEY = 'kaylads_portfolio_v2';
+            const BACKUP_KEY  = 'kaylads_portfolio_backup';
             let projects = [];
-            try { projects = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch(e) {}
-            if (!projects.length) return;
+
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (raw) {
+                    projects = JSON.parse(raw);
+                } else {
+                    const backupRaw = localStorage.getItem(BACKUP_KEY);
+                    if (backupRaw) {
+                        projects = JSON.parse(backupRaw);
+                        localStorage.setItem(STORAGE_KEY, backupRaw); // Self-healing recovery
+                    }
+                }
+            } catch(e) {
+                console.warn('Portfolio storage read notice:', e);
+            }
+
+            if (!Array.isArray(projects) || !projects.length) return;
 
             const grid = document.getElementById('projectsGrid');
             if (!grid) return;
@@ -1230,11 +1248,29 @@
                 'Cinematic Reel':'fa-film','Product Video':'fa-video'
             };
 
+            function esc(str) {
+                return (str || '').replace(/[&<>"']/g, function(m) {
+                    return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' })[m];
+                });
+            }
+
+            function safeUrl(u) {
+                if (!u) return '';
+                const trimmed = u.trim();
+                return /^https?:\/\//i.test(trimmed) ? esc(trimmed) : '';
+            }
+
             projects.forEach(p => {
                 const isLive = p.status === 'live';
                 const personLabel = p.person === 'mubaris' ? 'Mubaris' : 'Rasal';
                 const personRole  = p.person === 'mubaris' ? 'Web Architecture' : 'Creative Direction';
                 const iconClass   = CATEGORY_ICONS[p.category] || 'fa-folder';
+                const cleanTitle  = esc(p.title);
+                const cleanDesc   = esc(p.description);
+                const cleanCat    = esc(p.category);
+                const cleanGrad   = esc(p.gradient || 'linear-gradient(135deg, #149e97, #084945)');
+                const projectUrl  = safeUrl(p.url);
+
                 const statusDot   = isLive
                     ? '<span class="w-2 h-2 rounded-full bg-green-500 animate-pulse inline-block"></span><span>' + (p.person==='mubaris'?'Live Website':'Delivered') + '</span>'
                     : '<span class="w-2 h-2 rounded-full bg-yellow-400 inline-block"></span><span>' + (p.status==='in-progress'?'In Progress':'Upcoming') + '</span>';
@@ -1242,24 +1278,24 @@
                 const card = document.createElement('div');
                 card.className = 'agency-card overflow-hidden reveal group';
                 card.innerHTML = `
-                    ${p.url ? `<a href="${p.url}" target="_blank" rel="noopener noreferrer"` : '<div'} class="block h-60 relative flex items-center justify-center p-6 transition group-hover:brightness-105" style="background:${p.gradient};">
+                    ${projectUrl ? `<a href="${projectUrl}" target="_blank" rel="noopener noreferrer"` : '<div'} class="block h-60 relative flex items-center justify-center p-6 transition group-hover:brightness-105" style="background:${cleanGrad};">
                         <div class="relative z-10 text-center space-y-3">
-                            <span class="inline-block px-3 py-1 bg-white/20 border border-white/30 text-white text-[10px] font-bold uppercase tracking-widest rounded-full">${p.category}</span>
-                            <h3 class="font-display font-bold text-2xl sm:text-3xl text-white">${p.title}</h3>
-                            <p class="text-xs text-white/80 max-w-xs mx-auto">${p.description.substring(0,80)}${p.description.length>80?'…':''}</p>
+                            <span class="inline-block px-3 py-1 bg-white/20 border border-white/30 text-white text-[10px] font-bold uppercase tracking-widest rounded-full">${cleanCat}</span>
+                            <h3 class="font-display font-bold text-2xl sm:text-3xl text-white">${cleanTitle}</h3>
+                            <p class="text-xs text-white/80 max-w-xs mx-auto">${cleanDesc.substring(0,80)}${cleanDesc.length>80?'…':''}</p>
                         </div>
                         <span style="position:absolute;top:12px;right:12px;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);color:#fff;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.07em;border-radius:20px;padding:3px 9px;">${personLabel}</span>
-                    ${p.url ? '</a>' : '</div>'}
+                    ${projectUrl ? '</a>' : '</div>'}
                     <div class="p-7 space-y-4">
                         <div class="flex flex-wrap gap-1.5">
                             <span class="pill-violet text-[10px]">${personLabel}: ${personRole}</span>
-                            <span class="pill-slate text-[10px]">${p.category}</span>
+                            <span class="pill-slate text-[10px]">${cleanCat}</span>
                         </div>
-                        <p class="text-slate-600 text-xs sm:text-sm leading-relaxed">${p.description}</p>
+                        <p class="text-slate-600 text-xs sm:text-sm leading-relaxed">${cleanDesc}</p>
                         <div class="flex items-center justify-between pt-4 border-t border-violet-200">
-                            ${p.url
-                                ? `<a href="${p.url}" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-violet-700 hover:text-violet-900 flex items-center gap-2 transition"><span>View Project</span><i class="fa-solid fa-arrow-up-right-from-square text-xs"></i></a>`
-                                : `<span class="text-sm font-medium text-slate-400">${personLabel} · ${p.category}</span>`}
+                            ${projectUrl
+                                ? `<a href="${projectUrl}" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-violet-700 hover:text-violet-900 flex items-center gap-2 transition"><span>View Project</span><i class="fa-solid fa-arrow-up-right-from-square text-xs"></i></a>`
+                                : `<span class="text-sm font-medium text-slate-400">${personLabel} · ${cleanCat}</span>`}
                             <span class="text-xs text-green-600 font-semibold flex items-center gap-1.5">${statusDot}</span>
                         </div>
                     </div>
@@ -1272,6 +1308,18 @@
                 if (typeof revealObserver !== 'undefined') revealObserver.observe(el);
             });
         })();
+
+        // ── Offline Warning for Inquiries ──
+        window.addEventListener('offline', () => {
+            const formSuccess = document.getElementById('formSuccess');
+            if (formSuccess) {
+                formSuccess.innerHTML = '<i class="fa-solid fa-wifi-slash mr-2 text-amber-600"></i>You are currently offline. Please reconnect your internet to send inquiries directly via WhatsApp.';
+                formSuccess.style.background = '#fef3c7';
+                formSuccess.style.color = '#78350f';
+                formSuccess.style.borderColor = '#fde68a';
+                formSuccess.classList.remove('hidden');
+            }
+        });
     </script>
 
     <!-- ============================================================ -->

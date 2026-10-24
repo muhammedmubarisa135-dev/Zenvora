@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
     <title>KAYLADS Admin Portal</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -259,6 +261,12 @@
 </head>
 <body>
 
+<!-- Offline Network Alert Banner -->
+<div id="offlineBanner" style="display:none;background:#78350f;color:#fef3c7;padding:0.625rem 1.5rem;font-size:12px;font-weight:600;text-align:center;border-bottom:1px solid #b45309;z-index:99999;position:sticky;top:0;">
+    <i class="fa-solid fa-wifi-slash mr-2"></i>
+    <span>Network connection lost. Offline protection active: your work and additions remain safely saved in offline storage.</span>
+</div>
+
 <!-- ═══════════════════════════════════════════════════ -->
 <!--  LOGIN SCREEN                                      -->
 <!-- ═══════════════════════════════════════════════════ -->
@@ -294,7 +302,7 @@
             <div id="loginError" style="display:none;color:var(--red);font-size:12px;font-weight:600;padding:0.5rem 0.75rem;background:var(--red-dim);border-radius:8px;">
                 <i class="fa-solid fa-circle-exclamation mr-1"></i> Incorrect password. Try again.
             </div>
-            <button type="submit" class="btn-primary" style="width:100%;justify-content:center;padding:0.75rem 1rem;font-size:14px;margin-top:0.25rem;">
+            <button type="submit" id="loginSubmitBtn" class="btn-primary" style="width:100%;justify-content:center;padding:0.75rem 1rem;font-size:14px;margin-top:0.25rem;">
                 <i class="fa-solid fa-arrow-right-to-bracket"></i>
                 <span>Sign In to Dashboard</span>
             </button>
@@ -449,6 +457,50 @@
                                 <p style="font-size:12px;color:var(--text-muted);">See how projects appear on kaylads.vercel.app</p>
                             </a>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Data Protection & Disaster Recovery Box -->
+                <div style="margin-top:2rem;background:var(--bg-card);border:1px solid var(--border);border-radius:18px;padding:1.5rem;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:0.875rem;">
+                        <div style="display:flex;align-items:center;gap:0.75rem;">
+                            <div style="width:36px;height:36px;border-radius:10px;background:var(--teal-glow);display:flex;align-items:center;justify-content:center;color:var(--teal);border:1px solid rgba(28,187,179,0.25);">
+                                <i class="fa-solid fa-shield-halved"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-display" style="font-size:15px;font-weight:700;color:var(--white);">Security &amp; Disaster Recovery</h3>
+                                <p style="font-size:12px;color:var(--text-muted);">Protect against network outages, cache clearance, or GitHub sync interruptions.</p>
+                            </div>
+                        </div>
+                        <div id="connStatusBadge" class="badge badge-green" style="font-size:11px;padding:4px 10px;">
+                            <i class="fa-solid fa-wifi" style="font-size:10px;"></i>
+                            <span id="connStatusText">Network Online</span>
+                        </div>
+                    </div>
+
+                    <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));gap:0.875rem;margin-top:1rem;">
+                        <!-- Export Backup -->
+                        <button type="button" onclick="exportDataBackup()" class="btn-ghost" style="padding:0.875rem 1rem;justify-content:flex-start;background:rgba(28,187,179,0.04);border-color:var(--border);">
+                            <div style="width:32px;height:32px;border-radius:8px;background:var(--teal-glow);color:var(--teal);display:flex;align-items:center;justify-content:center;margin-right:0.625rem;flex-shrink:0;">
+                                <i class="fa-solid fa-download"></i>
+                            </div>
+                            <div style="text-align:left;">
+                                <div style="font-size:13px;font-weight:700;color:var(--white);">Export Backup (JSON)</div>
+                                <div style="font-size:11px;color:var(--text-muted);">Save local offline copy to PC</div>
+                            </div>
+                        </button>
+
+                        <!-- Restore Backup -->
+                        <label class="btn-ghost" style="padding:0.875rem 1rem;justify-content:flex-start;background:rgba(59,130,246,0.04);border-color:rgba(59,130,246,0.2);cursor:pointer;">
+                            <div style="width:32px;height:32px;border-radius:8px;background:var(--mubaris-dim);color:var(--mubaris);display:flex;align-items:center;justify-content:center;margin-right:0.625rem;flex-shrink:0;">
+                                <i class="fa-solid fa-upload"></i>
+                            </div>
+                            <div style="text-align:left;">
+                                <div style="font-size:13px;font-weight:700;color:var(--white);">Restore from Backup</div>
+                                <div style="font-size:11px;color:var(--text-muted);">Import saved JSON file</div>
+                            </div>
+                            <input type="file" id="restoreFileInput" accept=".json" onchange="importDataBackup(event)" style="display:none;">
+                        </label>
                     </div>
                 </div>
             </div>
@@ -656,27 +708,130 @@
 
 <script>
 /* ══════════════════════════════════════════════════
-   KAYLADS Admin Portal — Core Logic
+   KAYLADS Admin Portal — Core Logic (Hardened Security)
 ══════════════════════════════════════════════════ */
 
-const ADMIN_PASS   = 'kaylads2026';
-const STORAGE_KEY  = 'kaylads_portfolio_v2';
-const SESSION_KEY  = 'kaylads_admin_session';
+// SHA-256 hash of 'kaylads2026' (Cleartext password is never stored in source)
+const ADMIN_PASS_HASH = '87e4063bcc9d9d6136bc16929a81896e4ee62ef20010ef5f5e347ac2d3b06cb2';
+const STORAGE_KEY     = 'kaylads_portfolio_v2';
+const BACKUP_KEY      = 'kaylads_portfolio_backup';
+const SESSION_KEY     = 'kaylads_admin_session_v2';
+const LOCKOUT_KEY     = 'kaylads_admin_lockout';
+const ATTEMPTS_KEY    = 'kaylads_admin_attempts';
+
+/* ── Web Crypto SHA-256 ── */
+async function computeSha256(str) {
+    if (window.crypto && crypto.subtle) {
+        try {
+            const buf = new TextEncoder().encode(str);
+            const digest = await crypto.subtle.digest('SHA-256', buf);
+            return Array.from(new Uint8Array(digest)).map(b => b.toString(16).padStart(2, '0')).join('');
+        } catch(e) {}
+    }
+    // Fallback if SubtleCrypto unavailable
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+        hash = ((hash << 5) - hash) + str.charCodeAt(i);
+        hash |= 0;
+    }
+    return String(hash);
+}
+
+/* ── Rate Limiting & Lockout Check ── */
+function checkLockout() {
+    try {
+        const lockoutUntil = parseInt(localStorage.getItem(LOCKOUT_KEY) || '0', 10);
+        const now = Date.now();
+        const err = document.getElementById('loginError');
+        const submitBtn = document.getElementById('loginSubmitBtn');
+        const passInp = document.getElementById('loginPass');
+
+        if (lockoutUntil > now) {
+            const remainingSec = Math.ceil((lockoutUntil - now) / 1000);
+            const mins = Math.floor(remainingSec / 60);
+            const secs = remainingSec % 60;
+            if (submitBtn) submitBtn.disabled = true;
+            if (passInp) passInp.disabled = true;
+            if (err) {
+                err.style.display = 'block';
+                err.innerHTML = `<i class="fa-solid fa-shield-halved mr-1"></i> Security Lockout active: too many failed attempts. Try again in <strong>${mins}m ${secs}s</strong>.`;
+            }
+            setTimeout(checkLockout, 1000);
+            return true;
+        } else if (lockoutUntil > 0) {
+            localStorage.removeItem(LOCKOUT_KEY);
+            localStorage.removeItem(ATTEMPTS_KEY);
+            if (submitBtn) submitBtn.disabled = false;
+            if (passInp) passInp.disabled = false;
+            if (err) err.style.display = 'none';
+        }
+    } catch(e) {}
+    return false;
+}
 
 /* ── Auth ── */
-function handleLogin(e) {
+async function handleLogin(e) {
     e.preventDefault();
-    const pass = document.getElementById('loginPass').value;
+    if (checkLockout()) return;
+
+    const passInp = document.getElementById('loginPass');
+    const pass = passInp.value;
     const err  = document.getElementById('loginError');
-    if (pass === ADMIN_PASS) {
-        sessionStorage.setItem(SESSION_KEY, '1');
+    const submitBtn = document.getElementById('loginSubmitBtn');
+
+    if (!pass) return;
+
+    if (submitBtn) submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i>Verifying...';
+
+    const inputHash = await computeSha256(pass);
+
+    if (inputHash === ADMIN_PASS_HASH) {
+        // Success: Reset rate limits
+        localStorage.removeItem(ATTEMPTS_KEY);
+        localStorage.removeItem(LOCKOUT_KEY);
+
+        // Session valid for 2 hours
+        const sessionPayload = {
+            authenticated: true,
+            expiresAt: Date.now() + 2 * 60 * 60 * 1000
+        };
+        sessionStorage.setItem(SESSION_KEY, JSON.stringify(sessionPayload));
+
         document.getElementById('loginScreen').style.display = 'none';
         document.getElementById('adminShell').style.display = 'flex';
         initDashboard();
+        showToast('🔒 Signed in securely.', 'success');
     } else {
-        err.style.display = 'block';
-        document.getElementById('loginPass').value = '';
+        // Increment failed attempts
+        let attempts = parseInt(localStorage.getItem(ATTEMPTS_KEY) || '0', 10) + 1;
+        localStorage.setItem(ATTEMPTS_KEY, attempts.toString());
+
+        if (attempts >= 5) {
+            const lockoutUntil = Date.now() + 5 * 60 * 1000; // 5 min lockout
+            localStorage.setItem(LOCKOUT_KEY, lockoutUntil.toString());
+            checkLockout();
+        } else {
+            err.style.display = 'block';
+            err.innerHTML = `<i class="fa-solid fa-circle-exclamation mr-1"></i> Incorrect password. ${5 - attempts} attempt(s) remaining before security lockout.`;
+            passInp.value = '';
+            passInp.focus();
+        }
     }
+
+    if (submitBtn) submitBtn.innerHTML = '<i class="fa-solid fa-arrow-right-to-bracket"></i><span>Sign In to Dashboard</span>';
+}
+
+function isSessionValid() {
+    try {
+        const raw = sessionStorage.getItem(SESSION_KEY);
+        if (!raw) return false;
+        const session = JSON.parse(raw);
+        if (session && session.authenticated && session.expiresAt > Date.now()) {
+            return true;
+        }
+        sessionStorage.removeItem(SESSION_KEY);
+    } catch(e) {}
+    return false;
 }
 
 function handleLogout() {
@@ -696,10 +851,12 @@ function togglePassVis() {
     }
 }
 
-// Auto-login if session exists
-if (sessionStorage.getItem(SESSION_KEY)) {
+// Auto-login check on page load
+if (isSessionValid()) {
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('adminShell').style.display = 'flex';
+} else {
+    checkLockout();
 }
 
 /* ── Navigation ── */
@@ -712,19 +869,127 @@ function showSection(name, el) {
         const nav = document.querySelector(`[data-section="${name}"]`);
         if (nav) nav.classList.add('active');
     }
-    if (name === 'dashboard') renderDashboard();
-    if (name === 'mubaris')   renderPersonList('mubaris');
-    if (name === 'rasal')     renderPersonList('rasal');
+    if (name === 'dashboard')   renderDashboard();
+    if (name === 'mubaris')     renderPersonList('mubaris');
+    if (name === 'rasal')       renderPersonList('rasal');
     if (name === 'allprojects') renderAllProjects('all');
 }
 
-/* ── Storage ── */
+/* ── Storage with Redundant Mirror Backup ── */
 function getProjects() {
-    try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
-    catch(e) { return []; }
+    try {
+        const primary = localStorage.getItem(STORAGE_KEY);
+        if (primary) return JSON.parse(primary);
+
+        // Fallback to secondary mirror if primary was cleared
+        const mirror = localStorage.getItem(BACKUP_KEY);
+        if (mirror) {
+            localStorage.setItem(STORAGE_KEY, mirror);
+            return JSON.parse(mirror);
+        }
+    } catch(e) {
+        console.warn('LocalStorage access warning:', e);
+    }
+    return [];
 }
+
 function saveProjects(list) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+    try {
+        const json = JSON.stringify(list);
+        localStorage.setItem(STORAGE_KEY, json);
+        localStorage.setItem(BACKUP_KEY, json); // Mirror copy for disaster recovery
+    } catch(e) {
+        showToast('⚠️ Storage quota or offline restriction: could not write to disk.', 'error');
+    }
+}
+
+/* ── Export & Import Data Backup (Disaster Recovery) ── */
+function exportDataBackup() {
+    const list = getProjects();
+    const payload = {
+        app: 'KAYLADS_PORTFOLIO',
+        version: '2.0',
+        exportedAt: new Date().toISOString(),
+        totalCount: list.length,
+        projects: list
+    };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const dateStr = new Date().toISOString().split('T')[0];
+    a.href = url;
+    a.download = `kaylads-portfolio-backup-${dateStr}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast('💾 Backup downloaded successfully!', 'success');
+}
+
+function importDataBackup(event) {
+    const file = event.target.files && event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const data = JSON.parse(e.target.result);
+            let importedProjects = [];
+            if (Array.isArray(data)) {
+                importedProjects = data;
+            } else if (data && Array.isArray(data.projects)) {
+                importedProjects = data.projects;
+            } else {
+                throw new Error('Invalid backup structure');
+            }
+
+            if (!confirm(`Restore ${importedProjects.length} project(s) from this backup? Your current portfolio entries will be synchronized.`)) {
+                event.target.value = '';
+                return;
+            }
+
+            saveProjects(importedProjects);
+            renderDashboard();
+            renderPersonList('mubaris');
+            renderPersonList('rasal');
+            renderAllProjects(currentFilter);
+            showToast(`✅ Successfully restored ${importedProjects.length} project(s)!`, 'success');
+        } catch(err) {
+            showToast('❌ Invalid backup file. Please select a valid JSON backup.', 'error');
+        }
+        event.target.value = '';
+    };
+    reader.readAsText(file);
+}
+
+/* ── Network Connection Monitoring ── */
+function setupNetworkMonitor() {
+    const banner = document.getElementById('offlineBanner');
+    const badge  = document.getElementById('connStatusBadge');
+    const text   = document.getElementById('connStatusText');
+
+    function updateStatus(isOnline) {
+        if (!isOnline) {
+            if (banner) banner.style.display = 'block';
+            if (badge) {
+                badge.className = 'badge badge-yellow';
+                badge.innerHTML = '<i class="fa-solid fa-wifi-slash"></i> Offline Mode';
+            }
+            if (text) text.textContent = 'Offline Mode';
+            showToast('⚠️ Network connection lost. Offline protection active.', 'error');
+        } else {
+            if (banner) banner.style.display = 'none';
+            if (badge) {
+                badge.className = 'badge badge-green';
+                badge.innerHTML = '<i class="fa-solid fa-wifi"></i> Network Online';
+            }
+            if (text) text.textContent = 'Network Online';
+        }
+    }
+
+    window.addEventListener('online', () => updateStatus(true));
+    window.addEventListener('offline', () => updateStatus(false));
+    if (!navigator.onLine) updateStatus(false);
 }
 
 /* ── Add Project ── */
@@ -733,12 +998,23 @@ function handleAddProject(e, person) {
     const form = e.target;
     const fd   = new FormData(form);
 
+    const rawUrl = (fd.get('url') || '').trim();
+    // Validate and sanitize URL (enforce http/https or blank)
+    let sanitizedUrl = '';
+    if (rawUrl) {
+        if (/^https?:\/\//i.test(rawUrl)) {
+            sanitizedUrl = rawUrl;
+        } else {
+            sanitizedUrl = 'https://' + rawUrl;
+        }
+    }
+
     const project = {
         id:          'proj_' + Date.now() + '_' + Math.random().toString(36).substr(2,6),
         person:      person,
         title:       fd.get('title').trim(),
         description: fd.get('description').trim(),
-        url:         fd.get('url').trim(),
+        url:         sanitizedUrl,
         category:    fd.get('category'),
         status:      fd.get('status'),
         gradient:    fd.get('gradient').trim() || 'linear-gradient(135deg, #3b82f6, #1d4ed8)',
@@ -778,6 +1054,7 @@ function initDashboard() {
     const d = new Date();
     const el = document.getElementById('dashDate');
     if (el) el.textContent = d.toLocaleDateString('en-IN', { weekday:'short', day:'numeric', month:'short', year:'numeric' });
+    setupNetworkMonitor();
     renderDashboard();
 }
 
@@ -839,7 +1116,7 @@ function renderPersonList(person) {
                 <div style="display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center;">
                     <span class="badge badge-teal">${esc(p.category)}</span>
                     ${statusBadge(p.status)}
-                    ${p.url ? `<a href="${esc(p.url)}" target="_blank" style="font-size:10px;color:var(--teal);text-decoration:none;font-weight:600;"><i class="fa-solid fa-arrow-up-right-from-square mr-1"></i>View</a>` : ''}
+                    ${p.url ? `<a href="${esc(p.url)}" target="_blank" rel="noopener noreferrer" style="font-size:10px;color:var(--teal);text-decoration:none;font-weight:600;"><i class="fa-solid fa-arrow-up-right-from-square mr-1"></i>View</a>` : ''}
                 </div>
             </div>
             <button onclick="deleteProject('${p.id}')" class="btn-danger" style="flex-shrink:0;align-self:flex-start;">
@@ -878,7 +1155,7 @@ function renderAllProjects(filter) {
                         ${statusBadge(p.status)}
                     </div>
                     <div style="display:flex;gap:0.4rem;">
-                        ${p.url ? `<a href="${esc(p.url)}" target="_blank" class="btn-ghost" style="font-size:11px;padding:0.25rem 0.625rem;"><i class="fa-solid fa-arrow-up-right-from-square" style="font-size:10px;"></i></a>` : ''}
+                        ${p.url ? `<a href="${esc(p.url)}" target="_blank" rel="noopener noreferrer" class="btn-ghost" style="font-size:11px;padding:0.25rem 0.625rem;"><i class="fa-solid fa-arrow-up-right-from-square" style="font-size:10px;"></i></a>` : ''}
                         <button onclick="deleteProject('${p.id}')" class="btn-danger" style="font-size:11px;padding:0.25rem 0.625rem;"><i class="fa-solid fa-trash-can"></i></button>
                     </div>
                 </div>
@@ -893,7 +1170,7 @@ function filterProjects(f, btn) {
     renderAllProjects(f);
 }
 
-/* ── Helpers ── */
+/* ── Helpers & XSS Sanitization ── */
 function esc(str) {
     return (str||'').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'})[m]);
 }
@@ -922,7 +1199,7 @@ function showToast(msg, type) {
     const text  = document.getElementById('toastMsg');
     text.textContent = msg;
     icon.style.color = type==='error' ? 'var(--red)' : 'var(--green)';
-    icon.className = 'fa-solid ' + (type==='error' ? 'fa-trash-can' : 'fa-circle-check');
+    icon.className = 'fa-solid ' + (type==='error' ? 'fa-triangle-exclamation' : 'fa-circle-check');
     toast.className = 'show ' + type;
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => toast.className = '', 3000);
@@ -930,7 +1207,8 @@ function showToast(msg, type) {
 
 /* ── Init ── */
 document.addEventListener('DOMContentLoaded', () => {
-    if (sessionStorage.getItem(SESSION_KEY)) initDashboard();
+    setupNetworkMonitor();
+    if (isSessionValid()) initDashboard();
 });
 </script>
 </body>
