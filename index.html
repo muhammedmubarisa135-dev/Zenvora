@@ -618,8 +618,8 @@
                 </p>
             </div>
 
-            <!-- 3 Live Project Cards Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- 3 Live Project Cards Grid + Admin-added projects -->
+            <div id="projectsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
 
                 <!-- Project 1: Volcano Martial Arts Academy -->
                 <div class="agency-card overflow-hidden reveal group">
@@ -711,6 +711,8 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Admin-added projects injected here by JS -->
 
             </div>
 
@@ -1207,6 +1209,69 @@
                 btn.innerHTML = '<i class="fa-brands fa-whatsapp text-lg mr-2 text-emerald-300"></i><span>Inquiry Sent to WhatsApp</span>';
             }, 300);
         }
+
+        // ── Load Admin-Added Projects into Our Work section ──
+        (function loadAdminProjects() {
+            const STORAGE_KEY = 'kaylads_portfolio_v2';
+            let projects = [];
+            try { projects = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch(e) {}
+            if (!projects.length) return;
+
+            const grid = document.getElementById('projectsGrid');
+            if (!grid) return;
+
+            const CATEGORY_ICONS = {
+                'Web App':'fa-globe','Website':'fa-browser','UI/UX Design':'fa-pen-nib',
+                'Supabase System':'fa-database','E-commerce':'fa-cart-shopping',
+                'Dashboard':'fa-chart-line','Landing Page':'fa-file-code',
+                'Brand Film':'fa-clapperboard','Logo & Identity':'fa-signature',
+                'AI Video':'fa-robot','Social Media Campaign':'fa-hashtag',
+                'Commercial Photography':'fa-camera','Poster & Ad Design':'fa-image',
+                'Cinematic Reel':'fa-film','Product Video':'fa-video'
+            };
+
+            projects.forEach(p => {
+                const isLive = p.status === 'live';
+                const personLabel = p.person === 'mubaris' ? 'Mubaris' : 'Rasal';
+                const personRole  = p.person === 'mubaris' ? 'Web Architecture' : 'Creative Direction';
+                const iconClass   = CATEGORY_ICONS[p.category] || 'fa-folder';
+                const statusDot   = isLive
+                    ? '<span class="w-2 h-2 rounded-full bg-green-500 animate-pulse inline-block"></span><span>' + (p.person==='mubaris'?'Live Website':'Delivered') + '</span>'
+                    : '<span class="w-2 h-2 rounded-full bg-yellow-400 inline-block"></span><span>' + (p.status==='in-progress'?'In Progress':'Upcoming') + '</span>';
+
+                const card = document.createElement('div');
+                card.className = 'agency-card overflow-hidden reveal group';
+                card.innerHTML = `
+                    ${p.url ? `<a href="${p.url}" target="_blank" rel="noopener noreferrer"` : '<div'} class="block h-60 relative flex items-center justify-center p-6 transition group-hover:brightness-105" style="background:${p.gradient};">
+                        <div class="relative z-10 text-center space-y-3">
+                            <span class="inline-block px-3 py-1 bg-white/20 border border-white/30 text-white text-[10px] font-bold uppercase tracking-widest rounded-full">${p.category}</span>
+                            <h3 class="font-display font-bold text-2xl sm:text-3xl text-white">${p.title}</h3>
+                            <p class="text-xs text-white/80 max-w-xs mx-auto">${p.description.substring(0,80)}${p.description.length>80?'…':''}</p>
+                        </div>
+                        <span style="position:absolute;top:12px;right:12px;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);color:#fff;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.07em;border-radius:20px;padding:3px 9px;">${personLabel}</span>
+                    ${p.url ? '</a>' : '</div>'}
+                    <div class="p-7 space-y-4">
+                        <div class="flex flex-wrap gap-1.5">
+                            <span class="pill-violet text-[10px]">${personLabel}: ${personRole}</span>
+                            <span class="pill-slate text-[10px]">${p.category}</span>
+                        </div>
+                        <p class="text-slate-600 text-xs sm:text-sm leading-relaxed">${p.description}</p>
+                        <div class="flex items-center justify-between pt-4 border-t border-violet-200">
+                            ${p.url
+                                ? `<a href="${p.url}" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-violet-700 hover:text-violet-900 flex items-center gap-2 transition"><span>View Project</span><i class="fa-solid fa-arrow-up-right-from-square text-xs"></i></a>`
+                                : `<span class="text-sm font-medium text-slate-400">${personLabel} · ${p.category}</span>`}
+                            <span class="text-xs text-green-600 font-semibold flex items-center gap-1.5">${statusDot}</span>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+
+            // Re-trigger reveal observer for newly added cards
+            document.querySelectorAll('.reveal:not(.visible)').forEach(el => {
+                if (typeof revealObserver !== 'undefined') revealObserver.observe(el);
+            });
+        })();
     </script>
 
     <!-- ============================================================ -->
