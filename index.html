@@ -953,17 +953,9 @@
                                     </select>
                                 </div>
                                 <div>
-                                    <label class="agency-label-text">Send Inquiry To (WhatsApp Number) *</label>
-                                    <select name="whatsappRecipient" id="whatsappRecipient" class="agency-input font-medium" style="appearance:auto;">
-                                        <option value="919846930473">+91 98469 30473 (Mubaris — Web Architect)</option>
-                                        <option value="919495004272">+91 94950 04272 (Rasal — Creative Director)</option>
-                                    </select>
+                                    <label class="agency-label-text">Email Address (Optional)</label>
+                                    <input type="email" name="email" id="contactEmail" placeholder="alex@company.com" class="agency-input">
                                 </div>
-                            </div>
-
-                            <div>
-                                <label class="agency-label-text">Email Address (Optional)</label>
-                                <input type="email" name="email" id="contactEmail" placeholder="alex@company.com" class="agency-input">
                             </div>
 
                             <div>
@@ -1157,7 +1149,6 @@
             const phone = (form.querySelector('#contactPhone')?.value || '').trim();
             const email = (form.querySelector('#contactEmail')?.value || '').trim();
             const service = (form.querySelector('#contactService')?.value || 'General Inquiry').trim();
-            const recipient = form.querySelector('#whatsappRecipient')?.value || '919846930473';
             const message = (form.querySelector('#contactMessage')?.value || '').trim();
 
             if (!name || !phone || !message) {
@@ -1165,8 +1156,16 @@
                 return;
             }
 
-            const recipientName = recipient === '919495004272' ? 'Rasal' : 'Mubaris';
-            const recipientNumber = recipient === '919495004272' ? '+91 94950 04272' : '+91 98469 30473';
+            // Route to Rasal if video/branding/media; otherwise route to Mubaris (primary)
+            let recipient = '919846930473'; // Mubaris (Primary)
+            let recipientName = 'Mubaris';
+            let recipientNumber = '+91 98469 30473';
+
+            if (service.includes('Video') || service.includes('Photography') || service.includes('Posters') || service.includes('Branding')) {
+                recipient = '919495004272'; // Rasal
+                recipientName = 'Rasal';
+                recipientNumber = '+91 94950 04272';
+            }
 
             btn.disabled = true;
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i>Connecting to WhatsApp...';
@@ -1207,20 +1206,6 @@
                 btn.disabled = false;
                 btn.innerHTML = '<i class="fa-brands fa-whatsapp text-lg mr-2 text-emerald-300"></i><span>Inquiry Sent to WhatsApp</span>';
             }, 300);
-        }
-
-        // Smart Suggestion: Auto-select Mubaris or Rasal based on Service chosen
-        const serviceSelect = document.getElementById('contactService');
-        const recipientSelect = document.getElementById('whatsappRecipient');
-        if (serviceSelect && recipientSelect) {
-            serviceSelect.addEventListener('change', () => {
-                const val = serviceSelect.value;
-                if (val.includes('Video') || val.includes('Photography') || val.includes('Posters') || val.includes('Branding')) {
-                    recipientSelect.value = '919495004272'; // Rasal
-                } else if (val.includes('Website') || val.includes('UI/UX')) {
-                    recipientSelect.value = '919846930473'; // Mubaris
-                }
-            });
         }
     </script>
 
