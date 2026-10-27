@@ -1376,21 +1376,26 @@
         ];
 
         // ── Column configuration ──
-        const NUM_COLS = 6;
         let cols = [];
         let W = 0, H = 0;
 
         function initCols() {
             cols = [];
+            const isMobile = W < 640;
+            const isTablet = W < 1024;
+            const NUM_COLS = isMobile ? 2 : isTablet ? 4 : 6;
+            const BASE_FONT = isMobile ? 9 : 11;
+            const BASE_LINE_H = isMobile ? 28 : 22;
+
             for (let i = 0; i < NUM_COLS; i++) {
                 const segment = W / NUM_COLS;
                 cols.push({
-                    x: segment * i + Math.random() * (segment * 0.4),
+                    x: segment * i + Math.random() * (segment * 0.3),
                     y: Math.random() * -800,
-                    speed: 0.35 + Math.random() * 0.55,
-                    fontSize: 11 + Math.floor(Math.random() * 4),
-                    lineHeight: 22,
-                    opacity: 0.28 + Math.random() * 0.38,
+                    speed: isMobile ? 0.2 + Math.random() * 0.25 : 0.35 + Math.random() * 0.55,
+                    fontSize: BASE_FONT + Math.floor(Math.random() * (isMobile ? 2 : 4)),
+                    lineHeight: BASE_LINE_H,
+                    opacity: isMobile ? 0.18 + Math.random() * 0.22 : 0.28 + Math.random() * 0.38,
                     lines: buildColumnLines(),
                     lineOffset: 0,
                     cursorLine: Math.floor(Math.random() * 8),
