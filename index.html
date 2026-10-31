@@ -1230,7 +1230,17 @@
         (async function loadAdminProjects() {
             const STORAGE_KEY = 'kaylads_portfolio_v2';
             const BACKUP_KEY  = 'kaylads_portfolio_backup';
+            const DELETED_KEY = 'kaylads_portfolio_deleted_v2';
             let localProjects = [];
+            let deleted = new Set();
+
+            try {
+                const rawDel = localStorage.getItem(DELETED_KEY);
+                if (rawDel) {
+                    const arr = JSON.parse(rawDel);
+                    if (Array.isArray(arr)) deleted = new Set(arr);
+                }
+            } catch(e) {}
 
             try {
                 const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem(BACKUP_KEY);
@@ -1265,6 +1275,7 @@
                 remoteProjects.forEach(p => {
                     if (p && p.title) {
                         const low = p.title.trim().toLowerCase();
+                        if (deleted.has(p.id) || deleted.has(low)) return;
                         if (!hardcodedTitles.has(low) && !seenTitles.has(low)) {
                             dynamicProjects.push(p);
                             seenTitles.add(low);
@@ -1278,6 +1289,7 @@
                 localProjects.forEach(p => {
                     if (p && p.title) {
                         const low = p.title.trim().toLowerCase();
+                        if (deleted.has(p.id) || deleted.has(low)) return;
                         if (!hardcodedTitles.has(low) && !seenTitles.has(low)) {
                             dynamicProjects.push(p);
                             seenTitles.add(low);

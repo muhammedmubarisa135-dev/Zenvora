@@ -838,9 +838,40 @@
 const ADMIN_PASS_HASH = '87e4063bcc9d9d6136bc16929a81896e4ee62ef20010ef5f5e347ac2d3b06cb2';
 const STORAGE_KEY     = 'kaylads_portfolio_v2';
 const BACKUP_KEY      = 'kaylads_portfolio_backup';
+const DELETED_KEY     = 'kaylads_portfolio_deleted_v2';
 const SESSION_KEY     = 'kaylads_admin_session_v2';
 const LOCKOUT_KEY     = 'kaylads_admin_lockout';
 const ATTEMPTS_KEY    = 'kaylads_admin_attempts';
+
+/* ── Deletion Persistence Management (Prevents Reappearance on Refresh) ── */
+function getDeletedIds() {
+    try {
+        const raw = localStorage.getItem(DELETED_KEY);
+        if (raw) {
+            const arr = JSON.parse(raw);
+            if (Array.isArray(arr)) return new Set(arr);
+        }
+    } catch(e) {}
+    return new Set();
+}
+
+function markProjectDeleted(id, title) {
+    try {
+        const set = getDeletedIds();
+        if (id) set.add(id);
+        if (title) set.add(title.trim().toLowerCase());
+        localStorage.setItem(DELETED_KEY, JSON.stringify([...set]));
+    } catch(e) {}
+}
+
+function unmarkProjectDeleted(id, title) {
+    try {
+        const set = getDeletedIds();
+        if (id) set.delete(id);
+        if (title) set.delete(title.trim().toLowerCase());
+        localStorage.setItem(DELETED_KEY, JSON.stringify([...set]));
+    } catch(e) {}
+}
 
 /* ── Web Crypto SHA-256 ── */
 async function computeSha256(str) {
@@ -1033,42 +1064,34 @@ const DEFAULT_PROJECTS = [
         "description": "Bespoke bakery business ordering website featuring an interactive product catalogue, customer ordering inquiries, and digital publicity assets to drive local orders.",
         "gradient": "linear-gradient(135deg, #f43f5e 0%, #db2777 50%, #be185d 100%)",
         "createdAt": "2026-10-16T10:00:00.000Z"
-    },
-    {
-        "id": "proj-ism",
-        "title": "Islah Super Market",
-        "category": "Logo & Identity",
-        "person": "rasal",
-        "status": "live",
-        "url": "https://ism-web-blue.vercel.app",
-        "description": "Designed the comprehensive brand identity for ISM (Islah Super Market), including primary logo, wordmark, color systems, and modern web presence for print and digital use.",
-        "gradient": "linear-gradient(135deg, #0d807a 0%, #1cbbb3 50%, #084945 100%)",
-        "createdAt": "2026-10-17T10:00:00.000Z"
     }
 ];
 
-/* ── Storage with Redundant Mirror Backup ── */
+/* ── Storage with Redundant Mirror Backup & Deletion Protection ── */
 function getProjects() {
+    const deleted = getDeletedIds();
     try {
         const primary = localStorage.getItem(STORAGE_KEY);
-        if (primary) {
+        if (primary !== null) {
             const list = JSON.parse(primary);
-            if (Array.isArray(list) && list.length > 0) return list;
+            if (Array.isArray(list)) {
+                return list.filter(p => !deleted.has(p.id) && !deleted.has((p.title || '').trim().toLowerCase()));
+            }
         }
 
         // Fallback to secondary mirror if primary was cleared
         const mirror = localStorage.getItem(BACKUP_KEY);
-        if (mirror) {
+        if (mirror !== null) {
             const list = JSON.parse(mirror);
-            if (Array.isArray(list) && list.length > 0) {
+            if (Array.isArray(list)) {
                 localStorage.setItem(STORAGE_KEY, mirror);
-                return list;
+                return list.filter(p => !deleted.has(p.id) && !deleted.has((p.title || '').trim().toLowerCase()));
             }
         }
     } catch(e) {
         console.warn('LocalStorage access warning:', e);
     }
-    return DEFAULT_PROJECTS.slice();
+    return DEFAULT_PROJECTS.filter(p => !deleted.has(p.id) && !deleted.has((p.title || '').trim().toLowerCase()));
 }
 
 function saveProjects(list) {
@@ -1210,6 +1233,11 @@ async function importDataBackup(event) {
                 return;
             }
 
+            // Unmark any restored project from deletion list
+            importedProjects.forEach(p => {
+                if (p && p.id) unmarkProjectDeleted(p.id, p.title);
+            });
+
             saveProjects(importedProjects);
             renderDashboard();
             renderPersonList('mubaris');
@@ -1283,6 +1311,8 @@ function handleAddProject(e, person) {
         createdAt:   new Date().toISOString()
     };
 
+    unmarkProjectDeleted(project.id, project.title);
+
     const list = getProjects();
     list.unshift(project);
     saveProjects(list);
@@ -1313,6 +1343,12 @@ async function deleteProject(id) {
     });
     if (!confirmed) return;
 
+    if (project) {
+        markProjectDeleted(project.id, project.title);
+    } else {
+        markProjectDeleted(id, null);
+    }
+
     const list = getProjects().filter(p => p.id !== id);
     saveProjects(list);
     renderDashboard();
@@ -1334,12 +1370,21 @@ async function initDashboard() {
         if (res.ok) {
             const list = await res.json();
             if (Array.isArray(list) && list.length > 0) {
+                const deleted = getDeletedIds();
                 const current = getProjects();
-                const currentIds = new Set(current.map(p => p.id || p.title));
+                const currentIds = new Set(current.map(p => p.id));
+                const currentTitles = new Set(current.map(p => (p.title || '').trim().toLowerCase()));
                 let updated = false;
                 list.forEach(p => {
-                    if (!currentIds.has(p.id || p.title)) {
+                    if (!p || !p.title) return;
+                    const pId = p.id;
+                    const pTitle = (p.title || '').trim().toLowerCase();
+                    // Never restore projects that have been removed by the user
+                    if (deleted.has(pId) || deleted.has(pTitle)) return;
+                    if (!currentIds.has(pId) && !currentTitles.has(pTitle)) {
                         current.push(p);
+                        currentIds.add(pId);
+                        currentTitles.add(pTitle);
                         updated = true;
                     }
                 });
