@@ -1,5 +1,18 @@
 [
   {
+    "id": "proj-ism-web",
+    "title": "ISM",
+    "category": "Website",
+    "person": "mubaris",
+    "status": "live",
+    "url": "https://ism-web-blue.vercel.app",
+    "description": "a market shopping through digital",
+    "gradient": "linear-gradient(135deg, #3b82f6 0%, #1d4ed8 50%, #1e3a8a 100%)",
+    "image": null,
+    "tags": ["Mubaris: Web Architecture", "Website"],
+    "createdAt": "2026-10-31T20:00:00.000Z"
+  },
+  {
     "id": "proj-sakkees",
     "title": "Sakkees Food Products",
     "category": "Food Brand & E-commerce",

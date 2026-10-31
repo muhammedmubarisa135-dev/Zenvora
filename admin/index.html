@@ -849,7 +849,15 @@ function getDeletedIds() {
         const raw = localStorage.getItem(DELETED_KEY);
         if (raw) {
             const arr = JSON.parse(raw);
-            if (Array.isArray(arr)) return new Set(arr);
+            if (Array.isArray(arr)) {
+                // Self-healing: Never block active official projects
+                const protectedKeys = new Set(['ism', 'proj-ism-web', 'volcano academy', 'proj-volcano', 'al barakha bakery', 'proj-albarakha', 'sakkees food products', 'proj-sakkees']);
+                const filtered = arr.filter(k => !protectedKeys.has(String(k).trim().toLowerCase()));
+                if (filtered.length !== arr.length) {
+                    localStorage.setItem(DELETED_KEY, JSON.stringify(filtered));
+                }
+                return new Set(filtered);
+            }
         }
     } catch(e) {}
     return new Set();
@@ -1031,6 +1039,17 @@ function showSection(name, el) {
 
 /* ── Default Official Agency Projects (Synchronized with projects.json) ── */
 const DEFAULT_PROJECTS = [
+    {
+        "id": "proj-ism-web",
+        "title": "ISM",
+        "category": "Website",
+        "person": "mubaris",
+        "status": "live",
+        "url": "https://ism-web-blue.vercel.app",
+        "description": "a market shopping through digital",
+        "gradient": "linear-gradient(135deg, #3b82f6 0%, #1d4ed8 50%, #1e3a8a 100%)",
+        "createdAt": "2026-10-31T20:00:00.000Z"
+    },
     {
         "id": "proj-sakkees",
         "title": "Sakkees Food Products",

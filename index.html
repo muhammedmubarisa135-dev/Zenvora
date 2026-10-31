@@ -1208,7 +1208,15 @@
                 const rawDel = localStorage.getItem(DELETED_KEY);
                 if (rawDel) {
                     const arr = JSON.parse(rawDel);
-                    if (Array.isArray(arr)) deleted = new Set(arr);
+                    if (Array.isArray(arr)) {
+                        // Self-healing: Never block active official projects
+                        const protectedKeys = new Set(['ism', 'proj-ism-web', 'volcano academy', 'proj-volcano', 'al barakha bakery', 'proj-albarakha', 'sakkees food products', 'proj-sakkees']);
+                        const filtered = arr.filter(k => !protectedKeys.has(String(k).trim().toLowerCase()));
+                        if (filtered.length !== arr.length) {
+                            localStorage.setItem(DELETED_KEY, JSON.stringify(filtered));
+                        }
+                        deleted = new Set(filtered);
+                    }
                 }
             } catch(e) {}
 
