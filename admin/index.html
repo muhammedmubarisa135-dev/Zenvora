@@ -254,6 +254,73 @@
         .activity-item { display: flex; align-items: flex-start; gap: 0.875rem; padding: 0.875rem 0; border-bottom: 1px solid rgba(28,187,179,0.08); }
         .activity-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
 
+        /* ── Aesthetic Horizontal Form Model ── */
+        .form-horizontal-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 1.125rem 1.25rem;
+            align-items: start;
+        }
+        .col-span-12 { grid-column: span 12; }
+        .col-span-8  { grid-column: span 8; }
+        .col-span-6  { grid-column: span 6; }
+        .col-span-4  { grid-column: span 4; }
+        .col-span-3  { grid-column: span 3; }
+        
+        @media (max-width: 860px) {
+            .form-horizontal-grid {
+                gap: 0.875rem 0.75rem;
+            }
+            .col-span-6, .col-span-4, .col-span-3, .col-span-8 {
+                grid-column: span 12 !important;
+            }
+        }
+
+        /* ── Aesthetic Modal Notification ── */
+        #confirmModal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+        #confirmModal.active {
+            display: flex;
+        }
+        .modal-backdrop-blur {
+            position: absolute;
+            inset: 0;
+            background: rgba(4, 10, 18, 0.78);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            opacity: 0;
+            transition: opacity 0.25s ease;
+        }
+        #confirmModal.active .modal-backdrop-blur {
+            opacity: 1;
+        }
+        .modal-aesthetic-card {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 440px;
+            background: linear-gradient(160deg, #0e1e2d 0%, #0a141e 100%);
+            border: 1px solid rgba(28, 187, 179, 0.25);
+            border-radius: 24px;
+            box-shadow: 0 35px 80px rgba(0,0,0,0.8), 0 0 40px rgba(28,187,179,0.12);
+            padding: 2.25rem 1.875rem;
+            text-align: center;
+            transform: scale(0.92) translateY(10px);
+            opacity: 0;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        #confirmModal.active .modal-aesthetic-card {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
+
         .section-content { padding: 2rem; max-width: 1100px; }
 
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
@@ -266,6 +333,40 @@
 <div id="offlineBanner" style="display:none;background:#78350f;color:#fef3c7;padding:0.625rem 1.5rem;font-size:12px;font-weight:600;text-align:center;border-bottom:1px solid #b45309;z-index:99999;position:sticky;top:0;">
     <i class="fa-solid fa-wifi-slash mr-2"></i>
     <span>Network connection lost. Offline protection active: your work and additions remain safely saved in offline storage.</span>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!--  AESTHETIC NOTIFICATION & CONFIRMATION MODAL        -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div id="confirmModal">
+    <div id="confirmBackdrop" class="modal-backdrop-blur"></div>
+    <div id="confirmCard" class="modal-aesthetic-card">
+        <!-- Glowing Alert Icon Badge -->
+        <div id="confirmIconBadge" style="width:58px;height:58px;margin:0 auto 1.25rem;border-radius:18px;background:rgba(224,92,106,0.12);border:1px solid rgba(224,92,106,0.3);display:flex;align-items:center;justify-content:center;color:#e05c6a;font-size:22px;box-shadow:0 8px 24px rgba(224,92,106,0.25);">
+            <i id="confirmIcon" class="fa-solid fa-trash-can"></i>
+        </div>
+
+        <!-- Title -->
+        <h3 id="confirmTitle" class="font-display" style="font-size:19px;font-weight:800;color:#f0f9fa;margin-bottom:0.5rem;letter-spacing:-0.02em;">
+            Remove Project?
+        </h3>
+
+        <!-- Description -->
+        <p id="confirmDesc" style="font-size:13px;color:var(--text-muted);line-height:1.6;margin-bottom:1.75rem;">
+            Are you sure you want to remove this project from your portfolio? This action will remove it from the live site.
+        </p>
+
+        <!-- Action Buttons -->
+        <div style="display:flex;gap:0.75rem;justify-content:center;">
+            <button id="confirmCancelBtn" type="button" class="btn-ghost" style="flex:1;justify-content:center;padding:0.75rem 1.25rem;border-radius:12px;font-weight:600;font-size:13px;">
+                Cancel
+            </button>
+            <button id="confirmActionBtn" type="button" class="btn-danger" style="flex:1;justify-content:center;padding:0.75rem 1.25rem;border-radius:12px;font-weight:700;font-size:13px;background:linear-gradient(135deg,#e05c6a,#c0392b);color:#fff;border:none;box-shadow:0 4px 18px rgba(224,92,106,0.35);">
+                <i class="fa-solid fa-trash-can mr-1.5"></i>
+                <span id="confirmActionText">Yes, Remove</span>
+            </button>
+        </div>
+    </div>
 </div>
 
 <!-- ═══════════════════════════════════════════════════ -->
@@ -528,68 +629,75 @@
                 </div>
             </div>
 
-            <div class="section-content">
-                <div class="grid-2">
-                    <!-- Add Form -->
-                    <div>
-                        <h2 class="font-display" style="font-size:14px;font-weight:700;margin-bottom:1rem;color:var(--mubaris);">
-                            <i class="fa-solid fa-plus mr-2"></i>Add New Project
+            <div class="section-content" style="max-width: 1200px;">
+                <!-- ── Horizontal Add New Project Panel ── -->
+                <div style="margin-bottom: 2.5rem;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:0.75rem;">
+                        <h2 class="font-display" style="font-size:15px;font-weight:700;color:var(--mubaris);display:flex;align-items:center;gap:0.5rem;">
+                            <i class="fa-solid fa-plus-circle"></i>
+                            <span>Add New Web Project</span>
                         </h2>
-                        <div class="add-panel">
-                            <form id="mubarisForm" onsubmit="handleAddProject(event,'mubaris')" style="display:flex;flex-direction:column;gap:1rem;">
-                                <div>
-                                    <label class="admin-label">Project Title *</label>
-                                    <input type="text" name="title" class="admin-input" placeholder="e.g. Apex Fitness Dashboard" required>
-                                </div>
-                                <div>
-                                    <label class="admin-label">Short Description *</label>
-                                    <textarea name="description" class="admin-input" placeholder="Brief description of the project..." rows="3" required style="resize:vertical;"></textarea>
-                                </div>
-                                <div>
-                                    <label class="admin-label">Live URL</label>
-                                    <input type="url" name="url" class="admin-input" placeholder="https://yourproject.vercel.app">
-                                </div>
-                                <div>
-                                    <label class="admin-label">Category</label>
-                                    <select name="category" class="admin-input">
-                                        <option value="Web App">Web App</option>
-                                        <option value="Website">Website</option>
-                                        <option value="UI/UX Design">UI/UX Design</option>
-                                        <option value="Supabase System">Supabase System</option>
-                                        <option value="E-commerce">E-commerce</option>
-                                        <option value="Dashboard">Dashboard</option>
-                                        <option value="Landing Page">Landing Page</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="admin-label">Status</label>
-                                    <select name="status" class="admin-input">
-                                        <option value="live">✅ Live</option>
-                                        <option value="upcoming">🔜 Upcoming</option>
-                                        <option value="in-progress">⚙️ In Progress</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="admin-label">Card Gradient (CSS)</label>
-                                    <input type="text" name="gradient" class="admin-input" placeholder="linear-gradient(135deg, #3b82f6, #1d4ed8)" value="linear-gradient(135deg, #3b82f6 0%, #1d4ed8 50%, #1e3a8a 100%)">
-                                </div>
-                                <button type="submit" class="btn-primary" style="width:100%;justify-content:center;padding:0.75rem;">
+                        <span style="font-size:11px;color:var(--text-muted);background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2);padding:3px 10px;border-radius:20px;display:flex;align-items:center;gap:5px;">
+                            <i class="fa-solid fa-table-columns text-blue-400"></i> Horizontal Studio Form
+                        </span>
+                    </div>
+                    <div class="add-panel">
+                        <form id="mubarisForm" onsubmit="handleAddProject(event,'mubaris')" class="form-horizontal-grid">
+                            <div class="col-span-6">
+                                <label class="admin-label">Project Title *</label>
+                                <input type="text" name="title" class="admin-input" placeholder="e.g. Apex Fitness Dashboard" required>
+                            </div>
+                            <div class="col-span-3">
+                                <label class="admin-label">Category</label>
+                                <select name="category" class="admin-input">
+                                    <option value="Web App">Web App</option>
+                                    <option value="Website">Website</option>
+                                    <option value="UI/UX Design">UI/UX Design</option>
+                                    <option value="Supabase System">Supabase System</option>
+                                    <option value="E-commerce">E-commerce</option>
+                                    <option value="Dashboard">Dashboard</option>
+                                    <option value="Landing Page">Landing Page</option>
+                                </select>
+                            </div>
+                            <div class="col-span-3">
+                                <label class="admin-label">Status</label>
+                                <select name="status" class="admin-input">
+                                    <option value="live">✅ Live Website</option>
+                                    <option value="upcoming">🔜 Upcoming</option>
+                                    <option value="in-progress">⚙️ In Progress</option>
+                                </select>
+                            </div>
+                            <div class="col-span-6">
+                                <label class="admin-label">Live URL / Preview Link</label>
+                                <input type="url" name="url" class="admin-input" placeholder="https://yourproject.vercel.app">
+                            </div>
+                            <div class="col-span-6">
+                                <label class="admin-label">Card Gradient (CSS)</label>
+                                <input type="text" name="gradient" class="admin-input" placeholder="linear-gradient(135deg, #3b82f6, #1d4ed8)" value="linear-gradient(135deg, #3b82f6 0%, #1d4ed8 50%, #1e3a8a 100%)">
+                            </div>
+                            <div class="col-span-12">
+                                <label class="admin-label">Short Description *</label>
+                                <textarea name="description" class="admin-input" placeholder="Brief summary of the project, features delivered, and technology stack..." rows="2" required style="resize:vertical;min-height:54px;"></textarea>
+                            </div>
+                            <div class="col-span-12" style="display:flex;align-items:center;justify-content:flex-end;gap:1rem;margin-top:0.25rem;">
+                                <button type="submit" class="btn-primary" style="padding:0.75rem 1.75rem;background:linear-gradient(135deg,var(--mubaris),#1d4ed8);box-shadow:0 4px 16px rgba(59,130,246,0.35);">
                                     <i class="fa-solid fa-plus"></i>
                                     <span>Add to Portfolio</span>
                                 </button>
-                            </form>
-                        </div>
-                    </div>
-
-                    <!-- Projects List -->
-                    <div>
-                        <h2 class="font-display" style="font-size:14px;font-weight:700;margin-bottom:1rem;color:var(--white);">
-                            Mubaris Projects (<span id="mubarisCount">0</span>)
-                        </h2>
-                        <div id="mubarisProjectList" style="display:flex;flex-direction:column;gap:0.75rem;">
-                            <div style="font-size:13px;color:var(--text-dim);padding:2rem 0;text-align:center;background:var(--bg-card);border:1px dashed var(--border);border-radius:14px;">
-                                No projects yet — add your first one!
                             </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- ── Existing Projects Horizontal Grid ── -->
+                <div>
+                    <h2 class="font-display" style="font-size:15px;font-weight:700;margin-bottom:1rem;color:var(--white);display:flex;align-items:center;gap:0.5rem;">
+                        <i class="fa-solid fa-layer-group text-slate-400"></i>
+                        <span>Mubaris Projects (<span id="mubarisCount">0</span>)</span>
+                    </h2>
+                    <div id="mubarisProjectList" style="display:grid;grid-template-columns:repeat(auto-fill, minmax(320px, 1fr));gap:1rem;">
+                        <div style="font-size:13px;color:var(--text-dim);padding:2rem 0;text-align:center;background:var(--bg-card);border:1px dashed var(--border);border-radius:14px;grid-column:1/-1;">
+                            No projects yet — add your first one above!
                         </div>
                     </div>
                 </div>
@@ -610,69 +718,76 @@
                 </div>
             </div>
 
-            <div class="section-content">
-                <div class="grid-2">
-                    <!-- Add Form -->
-                    <div>
-                        <h2 class="font-display" style="font-size:14px;font-weight:700;margin-bottom:1rem;color:var(--rasal);">
-                            <i class="fa-solid fa-plus mr-2"></i>Add New Project
+            <div class="section-content" style="max-width: 1200px;">
+                <!-- ── Horizontal Add New Project Panel ── -->
+                <div style="margin-bottom: 2.5rem;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:0.75rem;">
+                        <h2 class="font-display" style="font-size:15px;font-weight:700;color:var(--rasal);display:flex;align-items:center;gap:0.5rem;">
+                            <i class="fa-solid fa-plus-circle"></i>
+                            <span>Add New Media Project</span>
                         </h2>
-                        <div class="add-panel">
-                            <form id="rasalForm" onsubmit="handleAddProject(event,'rasal')" style="display:flex;flex-direction:column;gap:1rem;">
-                                <div>
-                                    <label class="admin-label">Project Title *</label>
-                                    <input type="text" name="title" class="admin-input" placeholder="e.g. Luxe Cafe Brand Film" required>
-                                </div>
-                                <div>
-                                    <label class="admin-label">Short Description *</label>
-                                    <textarea name="description" class="admin-input" placeholder="Brief description of the project..." rows="3" required style="resize:vertical;"></textarea>
-                                </div>
-                                <div>
-                                    <label class="admin-label">Live URL / Drive / Behance Link</label>
-                                    <input type="url" name="url" class="admin-input" placeholder="https://drive.google.com/...">
-                                </div>
-                                <div>
-                                    <label class="admin-label">Category</label>
-                                    <select name="category" class="admin-input">
-                                        <option value="Brand Film">Brand Film</option>
-                                        <option value="Logo & Identity">Logo & Identity</option>
-                                        <option value="AI Video">AI Video</option>
-                                        <option value="Social Media Campaign">Social Media Campaign</option>
-                                        <option value="Commercial Photography">Commercial Photography</option>
-                                        <option value="Poster & Ad Design">Poster & Ad Design</option>
-                                        <option value="Cinematic Reel">Cinematic Reel</option>
-                                        <option value="Product Video">Product Video</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="admin-label">Status</label>
-                                    <select name="status" class="admin-input">
-                                        <option value="live">✅ Delivered</option>
-                                        <option value="upcoming">🔜 Upcoming</option>
-                                        <option value="in-progress">⚙️ In Production</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="admin-label">Card Gradient (CSS)</label>
-                                    <input type="text" name="gradient" class="admin-input" placeholder="linear-gradient(135deg, #a855f7, #7c3aed)" value="linear-gradient(135deg, #a855f7 0%, #7c3aed 50%, #4c1d95 100%)">
-                                </div>
-                                <button type="submit" class="btn-primary" style="width:100%;justify-content:center;padding:0.75rem;background:linear-gradient(135deg,var(--rasal),#7c3aed);">
+                        <span style="font-size:11px;color:var(--text-muted);background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.2);padding:3px 10px;border-radius:20px;display:flex;align-items:center;gap:5px;">
+                            <i class="fa-solid fa-table-columns text-purple-400"></i> Horizontal Studio Form
+                        </span>
+                    </div>
+                    <div class="add-panel">
+                        <form id="rasalForm" onsubmit="handleAddProject(event,'rasal')" class="form-horizontal-grid">
+                            <div class="col-span-6">
+                                <label class="admin-label">Project Title *</label>
+                                <input type="text" name="title" class="admin-input" placeholder="e.g. Luxe Cafe Brand Film" required>
+                            </div>
+                            <div class="col-span-3">
+                                <label class="admin-label">Category</label>
+                                <select name="category" class="admin-input">
+                                    <option value="Brand Film">Brand Film</option>
+                                    <option value="Logo & Identity">Logo & Identity</option>
+                                    <option value="AI Video">AI Video</option>
+                                    <option value="Social Media Campaign">Social Media Campaign</option>
+                                    <option value="Commercial Photography">Commercial Photography</option>
+                                    <option value="Poster & Ad Design">Poster & Ad Design</option>
+                                    <option value="Cinematic Reel">Cinematic Reel</option>
+                                    <option value="Product Video">Product Video</option>
+                                </select>
+                            </div>
+                            <div class="col-span-3">
+                                <label class="admin-label">Status</label>
+                                <select name="status" class="admin-input">
+                                    <option value="live">✅ Delivered</option>
+                                    <option value="upcoming">🔜 Upcoming</option>
+                                    <option value="in-progress">⚙️ In Production</option>
+                                </select>
+                            </div>
+                            <div class="col-span-6">
+                                <label class="admin-label">Live URL / Drive / Behance Link</label>
+                                <input type="url" name="url" class="admin-input" placeholder="https://drive.google.com/...">
+                            </div>
+                            <div class="col-span-6">
+                                <label class="admin-label">Card Gradient (CSS)</label>
+                                <input type="text" name="gradient" class="admin-input" placeholder="linear-gradient(135deg, #a855f7, #7c3aed)" value="linear-gradient(135deg, #a855f7 0%, #7c3aed 50%, #4c1d95 100%)">
+                            </div>
+                            <div class="col-span-12">
+                                <label class="admin-label">Short Description *</label>
+                                <textarea name="description" class="admin-input" placeholder="Brief summary of the creative campaign, deliverables produced, and styling..." rows="2" required style="resize:vertical;min-height:54px;"></textarea>
+                            </div>
+                            <div class="col-span-12" style="display:flex;align-items:center;justify-content:flex-end;gap:1rem;margin-top:0.25rem;">
+                                <button type="submit" class="btn-primary" style="padding:0.75rem 1.75rem;background:linear-gradient(135deg,var(--rasal),#7c3aed);box-shadow:0 4px 16px rgba(168,85,247,0.35);">
                                     <i class="fa-solid fa-plus"></i>
                                     <span>Add to Portfolio</span>
                                 </button>
-                            </form>
-                        </div>
-                    </div>
-
-                    <!-- Projects List -->
-                    <div>
-                        <h2 class="font-display" style="font-size:14px;font-weight:700;margin-bottom:1rem;color:var(--white);">
-                            Rasal Projects (<span id="rasalCount">0</span>)
-                        </h2>
-                        <div id="rasalProjectList" style="display:flex;flex-direction:column;gap:0.75rem;">
-                            <div style="font-size:13px;color:var(--text-dim);padding:2rem 0;text-align:center;background:var(--bg-card);border:1px dashed var(--border);border-radius:14px;">
-                                No projects yet — add your first one!
                             </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- ── Existing Projects Horizontal Grid ── -->
+                <div>
+                    <h2 class="font-display" style="font-size:15px;font-weight:700;margin-bottom:1rem;color:var(--white);display:flex;align-items:center;gap:0.5rem;">
+                        <i class="fa-solid fa-layer-group text-slate-400"></i>
+                        <span>Rasal Projects (<span id="rasalCount">0</span>)</span>
+                    </h2>
+                    <div id="rasalProjectList" style="display:grid;grid-template-columns:repeat(auto-fill, minmax(320px, 1fr));gap:1rem;">
+                        <div style="font-size:13px;color:var(--text-dim);padding:2rem 0;text-align:center;background:var(--bg-card);border:1px dashed var(--border);border-radius:14px;grid-column:1/-1;">
+                            No projects yet — add your first one above!
                         </div>
                     </div>
                 </div>
@@ -1003,12 +1118,75 @@ function copyProjectsJson() {
     }
 }
 
-function importDataBackup(event) {
+/* ── Aesthetic Notification & Confirmation Modal ── */
+function showAestheticConfirm({
+    title = 'Remove Project?',
+    desc = 'Are you sure you want to remove this project from the portfolio?',
+    icon = 'fa-trash-can',
+    actionText = 'Yes, Remove',
+    actionType = 'danger'
+} = {}) {
+    return new Promise(resolve => {
+        const modal = document.getElementById('confirmModal');
+        const titleEl = document.getElementById('confirmTitle');
+        const descEl  = document.getElementById('confirmDesc');
+        const iconEl  = document.getElementById('confirmIcon');
+        const iconBadge = document.getElementById('confirmIconBadge');
+        const actionBtn = document.getElementById('confirmActionBtn');
+        const actionTextEl = document.getElementById('confirmActionText');
+        const cancelBtn = document.getElementById('confirmCancelBtn');
+        const backdrop = document.getElementById('confirmBackdrop');
+
+        titleEl.textContent = title;
+        descEl.textContent = desc;
+        iconEl.className = 'fa-solid ' + icon;
+        actionTextEl.textContent = actionText;
+
+        if (actionType === 'danger') {
+            iconBadge.style.background = 'rgba(224,92,106,0.12)';
+            iconBadge.style.borderColor = 'rgba(224,92,106,0.3)';
+            iconBadge.style.color = '#e05c6a';
+            iconBadge.style.boxShadow = '0 8px 24px rgba(224,92,106,0.25)';
+            actionBtn.style.background = 'linear-gradient(135deg,#e05c6a,#c0392b)';
+            actionBtn.style.boxShadow = '0 4px 18px rgba(224,92,106,0.35)';
+        } else {
+            iconBadge.style.background = 'var(--teal-glow)';
+            iconBadge.style.borderColor = 'rgba(28,187,179,0.3)';
+            iconBadge.style.color = 'var(--teal)';
+            iconBadge.style.boxShadow = '0 8px 24px rgba(28,187,179,0.25)';
+            actionBtn.style.background = 'linear-gradient(135deg,var(--teal),var(--teal-dim))';
+            actionBtn.style.boxShadow = '0 4px 18px rgba(28,187,179,0.35)';
+        }
+
+        modal.classList.add('active');
+
+        function cleanup(result) {
+            modal.classList.remove('active');
+            actionBtn.onclick = null;
+            cancelBtn.onclick = null;
+            backdrop.onclick = null;
+            window.removeEventListener('keydown', onKey);
+            resolve(result);
+        }
+
+        function onKey(e) {
+            if (e.key === 'Escape') cleanup(false);
+            if (e.key === 'Enter') cleanup(true);
+        }
+
+        actionBtn.onclick = () => cleanup(true);
+        cancelBtn.onclick = () => cleanup(false);
+        backdrop.onclick  = () => cleanup(false);
+        window.addEventListener('keydown', onKey);
+    });
+}
+
+async function importDataBackup(event) {
     const file = event.target.files && event.target.files[0];
     if (!file) return;
 
     const reader = new FileReader();
-    reader.onload = function(e) {
+    reader.onload = async function(e) {
         try {
             const data = JSON.parse(e.target.result);
             let importedProjects = [];
@@ -1020,7 +1198,14 @@ function importDataBackup(event) {
                 throw new Error('Invalid backup structure');
             }
 
-            if (!confirm(`Restore ${importedProjects.length} project(s) from this backup? Your current portfolio entries will be synchronized.`)) {
+            const confirmed = await showAestheticConfirm({
+                title: 'Restore Projects Backup?',
+                desc: `Restore ${importedProjects.length} project(s) from this backup? Your current portfolio entries will be synchronized.`,
+                icon: 'fa-cloud-arrow-up',
+                actionText: 'Restore Now',
+                actionType: 'primary'
+            });
+            if (!confirmed) {
                 event.target.value = '';
                 return;
             }
@@ -1114,9 +1299,20 @@ function handleAddProject(e, person) {
     showToast('✅ Project added to portfolio!', 'success');
 }
 
-/* ── Delete Project ── */
-function deleteProject(id) {
-    if (!confirm('Remove this project from the portfolio?')) return;
+/* ── Delete Project (Aesthetic Modal) ── */
+async function deleteProject(id) {
+    const project = getProjects().find(p => p.id === id);
+    const projName = project ? `"${project.title}"` : 'this project';
+
+    const confirmed = await showAestheticConfirm({
+        title: 'Remove Project?',
+        desc: `Are you sure you want to remove ${projName} from the portfolio? This will remove it from the live showcase.`,
+        icon: 'fa-trash-can',
+        actionText: 'Yes, Remove',
+        actionType: 'danger'
+    });
+    if (!confirmed) return;
+
     const list = getProjects().filter(p => p.id !== id);
     saveProjects(list);
     renderDashboard();
@@ -1200,7 +1396,7 @@ function renderPersonList(person) {
     if (!listEl) return;
 
     if (!projects.length) {
-        listEl.innerHTML = `<div style="font-size:13px;color:var(--text-dim);padding:2rem 0;text-align:center;background:var(--bg-card);border:1px dashed var(--border);border-radius:14px;">No projects yet — add your first one!</div>`;
+        listEl.innerHTML = `<div style="font-size:13px;color:var(--text-dim);padding:2rem 0;text-align:center;background:var(--bg-card);border:1px dashed var(--border);border-radius:14px;grid-column:1/-1;">No projects yet — add your first one above!</div>`;
         return;
     }
 
