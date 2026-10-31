@@ -1229,26 +1229,15 @@
                 console.warn('Remote projects fetch notice:', e);
             }
 
-            // Built-in hardcoded projects in index.html to avoid duplicates
+            // Built-in hardcoded projects in index.html — these are permanent and must NEVER be removed by deletion sync
             const hardcodedTitles = new Set([
                 'volcano academy',
                 'al barakha bakery',
                 'sakkees food products'
             ]);
 
-            // Real-time deletion sync: remove any existing card from grid if it was deleted in admin
-            if (deleted.size > 0) {
-                const existingCards = document.querySelectorAll('#projectsGrid .agency-card');
-                existingCards.forEach(card => {
-                    const titleEl = card.querySelector('h3');
-                    if (titleEl) {
-                        const low = titleEl.textContent.trim().toLowerCase();
-                        if (deleted.has(low) || deleted.has('proj-ism')) {
-                            card.remove();
-                        }
-                    }
-                });
-            }
+            // The deletion tombstone only applies to DYNAMICALLY added projects (from admin localStorage/JSON)
+            // Hardcoded cards in the HTML are permanent — they are removed from the code only, never by the tombstone
 
             const dynamicProjects = [];
             const seenTitles = new Set();
