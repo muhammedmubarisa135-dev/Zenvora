@@ -616,8 +616,8 @@
                 </div>
             </div>
 
-            <!-- 3 Live Project Cards Grid + Admin-added projects -->
-            <div id="projectsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Featured Project Cards Grid (2x2 Balanced Agency Showcase) -->
+            <div id="projectsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-8">
 
                 <!-- Project 1: Volcano Martial Arts Academy -->
                 <div class="agency-card overflow-hidden reveal group">
@@ -710,7 +710,39 @@
                     </div>
                 </div>
 
-                <!-- Admin-added projects injected here by JS -->
+                <!-- Project 4: Sakkees Food Products -->
+                <div class="agency-card overflow-hidden reveal group">
+                    <div class="block h-60 relative flex items-center justify-center p-6 transition group-hover:brightness-105 overflow-hidden" style="background: linear-gradient(135deg, #0c2b1e 0%, #17422a 50%, #081c13 100%);">
+                        <div class="absolute inset-0 bg-cover bg-center opacity-40 transition-transform duration-500 group-hover:scale-105" style="background-image: url('sakkees-banner.png');"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/25"></div>
+                        <div class="relative z-10 text-center space-y-3">
+                            <span class="inline-block px-3 py-1 bg-amber-400/25 border border-amber-300/35 text-amber-200 text-[10px] font-bold uppercase tracking-widest rounded-full">Food Brand &amp; E-commerce</span>
+                            <h3 class="font-display font-bold text-2xl sm:text-3xl text-white">Sakkees Food Products</h3>
+                            <p class="text-xs text-amber-100 max-w-xs mx-auto">A Journey of Taste, Tradition &amp; Love — authentic culinary brand platform.</p>
+                        </div>
+                    </div>
+                    <div class="p-7 space-y-4">
+                        <div class="flex flex-wrap gap-1.5">
+                            <span class="pill-violet text-[10px]">Mubaris: Web Architecture &amp; Store</span>
+                            <span class="pill-slate text-[10px]">Rasal: Food Media Styling</span>
+                        </div>
+                        <p class="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                            Bespoke digital storefront and brand platform for authentic food products, featuring interactive product discovery, culinary storytelling, and direct WhatsApp customer ordering.
+                        </p>
+                        <div class="flex items-center justify-between pt-4 border-t border-violet-200">
+                            <a href="https://wa.me/919495004272?text=Hi%20KAYLADS,%20I%20saw%20the%20Sakkees%20Food%20Products%20project%20and%20would%20like%20to%20inquire%20about%20a%20similar%20build." target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-violet-700 hover:text-violet-900 flex items-center gap-2 transition">
+                                <span>Inquire About Build</span>
+                                <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+                            </a>
+                            <span class="text-xs text-green-600 font-semibold flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse inline-block"></span>
+                                Delivered &amp; Verified
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional dynamic projects injected here by JS -->
 
             </div>
 
@@ -1194,28 +1226,67 @@
             }, 300);
         }
 
-        // ── Load Admin-Added Projects into Our Work section (Security Hardened & Offline Resilient) ──
-        (function loadAdminProjects() {
+        // ── Load Admin-Added Projects into Our Work section (Global projects.json + Local Drafts) ──
+        (async function loadAdminProjects() {
             const STORAGE_KEY = 'kaylads_portfolio_v2';
             const BACKUP_KEY  = 'kaylads_portfolio_backup';
-            let projects = [];
+            let localProjects = [];
 
             try {
-                const raw = localStorage.getItem(STORAGE_KEY);
-                if (raw) {
-                    projects = JSON.parse(raw);
-                } else {
-                    const backupRaw = localStorage.getItem(BACKUP_KEY);
-                    if (backupRaw) {
-                        projects = JSON.parse(backupRaw);
-                        localStorage.setItem(STORAGE_KEY, backupRaw); // Self-healing recovery
-                    }
-                }
+                const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem(BACKUP_KEY);
+                if (raw) localProjects = JSON.parse(raw);
             } catch(e) {
                 console.warn('Portfolio storage read notice:', e);
             }
 
-            if (!Array.isArray(projects) || !projects.length) return;
+            let remoteProjects = [];
+            try {
+                const res = await fetch('projects.json?t=' + Date.now());
+                if (res.ok) {
+                    remoteProjects = await res.json();
+                }
+            } catch(e) {
+                console.warn('Remote projects fetch notice:', e);
+            }
+
+            // Built-in hardcoded projects in index.html to avoid duplicates
+            const hardcodedTitles = new Set([
+                'volcano academy',
+                'al barakha bakery',
+                'islah super market',
+                'sakkees food products'
+            ]);
+
+            const dynamicProjects = [];
+            const seenTitles = new Set();
+
+            // 1. Add remote projects from projects.json
+            if (Array.isArray(remoteProjects)) {
+                remoteProjects.forEach(p => {
+                    if (p && p.title) {
+                        const low = p.title.trim().toLowerCase();
+                        if (!hardcodedTitles.has(low) && !seenTitles.has(low)) {
+                            dynamicProjects.push(p);
+                            seenTitles.add(low);
+                        }
+                    }
+                });
+            }
+
+            // 2. Add local draft projects from localStorage
+            if (Array.isArray(localProjects)) {
+                localProjects.forEach(p => {
+                    if (p && p.title) {
+                        const low = p.title.trim().toLowerCase();
+                        if (!hardcodedTitles.has(low) && !seenTitles.has(low)) {
+                            dynamicProjects.push(p);
+                            seenTitles.add(low);
+                        }
+                    }
+                });
+            }
+
+            if (!dynamicProjects.length) return;
 
             const grid = document.getElementById('projectsGrid');
             if (!grid) return;
@@ -1242,7 +1313,7 @@
                 return /^https?:\/\//i.test(trimmed) ? esc(trimmed) : '';
             }
 
-            projects.forEach(p => {
+            dynamicProjects.forEach(p => {
                 const isLive = p.status === 'live';
                 const personLabel = p.person === 'mubaris' ? 'Mubaris' : 'Rasal';
                 const personRole  = p.person === 'mubaris' ? 'Web Architecture' : 'Creative Direction';

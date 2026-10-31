@@ -1,0 +1,54 @@
+[
+  {
+    "id": "proj-volcano",
+    "title": "Volcano Academy",
+    "category": "Web App & Admissions",
+    "person": "mubaris",
+    "status": "live",
+    "url": "https://volcanoacademy.vercel.app",
+    "description": "Full-featured academy web platform including online admission intake, student-facing dashboard, fee tracking, interactive galleries, and protected administrative control.",
+    "gradient": "linear-gradient(135deg, #7c3aed 0%, #6d28d9 50%, #4c1d95 100%)",
+    "image": "hero-bg.jpg",
+    "tags": ["Mubaris: Architecture & Supabase", "Rasal: Media Direction"],
+    "createdAt": "2026-10-15T10:00:00.000Z"
+  },
+  {
+    "id": "proj-albarakha",
+    "title": "Al Barakha Bakery",
+    "category": "Bakery Ordering Platform",
+    "person": "mubaris",
+    "status": "live",
+    "url": "https://albarakhabakery.vercel.app",
+    "description": "Bespoke bakery business ordering website featuring an interactive product catalogue, customer ordering inquiries, and digital publicity assets to drive local orders.",
+    "gradient": "linear-gradient(135deg, #f43f5e 0%, #db2777 50%, #be185d 100%)",
+    "image": null,
+    "tags": ["Mubaris: Web Development", "Rasal: Food Media Styling"],
+    "createdAt": "2026-10-16T10:00:00.000Z"
+  },
+  {
+    "id": "proj-ism",
+    "title": "Islah Super Market",
+    "category": "Brand Identity & Web",
+    "person": "rasal",
+    "status": "live",
+    "url": "https://ism-web-blue.vercel.app",
+    "description": "Designed the comprehensive brand identity for ISM (Islah Super Market), including primary logo, wordmark, color systems, and modern web presence for print and digital use.",
+    "gradient": "linear-gradient(135deg, #0d807a 0%, #1cbbb3 50%, #084945 100%)",
+    "image": null,
+    "tags": ["Rasal: Logo & Identity", "Mubaris: Web Showcase"],
+    "createdAt": "2026-10-17T10:00:00.000Z"
+  },
+  {
+    "id": "proj-sakkees",
+    "title": "Sakkees Food Products",
+    "category": "Food Brand & E-commerce",
+    "person": "mubaris",
+    "status": "live",
+    "url": "",
+    "description": "A Journey of Taste, Tradition & Love. Bespoke digital storefront and brand platform for authentic food products with culinary storytelling, product showcase, and customer ordering.",
+    "gradient": "linear-gradient(135deg, #0c2b1e 0%, #17422a 50%, #081c13 100%)",
+    "image": "sakkees-banner.png",
+    "tags": ["Mubaris: Web Architecture & Store", "Rasal: Food Media Styling"],
+    "createdAt": "2026-10-31T04:00:00.000Z"
+  }
+]
